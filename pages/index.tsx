@@ -1,6 +1,46 @@
-import Head from "next/head";
+/* eslint-disable prettier/prettier */
+import Head from "next/head"
+import axios, { AxiosResponse, AxiosError } from "axios"
+import useSWR, { Key, Fetcher } from "swr"
+
+type APIResponse = {
+  data: Data
+}
+
+type Data = {
+  page: Page
+}
+
+type Page = {
+  content: string
+  title: string
+}
+
+type Config = {
+  timeout: number
+}
 
 const Home: React.FC = () => {
+  const API_URL: Key = "api/page/sample-page"
+  const fetcher: Fetcher<APIResponse, string> = (path) =>
+    axios
+      .get<APIResponse, AxiosResponse<APIResponse, AxiosError>, Config>(path, {
+        timeout: 10000
+      })
+      .then((res) => res.data)
+
+  const { data, error } = useSWR<APIResponse, Error>(API_URL, fetcher)
+
+  if (error) {
+    return <div>error...</div>
+  }
+
+  if (!data) {
+    return <div>loading...</div>
+  }
+
+  const title = data.data.page.title
+
   return (
     <div>
       <Head>
@@ -9,12 +49,10 @@ const Home: React.FC = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main>
-        <h1>
-          Hello to <a href="https://nextjs.org">Next.js!</a>
-        </h1>
+        <h1>{title}</h1>
       </main>
     </div>
-  );
-};
+  )
+}
 
-export default Home;
+export default Home
