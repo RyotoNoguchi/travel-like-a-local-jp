@@ -2,6 +2,7 @@
 import Head from "next/head"
 import axios, { AxiosResponse, AxiosError } from "axios"
 import useSWR, { Key, Fetcher } from "swr"
+import { useRouter } from "next/router"
 
 type APIResponse = {
   data: Data
@@ -21,7 +22,11 @@ type Config = {
 }
 
 const Home: React.FC = () => {
-  const API_URL: Key = "api/page/sample-page"
+  const router = useRouter()
+  const {
+    query: { slug }
+  } = router
+  const API_URL: Key = `api/page/${slug}`
   const fetcher: Fetcher<APIResponse, string> = (path) =>
     axios
       .get<APIResponse, AxiosResponse<APIResponse, AxiosError>, Config>(path, {
