@@ -6,6 +6,7 @@
   ],
   "plugins": ["prettier"],
   "rules": {
+    "react/prop-types": "off",
     "prettier/prettier": [
       "error",
       {
@@ -14,6 +15,7 @@
         "tabWidth": 2
       }
     ],
+
     "semi": ["error", "never", { "beforeStatementContinuationChars": "never" }]
   }
 }
