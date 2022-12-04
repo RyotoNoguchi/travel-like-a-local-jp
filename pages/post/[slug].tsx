@@ -6,15 +6,15 @@ import { GetStaticPaths, GetStaticProps } from "next"
 import { ParsedUrlQuery } from "querystring"
 const API_URL = process.env.WORDPRESS_API_URL ?? ""
 
-type APIResponse = {
+type GetPostResponse = {
   data: Data
 }
 
 type Data = {
-  page: Page
+  post: Post
 }
 
-type Page = {
+type Post = {
   content: string
   title: string
 }
@@ -24,19 +24,19 @@ type Config = {
 }
 
 type Params = {
-  slug: string[]
+  slug: string
 } & ParsedUrlQuery
 
 type Props = {
-  uri: string
+  slug: string
 }
 
 type GetStaticPathsResponse = {
-  data: Pages
+  data: Posts
 }
 
-type Pages = {
-  pages: Edges
+type Posts = {
+  posts: Edges
 }
 
 type Edges = {
@@ -44,18 +44,22 @@ type Edges = {
 }
 
 type Node = {
-  node: { uri: string }
+  node: { slug: string }
 }
 
-const Page: React.FC<{ uri: string }> = ({ uri }) => {
-  const apiURL: Key = `/api/post/${uri}`
-  const fetcher: Fetcher<APIResponse, string> = (path) =>
+const Post: React.FC<{ slug: string }> = ({ slug }) => {
+  const apiURL: Key = `/api/post/${slug}`
+  const fetcher: Fetcher<GetPostResponse, string> = (path) =>
     axios
-      .get<APIResponse, AxiosResponse<APIResponse, AxiosError>, Config>(path, {
-        timeout: 10000
-      })
+      .get<GetPostResponse, AxiosResponse<GetPostResponse, AxiosError>, Config>(
+        path,
+        {
+          timeout: 10000
+        }
+      )
       .then((res) => res.data)
-  const { data, error, isValidating } = useSWR<APIResponse>(apiURL, fetcher)
+  const { data, error, isValidating } = useSWR(apiURL, fetcher)
+
   if (!data || isValidating) return <div>loading...</div>
   if (error) return <div>error...</div>
 
@@ -71,24 +75,23 @@ const Page: React.FC<{ uri: string }> = ({ uri }) => {
       </Head>
 
       <main>
-        <h1>{data.data.page.title}</h1>
-        <div dangerouslySetInnerHTML={{ __html: data.data.page.content }} />
+        <h1>{data.data.post.title}</h1>
+        <div dangerouslySetInnerHTML={{ __html: data.data.post.content }} />
       </main>
     </div>
   )
 }
 
-export default Page
+export default Post
 
 // GetStaticPropsの型付け(https://zenn.dev/eitches/articles/2021-0424-getstaticprops-type)
 export const getStaticProps: GetStaticProps<Props, Params> = async ({
   params
 }) => {
-  const slug = params?.slug
-  const uri = slug?.join("/") ?? ""
+  const slug = params?.slug ?? ""
   return {
     props: {
-      uri
+      slug
     }
   }
 }
@@ -100,11 +103,11 @@ export const getStaticPaths: GetStaticPaths<Params> = async () => {
     headers: { "Content-Type": "application/json" },
     data: {
       query: `#graphql
-        query allPages {
-          pages {
+        query allPosts {
+          posts {
             edges {
               node {
-                uri
+                slug
               }
             }
           }
@@ -120,19 +123,18 @@ export const getStaticPaths: GetStaticPaths<Params> = async () => {
         console.log("axios API call failed")
       }
     })
+  console.log("allPosts:", allPosts.data)
 
   const {
     data: {
-      pages: { edges }
+      posts: { edges }
     }
   } = allPosts
 
+  console.log("edges:", edges)
+
   const paths = edges.map(({ node }) => {
-    return {
-      params: {
-        slug: node.uri.split("/").filter((i) => i)
-      }
-    }
+    return { params: { slug: node.slug } }
   })
 
   return {

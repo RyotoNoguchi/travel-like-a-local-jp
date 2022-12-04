@@ -81,9 +81,7 @@ const Home: React.FC = () => {
             <div key={node.slug}>
               <h3>{node.title}</h3>
               <div dangerouslySetInnerHTML={{ __html: node.excerpt }}></div>
-              <Link href={node.slug}>
-                <a>Read More</a>
-              </Link>
+              <Link href={`post/${node.slug}`}>Read More</Link>
             </div>
           )
         })}

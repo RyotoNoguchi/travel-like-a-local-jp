@@ -112,7 +112,7 @@ export const getStaticPaths: GetStaticPaths<Params> = async () => {
       `
     }
   }
-  const allPosts: GetStaticPathsResponse = await axios
+  const allPages: GetStaticPathsResponse = await axios
     .request(options)
     .then((res: AxiosResponse) => res.data)
     .catch((err: AxiosError) => {
@@ -125,7 +125,7 @@ export const getStaticPaths: GetStaticPaths<Params> = async () => {
     data: {
       pages: { edges }
     }
-  } = allPosts
+  } = allPages
 
   const paths = edges.map(({ node }) => {
     return {
