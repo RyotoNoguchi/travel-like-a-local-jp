@@ -16,7 +16,8 @@ const handler = async (req: NextApiRequest, res: NextApiResponse<Data>) => {
   const {
     query: { slug }
   } = req
-
+  const arraySlug = slug as string[]
+  const uri = arraySlug.join("/")
   const options = {
     method: "POST",
     url: API_URL,
@@ -30,7 +31,9 @@ const handler = async (req: NextApiRequest, res: NextApiResponse<Data>) => {
           }
         }
         `,
-      variables: { id: slug }
+      variables: {
+        id: uri
+      }
     }
   }
 

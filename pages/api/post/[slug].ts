@@ -22,8 +22,8 @@ const handler = async (req: NextApiRequest, res: NextApiResponse<Data>) => {
     headers: { "Content-Type": "application/json" },
     data: {
       query: `#graphql 
-        query singlePage($id: ID!){
-          page(id: $id, idType: URI) {
+        query SinglePost($id: ID!){
+          post(id: $id, idType: SLUG) {
             title
             content
           }
@@ -48,7 +48,3 @@ const handler = async (req: NextApiRequest, res: NextApiResponse<Data>) => {
 }
 
 export default handler
-
-// 参照(https://nextjs-ja-translation-docs.vercel.app/docs/api-routes/introduction)
-// `pages/api/*`のファイルは全てAPIエンドポイントとして扱われ、「API Route」と呼ばれる
-// API Routeを動作させるには↑のように、`res`と`req`を引数にもったハンドラメソッドを`export default`しないといけない

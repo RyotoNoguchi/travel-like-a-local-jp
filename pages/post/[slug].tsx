@@ -48,14 +48,14 @@ type Node = {
 }
 
 const Page: React.FC<{ uri: string }> = ({ uri }) => {
-  const apiURL: Key = `/api/page/${uri}`
+  const apiURL: Key = `/api/post/${uri}`
   const fetcher: Fetcher<APIResponse, string> = (path) =>
     axios
       .get<APIResponse, AxiosResponse<APIResponse, AxiosError>, Config>(path, {
         timeout: 10000
       })
       .then((res) => res.data)
-  const { data, error, isValidating } = useSWR(apiURL, fetcher)
+  const { data, error, isValidating } = useSWR<APIResponse>(apiURL, fetcher)
   if (!data || isValidating) return <div>loading...</div>
   if (error) return <div>error...</div>
 

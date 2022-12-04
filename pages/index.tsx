@@ -1,13 +1,14 @@
 /* eslint-disable prettier/prettier */
 import Head from "next/head"
 import axios, { AxiosResponse, AxiosError } from "axios"
-import useSWR, { Key, Fetcher } from "swr"
+import useSWR, { Key, Fetcher, SWRResponse } from "swr"
+import Link from "next/link"
 
-type APIResponse = {
-  data: Data
+type HomeDataResponse = {
+  data: HomeData
 }
 
-type Data = {
+type HomeData = {
   page: Page
 }
 
@@ -20,27 +21,50 @@ type Config = {
   timeout: number
 }
 
-const Home: React.FC = () => {
-  const API_URL: Key = "api/page/sample-page"
-  const fetcher: Fetcher<APIResponse, string> = (path) =>
+type PostDataResponse = {
+  data: Post
+}
+
+type Post = {
+  posts: Posts
+}
+
+type Posts = {
+  edges: PostNode[]
+}
+
+type PostNode = {
+  node: { excerpt: string; slug: string; title: string }
+}
+
+function useSWRWithTimeout<T>(key: Key): SWRResponse<T> {
+  const fetcher: Fetcher<T, string> = (apiPath) =>
     axios
-      .get<APIResponse, AxiosResponse<APIResponse, AxiosError>, Config>(path, {
-        timeout: 10000
-      })
+      .get<T, AxiosResponse<T, AxiosError>, Config>(apiPath, { timeout: 10000 })
       .then((res) => res.data)
+  return useSWR<T, Error>(key, fetcher, { shouldRetryOnError: false })
+}
 
-  const { data, error } = useSWR<APIResponse, Error>(API_URL, fetcher)
+const Home: React.FC = () => {
+  const homePageKey: Key = "api/page/sample-page"
+  const recentPageKey: Key = "api/post/recent"
 
-  if (error) {
+  const { data: homeData, error: homePageError } =
+    useSWRWithTimeout<HomeDataResponse>(homePageKey)
+
+  const { data: postData, error: postError } =
+    useSWRWithTimeout<PostDataResponse>(recentPageKey)
+
+  if (homePageError) {
     return <div>error...</div>
   }
 
-  if (!data) {
+  if (!homeData) {
     return <div>loading...</div>
   }
 
-  const title = data.data.page.title
-  const content = data.data.page.content
+  const title = homeData.data.page.title
+  const content = homeData.data.page.content
 
   return (
     <div>
@@ -52,6 +76,17 @@ const Home: React.FC = () => {
       <main>
         <h1>{title}</h1>
         <div dangerouslySetInnerHTML={{ __html: content }}></div>
+        {postData?.data.posts.edges.map(({ node }) => {
+          return (
+            <div key={node.slug}>
+              <h3>{node.title}</h3>
+              <div dangerouslySetInnerHTML={{ __html: node.excerpt }}></div>
+              <Link href={node.slug}>
+                <a>Read More</a>
+              </Link>
+            </div>
+          )
+        })}
       </main>
     </div>
   )
