@@ -12,7 +12,7 @@ type Data = {
   page: PageContent
 }
 
-const handler = async (req: NextApiRequest, res: NextApiResponse<Data>) => {
+const handler = async (_: NextApiRequest, res: NextApiResponse<Data>) => {
   const options = {
     method: "POST",
     url: API_URL,
