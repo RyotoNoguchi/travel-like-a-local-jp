@@ -3,6 +3,7 @@ import Head from "next/head"
 import axios, { AxiosResponse, AxiosError } from "axios"
 import useSWR, { Key, Fetcher, SWRResponse } from "swr"
 import Link from "next/link"
+import Header from "../components/Header"
 
 type HomeDataResponse = {
   data: HomeData
@@ -74,6 +75,7 @@ const Home: React.FC = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main>
+        <Header />
         <h1>{title}</h1>
         <div dangerouslySetInnerHTML={{ __html: content }}></div>
         {postData?.data.posts.edges.map(({ node }) => {
