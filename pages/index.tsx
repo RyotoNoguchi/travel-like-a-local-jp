@@ -75,7 +75,6 @@ const Home: React.FC = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main>
-        <Header />
         <h1>{title}</h1>
         <div dangerouslySetInnerHTML={{ __html: content }}></div>
         {postData?.data.posts.edges.map(({ node }) => {
