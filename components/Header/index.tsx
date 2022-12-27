@@ -13,29 +13,27 @@ const Header: React.FC = () => {
     "culture"
   ]
   return (
-    <div className="mx-auto h-96 px-10 mb-8 bg-sp_hero sm:bg-pc_hero bg-no-repeat bg-cover bg-center sm:bg-fixed">
-      <div className="flex justify-center md:justify-between w-full border-blue-400 py-8">
-        {matches ? (
-          <Link href="/">
-            <Image alt="logo" height={30} width={200} src="/logo.png"></Image>
-          </Link>
-        ) : (
-          <Link href="/">
-            <Image alt="logo" height={30} width={200} src="/logo.png"></Image>
-          </Link>
-        )}
-        {matches && (
-          <div className="flex items-center">
-            {mockCategories.map((category) => (
-              <Link key={category} href={`/category/${category}`}>
-                <span className="text-white ml-4 font-semibold cursor-pointer">
-                  {category}
-                </span>
-              </Link>
-            ))}
-          </div>
-        )}
-      </div>
+    <div className="flex justify-center md:justify-between w-full border-blue-400 sticky top-0 z-10 bg-slate-100 text-cyan-500">
+      {matches ? (
+        <Link href="/">
+          <Image alt="logo" height={30} width={200} src="/logo.png"></Image>
+        </Link>
+      ) : (
+        <Link href="/">
+          <Image alt="logo" height={30} width={200} src="/logo.png"></Image>
+        </Link>
+      )}
+      {matches && (
+        <div className="flex items-center">
+          {mockCategories.map((category) => (
+            <Link key={category} href={`/category/${category}`}>
+              <span className=" ml-4 font-semibold cursor-pointer">
+                {category}
+              </span>
+            </Link>
+          ))}
+        </div>
+      )}
     </div>
   )
 }
