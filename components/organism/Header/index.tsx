@@ -1,7 +1,7 @@
 import useMediaQuery from "@mui/material/useMediaQuery"
 import Link from "next/link"
 import Image from "next/image"
-import { Category } from "../types/category"
+import { Category } from "../../types/category"
 
 const Header: React.FC = () => {
   const matches = useMediaQuery("(min-width:768px)")
