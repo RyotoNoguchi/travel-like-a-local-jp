@@ -1,12 +1,12 @@
 import { Category } from "./category"
 
 type Content = {
-  raw: Raw;
-};
+  raw: Raw
+}
 
 type Raw = {
   children: TypeObject[]
-};
+}
 
 export type TypeObject = {
   children: ChildrenObject[]
@@ -21,7 +21,7 @@ export type TypeObject = {
   height: number | undefined
   mineType: string | undefined
   handle: string | undefined
-};
+}
 
 export type ChildrenObject = {
   text: string
@@ -73,30 +73,30 @@ type ListObjectChild7 = {
 }
 
 type FeaturedImage = {
-  url: string;
-};
+  url: string
+}
 
 export type Author = {
-  bio: string;
-  id: string;
-  name: string;
-  photo: Photo;
-};
+  bio: string
+  id: string
+  name: string
+  photo: Photo
+}
 
 type Photo = {
-  url: string;
-};
+  url: string
+}
 
 export type Post = {
-  author: Author;
-  categories: Category[];
-  content: Content;
-  createdAt: string;
-  excerpt: string;
-  featuredImage: FeaturedImage;
-  slug: string;
-  title: string;
-};
+  author: Author
+  categories: Category[]
+  content: Content
+  createdAt: string
+  excerpt: string
+  featuredImage: FeaturedImage
+  slug: string
+  title: string
+}
 
 export type CategoryPostsProps = {
   posts: CategoryPosts[]
@@ -108,12 +108,13 @@ type CategoryPosts = {
 }
 
 export type FeaturedPost = {
-  author: Author;
-  categories: Category;
-  createdAt: string;
-  featuredImage: FeaturedImage;
-  slug: string;
-  title: string;
+  author: Author
+  categories: Category
+  createdAt: string
+  featuredImage: FeaturedImage
+  excerpt: string
+  slug: string
+  title: string
 }
 
 export type AdjacentPosts = {
