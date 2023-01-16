@@ -41,12 +41,16 @@ const handler = async (
                 }
                 featuredImage {
                   node {
-                    uri
+                    altText
+                    sourceUrl
                   }
                 }
                 author {
                   node {
                     name
+                    avatar {
+                      url
+                    }
                   }
                 }
               }

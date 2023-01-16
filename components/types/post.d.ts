@@ -73,6 +73,10 @@ type ListObjectChild7 = {
 }
 
 type FeaturedImage = {
+  node: { sourceUrl: string; altText: string }
+}
+
+type Avatar = {
   url: string
 }
 
@@ -80,7 +84,7 @@ export type Author = {
   bio: string
   id: string
   name: string
-  photo: Photo
+  avatar: Avatar
 }
 
 type Photo = {
@@ -110,7 +114,7 @@ type CategoryPosts = {
 export type FeaturedPost = {
   author: Author
   categories: Category
-  createdAt: string
+  date: string
   featuredImage: FeaturedImage
   excerpt: string
   slug: string
