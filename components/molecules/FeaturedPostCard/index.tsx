@@ -25,14 +25,14 @@ const FeaturedPostCard: React.FC<{ post: FeaturedPost }> = ({ post }) => {
             <div className="flex items-center absolute bottom-5 w-full justify-center">
               <Image
                 unoptimized
-                alt={post.author.name}
+                alt={post.author.node.name}
                 height={30}
                 width={30}
-                src={post.author.avatar?.url}
+                src={post.author.node.avatar.url}
                 className="align-middle drop-shadow-lg rounded-full"
               />
               <p className="inline align-middle text-white text-shadow ml-2 font-medium">
-                {post.author.name}
+                {post.author.node.name}
               </p>
             </div>
           </div>

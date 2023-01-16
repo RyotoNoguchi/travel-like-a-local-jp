@@ -81,10 +81,7 @@ type Avatar = {
 }
 
 export type Author = {
-  bio: string
-  id: string
-  name: string
-  avatar: Avatar
+  node: { name: string; avatar: Avatar }
 }
 
 type Photo = {

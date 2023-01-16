@@ -14,11 +14,11 @@ const responsive = {
   },
   desktop: {
     breakpoint: { max: 1024, min: 768 },
-    items: 3
+    items: 4
   },
   tablet: {
     breakpoint: { max: 768, min: 640 },
-    items: 2
+    items: 3
   },
   mobile: {
     breakpoint: { max: 640, min: 0 },
@@ -68,7 +68,7 @@ const FeaturedPosts: React.FC = () => {
   return (
     <div className="mb-8">
       <Carousel
-        infinite
+        infinite={true}
         customLeftArrow={<ArrowLeft />}
         customRightArrow={<ArrowRight />}
         responsive={responsive}

@@ -70,7 +70,6 @@ const handler = async (
         console.log("axios API call failed")
       }
     })
-  console.log("data", data)
   res.json(data)
 }
 
