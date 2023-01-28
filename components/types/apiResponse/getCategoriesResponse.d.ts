@@ -5,7 +5,7 @@ type GetCategoriesResponse = {
     categories: {
       edges: {
         node: {
-          name: string
+          name: Category
         }
       }[]
     }
