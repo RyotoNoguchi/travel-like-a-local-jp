@@ -22,7 +22,7 @@ const Home: React.FC = () => {
   const { data: homeData, error: homePageError } =
     useSWRWithTimeout<HomeDataResponse>(homePageKey)
 
-  const { data: postData, error: postError } =
+  const { data: recentPostsData, error: postError } =
     useSWRWithTimeout<GetRecentPostsResponse>(recentPageKey)
 
   if (homePageError) {
@@ -49,7 +49,7 @@ const Home: React.FC = () => {
 
         <h1>{title}</h1>
         <div dangerouslySetInnerHTML={{ __html: content }}></div>
-        {postData?.data.posts.edges.map(({ node }) => {
+        {recentPostsData?.data.posts.edges.map(({ node }) => {
           return (
             <div key={node.slug}>
               <h3>{node.title}</h3>
