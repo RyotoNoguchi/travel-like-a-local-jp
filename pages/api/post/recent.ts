@@ -19,7 +19,7 @@ const handler = async (_: NextApiRequest, res: NextApiResponse<Data>) => {
     headers: { "Content-Type": "application/json" },
     data: {
       query: `#graphql 
-        query RecentPosts {
+        query GetRecentPosts {
               posts(first: 5, where: { orderby: { field: DATE, order: DESC } }) {
                 edges {
                   node {
@@ -30,7 +30,7 @@ const handler = async (_: NextApiRequest, res: NextApiResponse<Data>) => {
                 }
               }
             }
-        `,
+        `
     }
   }
 

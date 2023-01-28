@@ -4,26 +4,13 @@ import { Key } from "swr"
 import Link from "next/link"
 import { Hero, FeaturedPosts } from "../components"
 import { useSWRWithTimeout } from "../components/hooks/swr"
+import { GetRecentPostsResponse } from "../components/types/apiResponse"
 
 type HomeDataResponse = {
   data: {
     page: {
       content: string
       title: string
-    }
-  }
-}
-
-type PostDataResponse = {
-  data: {
-    posts: {
-      edges: {
-        node: {
-          excerpt: string
-          slug: string
-          title: string
-        }
-      }[]
     }
   }
 }
@@ -36,7 +23,7 @@ const Home: React.FC = () => {
     useSWRWithTimeout<HomeDataResponse>(homePageKey)
 
   const { data: postData, error: postError } =
-    useSWRWithTimeout<PostDataResponse>(recentPageKey)
+    useSWRWithTimeout<GetRecentPostsResponse>(recentPageKey)
 
   if (homePageError) {
     return <div>error...</div>
