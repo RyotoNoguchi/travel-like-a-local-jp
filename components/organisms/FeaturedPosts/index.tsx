@@ -5,7 +5,7 @@ import ArrowLeft from "../../atoms/ArrowLeft"
 import ArrowRight from "../../atoms/ArrowRight"
 import { Key } from "swr"
 import { useSWRWithTimeout } from "../../hooks/swr"
-import { GetPostsResponse } from "../../types/apiResponse"
+import { Post } from "../../types/post"
 
 const responsive = {
   superLargeDesktop: {
@@ -33,10 +33,11 @@ const FeaturedPosts: React.FC = () => {
     data: featuredPostData,
     isValidating,
     error: _
-  } = useSWRWithTimeout<GetPostsResponse>(featuredPostKey)
+  } = useSWRWithTimeout<Post[]>(featuredPostKey)
 
   if (isValidating) return null
 
+  console.log("featuredPostData", featuredPostData)
   return (
     <div className="mb-8">
       <Carousel
@@ -46,8 +47,8 @@ const FeaturedPosts: React.FC = () => {
         responsive={responsive}
         itemClass="px-4"
       >
-        {featuredPostData?.data.posts.edges.map(({ node }) => (
-          <FeaturedPostCard key={node.slug} post={node} />
+        {featuredPostData?.map((post) => (
+          <FeaturedPostCard key={post.slug} post={post} />
         ))}
       </Carousel>
     </div>

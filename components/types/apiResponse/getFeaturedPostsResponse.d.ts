@@ -1,4 +1,4 @@
-type GetRecentPostsResponse = {
+type GetFeaturedPostsResponse = {
   posts: {
     edges: {
       node: {
@@ -18,4 +18,4 @@ type GetRecentPostsResponse = {
   }
 }
 
-export default GetRecentPostsResponse
+export default GetFeaturedPostsResponse

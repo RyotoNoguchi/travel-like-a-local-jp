@@ -1,10 +1,18 @@
 /* eslint-disable prettier/prettier */
 import Head from "next/head"
-import { Key } from "swr"
+import { Key, SWRConfig } from "swr"
 import Link from "next/link"
 import { Hero, FeaturedPosts } from "../components"
 import { useSWRWithTimeout } from "../components/hooks/swr"
-import { GetRecentPostsResponse } from "../components/types/apiResponse"
+import {
+  GetRecentPostsResponse,
+  GetFeaturedPostsResponse
+} from "../components/types/apiResponse"
+import { Post } from "../components/types/post"
+import type { InferGetStaticPropsType, NextPage, GetStaticProps } from "next"
+import request, { gql } from "graphql-request"
+import PostCard from "../components/organisms/PostCard"
+import { useEffect, useState } from "react"
 
 type HomeDataResponse = {
   data: {
@@ -15,15 +23,28 @@ type HomeDataResponse = {
   }
 }
 
-const Home: React.FC = () => {
+type Props = InferGetStaticPropsType<typeof getStaticProps>
+
+const Home: NextPage<Props> = ({ fallback }) => {
+  console.log("フォールバック: ", fallback)
+  console.log("フォールバック2: ", fallback["api/post/recent"])
+  const [recentPosts, setRecentPosts] = useState(fallback["api/post/recent"])
+  console.log("recentPosts: ", recentPosts)
+
   const homePageKey: Key = "api/page/sample-page"
-  const recentPageKey: Key = "api/post/recent"
 
   const { data: homeData, error: homePageError } =
     useSWRWithTimeout<HomeDataResponse>(homePageKey)
 
-  const { data: recentPostsData, error: postError } =
-    useSWRWithTimeout<GetRecentPostsResponse>(recentPageKey)
+  const recentPageKey: Key = "api/post/recent"
+  const { data: recentPageData } = useSWRWithTimeout<Post[]>(recentPageKey)
+
+  useEffect(() => {
+    if (recentPageData) {
+      setRecentPosts(recentPageData)
+    }
+    console.log("useEffect後のrecentPageData", recentPosts)
+  }, [recentPageData, recentPosts])
 
   if (homePageError) {
     return <div>error...</div>
@@ -45,22 +66,107 @@ const Home: React.FC = () => {
       </Head>
       <main>
         <Hero />
-        <FeaturedPosts />
+        <SWRConfig value={{ fallback }}>
+          <FeaturedPosts />
+        </SWRConfig>
 
         <h1>{title}</h1>
         <div dangerouslySetInnerHTML={{ __html: content }}></div>
-        {recentPostsData?.data.posts.edges.map(({ node }) => {
-          return (
-            <div key={node.slug}>
-              <h3>{node.title}</h3>
-              <div dangerouslySetInnerHTML={{ __html: node.excerpt }}></div>
-              <Link href={`post/${node.slug}`}>Read More</Link>
-            </div>
-          )
-        })}
+
+        {recentPosts?.map((post) => (
+          <SWRConfig value={{ fallback }} key={post.slug}>
+            <PostCard post={post} />
+          </SWRConfig>
+        ))}
       </main>
     </div>
   )
 }
 
 export default Home
+
+type GetStaticPropsResponse = {
+  fallback: {
+    "api/post/featured": Post[]
+    "api/post/recent": Post[]
+  }
+}
+
+export const getStaticProps: GetStaticProps<
+  GetStaticPropsResponse
+> = async () => {
+  const GRAPHQL_API_URL = "https://travel-like-a-local-jp.com/graphql"
+  const queryGetFeaturedPosts = gql`
+    query GetFeaturedPosts {
+      posts(where: { tag: "featured" }) {
+        edges {
+          node {
+            slug
+            title
+            excerpt
+            date
+            content
+            categories {
+              edges {
+                node {
+                  name
+                }
+              }
+            }
+            featuredImage {
+              node {
+                altText
+                sourceUrl
+              }
+            }
+            author {
+              node {
+                name
+                avatar {
+                  url
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  `
+  const getFeaturedPostsResponse: GetFeaturedPostsResponse = await request(
+    GRAPHQL_API_URL,
+    queryGetFeaturedPosts
+  )
+  const featuredPosts: Post[] = getFeaturedPostsResponse.posts.edges.map(
+    ({ node }) => node
+  )
+
+  const queryGetRecentPosts = gql`
+    query GetRecentPosts {
+      posts(first: 5, where: { orderby: { field: DATE, order: DESC } }) {
+        edges {
+          node {
+            slug
+            title
+            excerpt
+          }
+        }
+      }
+    }
+  `
+  const queryGetRecentPostsResponse: GetRecentPostsResponse = await request(
+    GRAPHQL_API_URL,
+    queryGetRecentPosts
+  )
+  const recentPosts: Post[] = queryGetRecentPostsResponse.posts.edges.map(
+    ({ node }) => node
+  )
+
+  return {
+    props: {
+      fallback: {
+        "api/post/featured": featuredPosts,
+        "api/post/recent": recentPosts
+      }
+    }
+  }
+}

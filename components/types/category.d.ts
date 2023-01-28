@@ -1,9 +1,7 @@
-type Category =
-  | "activity"
-  | "food"
-  | "culture"
-  | "hotel"
-  | "people"
-  | "Uncategorized"
+type Category = {
+  node: {
+    name: "activity" | "food" | "culture" | "hotel" | "people" | "Uncategorized"
+  }
+}
 
 export default Category

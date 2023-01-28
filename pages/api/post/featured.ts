@@ -2,12 +2,10 @@
 import axios, { AxiosResponse, AxiosError } from "axios"
 import type { NextApiRequest, NextApiResponse } from "next"
 import { GetPostsResponse } from "../../../components/types/apiResponse"
+import { Post } from "../../../components/types/post"
 const API_URL = process.env.WORDPRESS_API_URL ?? ""
 
-const handler = async (
-  _: NextApiRequest,
-  res: NextApiResponse<GetPostsResponse>
-) => {
+const handler = async (_: NextApiRequest, res: NextApiResponse<Post[]>) => {
   const options = {
     method: "POST",
     url: API_URL,
@@ -60,7 +58,7 @@ const handler = async (
         console.log("axios API call failed")
       }
     })
-  res.json(data)
+  res.json(data?.data?.posts?.edges.map(({ node }) => node))
 }
 
 export default handler

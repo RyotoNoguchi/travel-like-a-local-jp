@@ -9,7 +9,9 @@ type Photo = {
 export type Post = {
   author: Author
   // eslint-disable-next-line prettier/prettier
-  categories: Category[]
+  categories: {
+    edges: Category[]
+  }
   content: string
   date: string
   excerpt: string

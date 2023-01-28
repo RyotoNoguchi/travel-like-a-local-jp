@@ -1,18 +1,11 @@
 /* eslint-disable prettier/prettier */
 import axios, { AxiosResponse, AxiosError } from "axios"
 import type { NextApiRequest, NextApiResponse } from "next"
+import { GetPostsResponse } from "../../../components/types/apiResponse"
+import { Post } from "../../../components/types/post"
 const API_URL = process.env.WORDPRESS_API_URL ?? ""
 
-type PageContent = {
-  title: string
-  content: string
-}
-
-type Data = {
-  page: PageContent
-}
-
-const handler = async (_: NextApiRequest, res: NextApiResponse<Data>) => {
+const handler = async (_: NextApiRequest, res: NextApiResponse<Post[]>) => {
   const options = {
     method: "POST",
     url: API_URL,
@@ -26,6 +19,28 @@ const handler = async (_: NextApiRequest, res: NextApiResponse<Data>) => {
                     slug
                     title
                     excerpt
+                    date
+                    categories {
+                      edges {
+                        node {
+                          name
+                        }
+                      }
+                    }
+                    featuredImage {
+                      node {
+                        altText
+                        sourceUrl
+                      }
+                    }
+                    author {
+                      node {
+                        name
+                        avatar {
+                          url
+                        }
+                      }
+                    }
                   }
                 }
               }
@@ -35,7 +50,7 @@ const handler = async (_: NextApiRequest, res: NextApiResponse<Data>) => {
   }
 
   // axiosでGraphQLのAPIコールの仕方(https://rapidapi.com/guides/graphql-axios)
-  const data: Data = await axios
+  const data: GetPostsResponse = await axios
     .request(options)
     .then((res: AxiosResponse) => res.data)
     .catch((err: AxiosError) => {
@@ -43,7 +58,7 @@ const handler = async (_: NextApiRequest, res: NextApiResponse<Data>) => {
         console.log("axios API call failed")
       }
     })
-  res.json(data)
+  res.json(data.data.posts.edges.map(({ node }) => node))
 }
 
 export default handler

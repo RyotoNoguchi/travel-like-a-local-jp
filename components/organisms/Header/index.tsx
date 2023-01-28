@@ -33,6 +33,7 @@ const Header: React.FC = () => {
         </Link>
       )}
       {matches && (
+        // categoriesData?.data.categories.map({ edges } => edges.)
         <div className="flex items-center">
           {categoriesData?.data?.categories.edges.map(({ node }) => {
             const category = node.name
