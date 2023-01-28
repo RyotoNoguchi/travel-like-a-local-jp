@@ -3,7 +3,7 @@
     "target": "es5",
     "lib": ["dom", "dom.iterable", "esnext"],
     "allowJs": true,
-    "skipLibCheck": true,
+    // "skipLibCheck": true, これをfalseにすることで「.d.ts」ファイルでもでも存在しない型を検知してくれる
     "strict": true,
     "forceConsistentCasingInFileNames": true,
     "noEmit": true,

@@ -1,12 +1,12 @@
 /* eslint-disable prettier/prettier */
 import axios, { AxiosResponse, AxiosError } from "axios"
 import type { NextApiRequest, NextApiResponse } from "next"
-import { PostDataResponse } from "../../../components/organisms/FeaturedPosts"
+import { GetPostsResponse } from "../../../components/types/apiResponse"
 const API_URL = process.env.WORDPRESS_API_URL ?? ""
 
 const handler = async (
   _: NextApiRequest,
-  res: NextApiResponse<PostDataResponse>
+  res: NextApiResponse<GetPostsResponse>
 ) => {
   const options = {
     method: "POST",
@@ -14,7 +14,7 @@ const handler = async (
     headers: { "Content-Type": "application/json" },
     data: {
       query: `#graphql 
-        query GetFeaturedPost {
+        query GetFeaturedPosts {
           posts(where: {tag: "featured"}) {
             edges {
               node {
@@ -52,7 +52,7 @@ const handler = async (
   }
 
   // axiosでGraphQLのAPIコールの仕方(https://rapidapi.com/guides/graphql-axios)
-  const data: PostDataResponse = await axios
+  const data: GetPostsResponse = await axios
     .request(options)
     .then((res: AxiosResponse) => res.data)
     .catch((err: AxiosError) => {

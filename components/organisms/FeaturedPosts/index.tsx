@@ -1,11 +1,11 @@
 import FeaturedPostCard from "../../molecules/FeaturedPostCard"
 import Carousel from "react-multi-carousel"
 import "react-multi-carousel/lib/styles.css"
-import { Post } from "../../types/post"
 import ArrowLeft from "../../atoms/ArrowLeft"
 import ArrowRight from "../../atoms/ArrowRight"
 import { Key } from "swr"
 import { useSWRWithTimeout } from "../../hooks/swr"
+import { GetPostsResponse } from "../../types/apiResponse"
 
 const responsive = {
   superLargeDesktop: {
@@ -26,10 +26,6 @@ const responsive = {
   }
 }
 
-export type PostDataResponse = {
-  data: { posts: { edges: { node: Post }[] } }
-}
-
 const FeaturedPosts: React.FC = () => {
   const featuredPostKey: Key = "api/post/featured"
 
@@ -37,7 +33,7 @@ const FeaturedPosts: React.FC = () => {
     data: featuredPostData,
     isValidating,
     error: _
-  } = useSWRWithTimeout<PostDataResponse>(featuredPostKey)
+  } = useSWRWithTimeout<GetPostsResponse>(featuredPostKey)
 
   if (isValidating) return null
 

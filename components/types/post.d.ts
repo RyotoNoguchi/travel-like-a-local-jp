@@ -1,5 +1,4 @@
 import Category from "./category"
-import Avatar from "./avatar"
 import Author from "./author"
 import FeaturedImage from "./featuredImage"
 
@@ -11,7 +10,7 @@ export type Post = {
   author: Author
   // eslint-disable-next-line prettier/prettier
   categories: Category[]
-  content: Content
+  content: string
   date: string
   excerpt: string
   featuredImage: FeaturedImage

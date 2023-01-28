@@ -1,2 +1,15 @@
-type Category = "activity" | "food" | "culture" | "hotel" | "people"
+type Category = {
+  edges: {
+    node: {
+      name:
+        | "activity"
+        | "food"
+        | "culture"
+        | "hotel"
+        | "people"
+        | "Uncategorized"
+    }
+  }
+}
+
 export default Category
