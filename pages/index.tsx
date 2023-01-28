@@ -2,8 +2,7 @@
 import Head from "next/head"
 import { Key } from "swr"
 import Link from "next/link"
-import { Hero } from "../components"
-import FeaturedPosts from "../components/organisms/FeaturedPost"
+import { Hero, FeaturedPosts } from "../components"
 import { useSWRWithTimeout } from "../components/hooks/swr"
 
 type HomeDataResponse = {

@@ -1,7 +1,7 @@
 /* eslint-disable prettier/prettier */
 import axios, { AxiosResponse, AxiosError } from "axios"
 import type { NextApiRequest, NextApiResponse } from "next"
-import { PostDataResponse } from "../../../components/organisms/FeaturedPost"
+import { PostDataResponse } from "../../../components/organisms/FeaturedPosts"
 const API_URL = process.env.WORDPRESS_API_URL ?? ""
 
 const handler = async (
