@@ -5,7 +5,6 @@ import Link from "next/link"
 import { Post } from "../../types/post"
 
 const FeaturedPostCard: React.FC<{ post: Post }> = ({ post }) => {
-  console.log("post", post)
   return (
     <div className="relative h-72">
       <div

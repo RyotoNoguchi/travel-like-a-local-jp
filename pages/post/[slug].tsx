@@ -123,15 +123,12 @@ export const getStaticPaths: GetStaticPaths<Params> = async () => {
         console.log("axios API call failed")
       }
     })
-  console.log("allPosts:", allPosts.data)
 
   const {
     data: {
       posts: { edges }
     }
   } = allPosts
-
-  console.log("edges:", edges)
 
   const paths = edges.map(({ node }) => {
     return { params: { slug: node.slug } }
