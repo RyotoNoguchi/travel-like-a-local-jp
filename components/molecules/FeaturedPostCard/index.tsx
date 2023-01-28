@@ -2,9 +2,9 @@ import React from "react"
 import moment from "moment"
 import Image from "next/image"
 import Link from "next/link"
-import { FeaturedPost } from "../../types/post"
+import { Post } from "../../types/post"
 
-const FeaturedPostCard: React.FC<{ post: FeaturedPost }> = ({ post }) => {
+const FeaturedPostCard: React.FC<{ post: Post }> = ({ post }) => {
   console.log("post", post)
   return (
     <div className="relative h-72">

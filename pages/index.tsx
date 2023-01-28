@@ -1,10 +1,10 @@
 /* eslint-disable prettier/prettier */
 import Head from "next/head"
-import axios, { AxiosResponse, AxiosError } from "axios"
-import useSWR, { Key, Fetcher, SWRResponse } from "swr"
+import { Key } from "swr"
 import Link from "next/link"
 import { Hero } from "../components"
 import FeaturedPosts from "../components/organisms/FeaturedPost"
+import { useSWRWithTimeout } from "../components/hooks/swr"
 
 type HomeDataResponse = {
   data: HomeData
@@ -19,32 +19,16 @@ type Page = {
   title: string
 }
 
-type Config = {
-  timeout: number
-}
-
 type PostDataResponse = {
-  data: Post
+  data: { posts: Post}
 }
 
 type Post = {
-  posts: Posts
-}
-
-type Posts = {
   edges: PostNode[]
 }
 
 type PostNode = {
   node: { excerpt: string; slug: string; title: string }
-}
-
-function useSWRWithTimeout<T>(key: Key): SWRResponse<T> {
-  const fetcher: Fetcher<T, string> = (apiPath) =>
-    axios
-      .get<T, AxiosResponse<T, AxiosError>, Config>(apiPath, { timeout: 10000 })
-      .then((res) => res.data)
-  return useSWR<T, Error>(key, fetcher, { shouldRetryOnError: false })
 }
 
 const Home: React.FC = () => {
@@ -78,6 +62,7 @@ const Home: React.FC = () => {
       <main>
         <Hero />
         <FeaturedPosts />
+        
         <h1>{title}</h1>
         <div dangerouslySetInnerHTML={{ __html: content }}></div>
         {postData?.data.posts.edges.map(({ node }) => {

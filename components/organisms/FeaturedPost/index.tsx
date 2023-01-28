@@ -1,11 +1,11 @@
 import FeaturedPostCard from "../../molecules/FeaturedPostCard"
 import Carousel from "react-multi-carousel"
 import "react-multi-carousel/lib/styles.css"
-import { FeaturedPost } from "../../types/post"
+import { Post } from "../../types/post"
 import ArrowLeft from "../../atoms/ArrowLeft"
 import ArrowRight from "../../atoms/ArrowRight"
-import useSWR, { Key, Fetcher, SWRResponse } from "swr"
-import axios, { AxiosResponse, AxiosError } from "axios"
+import { Key } from "swr"
+import { useSWRWithTimeout } from "../../hooks/swr"
 
 const responsive = {
   superLargeDesktop: {
@@ -26,32 +26,8 @@ const responsive = {
   }
 }
 
-function useSWRWithTimeout<T>(key: Key): SWRResponse<T> {
-  const fetcher: Fetcher<T, string> = (apiPath) =>
-    axios
-      .get<T, AxiosResponse<T, AxiosError>, Config>(apiPath, { timeout: 10000 })
-      .then((res) => res.data)
-  return useSWR<T, Error>(key, fetcher, { shouldRetryOnError: false })
-}
-
-type Config = {
-  timeout: number
-}
-
 export type PostDataResponse = {
-  data: Post
-}
-
-type Post = {
-  posts: Posts
-}
-
-type Posts = {
-  edges: PostNode[]
-}
-
-type PostNode = {
-  node: FeaturedPost
+  data: { posts: { edges: { node: Post }[] } }
 }
 
 const FeaturedPosts: React.FC = () => {
@@ -60,7 +36,7 @@ const FeaturedPosts: React.FC = () => {
   const {
     data: featuredPostData,
     isValidating,
-    error: postError
+    error: _
   } = useSWRWithTimeout<PostDataResponse>(featuredPostKey)
 
   if (isValidating) return null

@@ -4,16 +4,6 @@ import type { NextApiRequest, NextApiResponse } from "next"
 import { PostDataResponse } from "../../../components/organisms/FeaturedPost"
 const API_URL = process.env.WORDPRESS_API_URL ?? ""
 
-// type GetFeaturedPostResponse = {
-//   excerpt: string
-//   slug: string
-//   title: string
-// }
-
-// type Data = {
-//   getFeaturedPostResponse: { excerpt: string; slug: string; title: string }
-// }
-
 const handler = async (
   _: NextApiRequest,
   res: NextApiResponse<PostDataResponse>
