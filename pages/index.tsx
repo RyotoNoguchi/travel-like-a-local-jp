@@ -7,28 +7,26 @@ import FeaturedPosts from "../components/organisms/FeaturedPost"
 import { useSWRWithTimeout } from "../components/hooks/swr"
 
 type HomeDataResponse = {
-  data: HomeData
-}
-
-type HomeData = {
-  page: Page
-}
-
-type Page = {
-  content: string
-  title: string
+  data: {
+    page: {
+      content: string
+      title: string
+    }
+  }
 }
 
 type PostDataResponse = {
-  data: { posts: Post}
-}
-
-type Post = {
-  edges: PostNode[]
-}
-
-type PostNode = {
-  node: { excerpt: string; slug: string; title: string }
+  data: {
+    posts: {
+      edges: {
+        node: {
+          excerpt: string
+          slug: string
+          title: string
+        }
+      }[]
+    }
+  }
 }
 
 const Home: React.FC = () => {
@@ -62,7 +60,7 @@ const Home: React.FC = () => {
       <main>
         <Hero />
         <FeaturedPosts />
-        
+
         <h1>{title}</h1>
         <div dangerouslySetInnerHTML={{ __html: content }}></div>
         {postData?.data.posts.edges.map(({ node }) => {
