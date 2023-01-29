@@ -58,7 +58,7 @@ const handler = async (_: NextApiRequest, res: NextApiResponse<Post[]>) => {
         console.log("axios API call failed")
       }
     })
-  res.json(data.data.posts.edges.map(({ node }) => node))
+  res.json(data?.data?.posts?.edges.map(({ node }) => node))
 }
 
 export default handler

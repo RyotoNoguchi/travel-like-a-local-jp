@@ -69,3 +69,4 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/deploym
 
 - [WordPressのプレビューモード実装](https://tsh.io/blog/headless-wordpress-as-an-api-for-a-next-js-application/)
 - [The Next.js WordPress Starter](https://webdevstudios.github.io/nextjs-wordpress-starter/)
+

@@ -1,7 +1,6 @@
 /* eslint-disable prettier/prettier */
 import Head from "next/head"
 import { Key, SWRConfig } from "swr"
-import Link from "next/link"
 import { Hero, FeaturedPosts } from "../components"
 import { useSWRWithTimeout } from "../components/hooks/swr"
 import {
@@ -11,8 +10,7 @@ import {
 import { Post } from "../components/types/post"
 import type { InferGetStaticPropsType, NextPage, GetStaticProps } from "next"
 import request, { gql } from "graphql-request"
-import PostCard from "../components/organisms/PostCard"
-import { useEffect, useState } from "react"
+import PostCards from "../components/organisms/PostCards"
 
 type HomeDataResponse = {
   data: {
@@ -26,25 +24,10 @@ type HomeDataResponse = {
 type Props = InferGetStaticPropsType<typeof getStaticProps>
 
 const Home: NextPage<Props> = ({ fallback }) => {
-  console.log("フォールバック: ", fallback)
-  console.log("フォールバック2: ", fallback["api/post/recent"])
-  const [recentPosts, setRecentPosts] = useState(fallback["api/post/recent"])
-  console.log("recentPosts: ", recentPosts)
-
   const homePageKey: Key = "api/page/sample-page"
 
   const { data: homeData, error: homePageError } =
     useSWRWithTimeout<HomeDataResponse>(homePageKey)
-
-  const recentPageKey: Key = "api/post/recent"
-  const { data: recentPageData } = useSWRWithTimeout<Post[]>(recentPageKey)
-
-  useEffect(() => {
-    if (recentPageData) {
-      setRecentPosts(recentPageData)
-    }
-    console.log("useEffect後のrecentPageData", recentPosts)
-  }, [recentPageData, recentPosts])
 
   if (homePageError) {
     return <div>error...</div>
@@ -73,11 +56,9 @@ const Home: NextPage<Props> = ({ fallback }) => {
         <h1>{title}</h1>
         <div dangerouslySetInnerHTML={{ __html: content }}></div>
 
-        {recentPosts?.map((post) => (
-          <SWRConfig value={{ fallback }} key={post.slug}>
-            <PostCard post={post} />
-          </SWRConfig>
-        ))}
+        <SWRConfig value={{ fallback }}>
+          <PostCards />
+        </SWRConfig>
       </main>
     </div>
   )

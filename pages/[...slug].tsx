@@ -4,6 +4,7 @@ import axios, { AxiosResponse, AxiosError } from "axios"
 import useSWR, { Key, Fetcher } from "swr"
 import { GetStaticPaths, GetStaticProps } from "next"
 import { ParsedUrlQuery } from "querystring"
+import path from "path"
 const API_URL = process.env.WORDPRESS_API_URL ?? ""
 
 type APIResponse = {
@@ -40,11 +41,7 @@ type Pages = {
 }
 
 type Edges = {
-  edges: Node[]
-}
-
-type Node = {
-  node: { uri: string }
+  edges: { node: { uri: string } }[]
 }
 
 const Page: React.FC<{ uri: string }> = ({ uri }) => {
@@ -127,6 +124,7 @@ export const getStaticPaths: GetStaticPaths<Params> = async () => {
     }
   } = allPages
 
+  edges.splice(edges.length - 1, 1) // splice()して"/"のパス削除しないと`yarn build`で「path: "/" from page: "/[...slug]" conflicts with path: "/" 」のエラーがでる。>>
   const paths = edges.map(({ node }) => {
     return {
       params: {
@@ -134,7 +132,6 @@ export const getStaticPaths: GetStaticPaths<Params> = async () => {
       }
     }
   })
-
   return {
     paths,
     fallback: true

@@ -6,7 +6,6 @@ type Config = {
 }
 
 export function useSWRWithTimeout<T>(key: Key): SWRResponse<T> {
-  console.log("APIのURL", key)
   const fetcher: Fetcher<T, string> = (apiPath) =>
     axios
       .get<T, AxiosResponse<T, AxiosError>, Config>(apiPath, { timeout: 10000 })

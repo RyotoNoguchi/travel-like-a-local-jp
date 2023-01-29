@@ -37,7 +37,6 @@ const FeaturedPosts: React.FC = () => {
 
   if (isValidating) return null
 
-  console.log("featuredPostData", featuredPostData)
   return (
     <div className="mb-8">
       <Carousel
