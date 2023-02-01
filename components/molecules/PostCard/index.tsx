@@ -4,9 +4,8 @@ import { useState } from "react"
 import { Post } from "../../types/post"
 
 const PostCard: React.FC<{ post: Post }> = ({ post }) => {
-  console.log("PostCardコンポーネントのpost: ", post)
   const [featuredImage, setFeaturedImage] = useState(
-    post?.featuredImage?.node.sourceUrl
+    post.featuredImage?.node.sourceUrl
   )
   return (
     <div className="bg-white shadow-lg rounded-lg p-0 mb-8">
@@ -33,14 +32,14 @@ const PostCard: React.FC<{ post: Post }> = ({ post }) => {
       <div className="block lg:flex text-center items-center justify-center mb-2 w-full">
         <div className="flex items-center justify-center lg:mb-0 w-full lg:w-auto mr-8">
           <Image
-            src={post.author.node.avatar.url}
-            alt={post.author.node.name}
+            src={post.author?.node.avatar.url}
+            alt={post.author?.node.name}
             width={30}
             height={30}
             className="align-middle rounded-full drop-shadow-sm shadow"
           />
           <p className="inline align-middle text-gray-700 ml-2 text-lg">
-            {post.author.node.name}
+            {post.author?.node.name}
           </p>
         </div>
       </div>

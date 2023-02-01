@@ -11,7 +11,6 @@ import { Post } from "../components/types/post"
 import type { InferGetStaticPropsType, NextPage, GetStaticProps } from "next"
 import request, { gql } from "graphql-request"
 import PostCards from "../components/organisms/PostCards"
-import { faL } from "@fortawesome/free-solid-svg-icons"
 
 type HomeDataResponse = {
   data: {
@@ -57,8 +56,9 @@ const Home: NextPage<Props> = ({ fallback }) => {
         <h1>{title}</h1>
         <div dangerouslySetInnerHTML={{ __html: content }}></div>
 
+        {/* fallbackなしだと、レンダリング後にfetcherが叩かれるため、一瞬ブランクな状態が発生する。console.logしてリロードするとundefinedになることを確認できる */}
         <SWRConfig value={{ fallback }}>
-          <PostCards posts={fallback["api/post/recent"]} />
+          <PostCards />
         </SWRConfig>
       </main>
     </div>
