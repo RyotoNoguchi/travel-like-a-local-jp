@@ -130,6 +130,28 @@ export const getStaticProps: GetStaticProps<
             slug
             title
             excerpt
+            date
+            categories {
+              edges {
+                node {
+                  name
+                }
+              }
+            }
+            featuredImage {
+              node {
+                altText
+                sourceUrl
+              }
+            }
+            author {
+              node {
+                name
+                avatar {
+                  url
+                }
+              }
+            }
           }
         }
       }

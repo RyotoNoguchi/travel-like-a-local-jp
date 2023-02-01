@@ -4,17 +4,21 @@ import PostCard from "../../molecules/PostCard"
 import { Key } from "swr"
 import { useState } from "react"
 
-const PostCards: React.FC<{ posts: Post[] }> = (posts) => {
+const PostCards: React.FC<{ posts: Post[] }> = ({ posts }) => {
   const recentPostsKey: Key = "api/post/recent"
   const { data: recentPostsData, isValidating } =
     useSWRWithTimeout<Post[]>(recentPostsKey)
 
-  if (isValidating) return null
-  if (!recentPostsData) return null
+  if (!posts && (isValidating || !recentPostsData)) {
+    return <div>PostCard</div>
+  }
+
+  console.log("posts", posts)
+  console.log("recentPostsData", recentPostsData)
 
   return (
     <>
-      {(recentPostsData ?? posts).map((post) => (
+      {(recentPostsData != null ? recentPostsData : posts).map((post) => (
         <PostCard key={post.slug} post={post} />
       ))}
     </>
