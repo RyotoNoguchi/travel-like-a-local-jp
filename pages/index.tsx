@@ -11,6 +11,7 @@ import { Post } from "../components/types/post"
 import type { InferGetStaticPropsType, NextPage, GetStaticProps } from "next"
 import request, { gql } from "graphql-request"
 import PostCards from "../components/organisms/PostCards"
+import { faL } from "@fortawesome/free-solid-svg-icons"
 
 type HomeDataResponse = {
   data: {
@@ -57,7 +58,7 @@ const Home: NextPage<Props> = ({ fallback }) => {
         <div dangerouslySetInnerHTML={{ __html: content }}></div>
 
         <SWRConfig value={{ fallback }}>
-          <PostCards />
+          <PostCards posts={fallback["api/post/recent"]} />
         </SWRConfig>
       </main>
     </div>
