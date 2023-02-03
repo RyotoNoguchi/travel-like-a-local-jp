@@ -59,10 +59,11 @@ const Post: React.FC<{ slug: string }> = ({ slug }) => {
       )
       .then((res) => res.data)
   const { data, error, isValidating } = useSWR(apiURL, fetcher)
-
   if (!data || isValidating) return <div>loading...</div>
   if (error) return <div>error...</div>
 
+  // TODO {id}をパラメータにしてgetPostById的な感じで`slug`と`categories`をfetch
+  // TODO <PostWidget slug={slug} categories={categories}/>をreturnする
   return (
     <div>
       <Head>
@@ -84,6 +85,7 @@ const Post: React.FC<{ slug: string }> = ({ slug }) => {
 
 export default Post
 
+// TODO slugだけでなくPostのidを含めて{slug, id}の形で<Post />にprops渡す
 // GetStaticPropsの型付け(https://zenn.dev/eitches/articles/2021-0424-getstaticprops-type)
 export const getStaticProps: GetStaticProps<Props, Params> = async ({
   params
