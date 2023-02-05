@@ -11,6 +11,7 @@ import { Post } from "../components/types/post"
 import type { InferGetStaticPropsType, NextPage, GetStaticProps } from "next"
 import request, { gql } from "graphql-request"
 import PostCards from "../components/organisms/PostCards"
+const GRAPHQL_API_URL = process.env.WORDPRESS_API_URL ?? ""
 
 type HomeDataResponse = {
   data: {
@@ -77,7 +78,6 @@ type GetStaticPropsResponse = {
 export const getStaticProps: GetStaticProps<
   GetStaticPropsResponse
 > = async () => {
-  const GRAPHQL_API_URL = "https://travel-like-a-local-jp.com/graphql"
   const queryGetFeaturedPosts = gql`
     query GetFeaturedPosts {
       posts(where: { tag: "featured" }) {
