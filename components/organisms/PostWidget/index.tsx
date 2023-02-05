@@ -1,22 +1,17 @@
-import axios from "axios"
-import useSWR from "swr"
+import { useSWRDynamicParams } from "../../hooks/swr"
 
-type GetPostDetailResponse = {
+type GetPostWidgetResponse = {
   categories: string[]
   // eslint-disable-next-line prettier/prettier
   slug: string
 }
 
 const PostWidget: React.FC<{ slug: string }> = ({ slug }) => {
-  const fetcher = (url: string, slug: string) =>
-    axios.get(`${url}/${slug}`, { timeout: 10000 }).then((res) => res.data)
+  // https://swr.vercel.app/ja/docs/arguments#%E8%A4%87%E6%95%B0%E3%81%AE%E5%BC%95%E6%95%B0
+  // useSWRの引数に配列をを指定し、変数を第2引数以降に入れることでuseSWRがkeyを動的に認知してくれるようになる
+  const { data } = useSWRDynamicParams<GetPostWidgetResponse>("/api/post", slug)
+  console.log("GetPostWidgetResponse: ", data)
 
-  // TODO useSWRDynamicParamsとしてexportしたのを使用するよに変更
-  const { data } = useSWR(
-    ["/api/post", slug],
-    ([url, slug]: [string, string]) => fetcher(url, slug)
-  )
-  console.log("PostWidgetのdata:", data)
   return <div>{data?.categories ?? "なし"}</div>
 }
 

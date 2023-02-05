@@ -14,14 +14,17 @@ export function useSWRWithTimeout<T>(key: Key): SWRResponse<T> {
   return useSWR<T, Error>(key, fetcher, { shouldRetryOnError: false })
 }
 
-// export function useSWRWithMultipleArguments<T>(
-//   array: string[]
-// ): SWRResponse<T> {
-//   const apiEndpoint = `${key}/${slug}`
-//   const fetcher: Fetcher<T, string> = (apiEndpoint) =>
-//     axios
-//       .get<T, AxiosResponse<T, AxiosError>, Config>(apiEndpoint)
-//       .then((res) => res.data)
+// 参考:
+// - https://swr.vercel.app/ja/docs/with-nextjs
+// - https://swr.vercel.app/ja/docs/arguments
+export function useSWRDynamicParams<T>(
+  url: string,
+  slug: string
+): SWRResponse<T> {
+  const fetcher: Fetcher<T, string[]> = (url: string, slug: string) =>
+    axios.get(`${url}/${slug}`, { timeout: 10000 }).then((res) => res.data)
 
-//   return useSWR<T, Error>(apiEndpoint, fetcher)
-// }
+  return useSWR<T, Error>([url, slug], ([url, slug]: [string, string]) =>
+    fetcher(url, slug)
+  )
+}

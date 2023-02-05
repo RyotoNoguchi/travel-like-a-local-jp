@@ -1,61 +1,20 @@
 /* eslint-disable prettier/prettier */
 import Head from "next/head"
 import axios, { AxiosResponse, AxiosError } from "axios"
-import useSWR, { Key, Fetcher, SWRConfig } from "swr"
+import { SWRConfig } from "swr"
 import { GetStaticPaths, GetStaticProps } from "next"
 import { ParsedUrlQuery } from "querystring"
 import request, { gql } from "graphql-request"
 const GRAPHQL_API_URL = process.env.WORDPRESS_API_URL ?? ""
 import { unstable_serialize } from "swr"
 import PostWidget from "../../components/organisms/PostWidget"
-
-type GetPostResponse = {
-  data: {
-    post: {
-      content: string
-      title: string
-    }
-  }
-}
-
-type Config = {
-  timeout: number
-}
+import GetPostWidgetResponse from "../../components/types/apiResponse/getPostWidgetResponse"
 
 type Params = {
   slug: string
 } & ParsedUrlQuery
 
-type GetStaticPathsResponse = {
-  data: {
-    posts: {
-      edges: {
-        node: {
-          slug: string
-          id: string
-        }
-      }[]
-    }
-  }
-}
-
 const Post: React.FC<GetStaticPropsResponse> = ({ slug, fallback }) => {
-  const apiURL: Key = `/api/post/featured`
-  const fetcher: Fetcher<GetPostResponse, string> = (path) =>
-    axios
-      .get<GetPostResponse, AxiosResponse<GetPostResponse, AxiosError>, Config>(
-        path,
-        {
-          timeout: 10000
-        }
-      )
-      .then((res) => res.data)
-  const { data, error, isValidating } = useSWR(apiURL, fetcher)
-  if (!data || isValidating) return <div>loading...</div>
-  if (error) return <div>error...</div>
-
-  // TODO {slug}をパラメータにしてgetPostById的な感じで`slug`と`categories`をfetch
-  // TODO <PostWidget slug={slug} categories={categories}/>をreturnする
   return (
     <div>
       <Head>
@@ -70,29 +29,11 @@ const Post: React.FC<GetStaticPropsResponse> = ({ slug, fallback }) => {
       <SWRConfig value={{ fallback }}>
         <PostWidget slug={slug} />
       </SWRConfig>
-
-      {/* <main>
-        <h1>{data.data.post.title}</h1>
-        <div dangerouslySetInnerHTML={{ __html: data.data.post.content }} />
-      </main> */}
     </div>
   )
 }
 
 export default Post
-
-type GetPostWidgetPropsResponse = {
-  post: {
-    categories: {
-      edges: {
-        node: {
-          name: string
-        }
-      }[]
-    }
-    slug: string
-  }
-}
 
 type GetStaticPropsResponse = {
   slug: string
@@ -125,7 +66,7 @@ export const getStaticProps: GetStaticProps<
       }
     }
   `
-  const getPostWidgetPropsResponse: GetPostWidgetPropsResponse = await request(
+  const getPostWidgetPropsResponse: GetPostWidgetResponse = await request(
     GRAPHQL_API_URL,
     queryGetPostWidgetProps,
     { id: slug } // 引数渡すときは`request`の第3引数にオブジェクトオブジェクト指定する
@@ -138,11 +79,25 @@ export const getStaticProps: GetStaticProps<
     props: {
       slug: slug,
       fallback: {
+        // {fallback}のkeyとして動的APIエンドポイントを指定したい場合は unstable_serializeを使う
         [unstable_serialize(["/api/post", slug])]: {
           categories,
           slug
         }
       }
+    }
+  }
+}
+
+type GetStaticPathsResponse = {
+  data: {
+    posts: {
+      edges: {
+        node: {
+          slug: string
+          id: string
+        }
+      }[]
     }
   }
 }
