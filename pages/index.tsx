@@ -122,6 +122,7 @@ export const getStaticProps: GetStaticProps<
     ({ node }) => node
   )
 
+  // TODO プラグイン「Post Views Counter」ををインストール → チュートリアル(https://www.wpgraphql.com/docs/build-your-first-wpgraphql-extension)参考にして、WPGraphQLで{viewCount}をqueryできるようにして、トップに人気記事を表示できるようにする
   const queryGetRecentPosts = gql`
     query GetRecentPosts {
       posts(first: 5, where: { orderby: { field: DATE, order: DESC } }) {
