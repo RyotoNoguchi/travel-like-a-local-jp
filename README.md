@@ -5,7 +5,7 @@
 
 1. [YouTube](https://www.youtube.com/watch?v=7uNvYHyBNa0&t=1462s)を参考にして、[InfinityFree](https://app.infinityfree.net/)でWordPressサイトを作成する
 2. ドメインは[お名前.com](https://www.onamae.com/)でとりあえず無料にて取得する
-3. YouTubeの動画で消化いされているGoDaddyでネームサーバーをInfinityFreeのものに変更するには、[お名前.com > ドメイン設定 > 他のネームサーバーを利用 > ネームサーバー情報を入力](https://gyazo.com/f7d3ee18abb6f31a2d46fe95dd9d02c4)に入力
+3. YouTubeの動画で紹介されているGoDaddyでネームサーバーをInfinityFreeのものに変更するには、[お名前.com > ドメイン設定 > 他のネームサーバーを利用 > ネームサーバー情報を入力](https://gyazo.com/f7d3ee18abb6f31a2d46fe95dd9d02c4)に入力
 4. SSLを有効化するには
    1. InfinityFreeのコントロールパネルの[**SSL/TSL**](https://gyazo.com/bb001dfac69fea1c90414a628316cece)押下
    2. [**ConfigureSSL**](https://gyazo.com/704f35d990dc4722d902722f8c427cd6)押下
