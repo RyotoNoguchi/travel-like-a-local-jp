@@ -34,3 +34,11 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# wordpress
+/htdocs/*
+!/htdocs/wp-content/
+/htdocs/wp-content/*
+!/htdocs/wp-content/plugins
+/htdocs/wp-content/plugins/*
+!/htdocs/wp-content/plugins/wp-graphql-extension
