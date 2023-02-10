@@ -1,10 +1,10 @@
 import Avatar from "./avatar"
 
 type Author = {
-  node: { 
+  node: {
     name: string
     // eslint-disable-next-line prettier/prettier
-    avatar: Avatar 
+    avatar: Avatar
   }
 }
 

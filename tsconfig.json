@@ -1,13 +1,9 @@
 {
   "compilerOptions": {
     "target": "es5",
-    "lib": [
-      "dom",
-      "dom.iterable",
-      "esnext"
-    ],
+    "lib": ["dom", "dom.iterable", "esnext"],
     "allowJs": true,
-    // "skipLibCheck": true, これをfalseにすることで「.d.ts」ファイルでもでも存在しない型を検知してくれる
+    // "skipLibCheck": true, これをfalseにすることで「.d.ts」ファイルでもでも存在しない型を検知してくれなくなる
     "strict": true,
     "forceConsistentCasingInFileNames": true,
     "noEmit": true,
@@ -18,15 +14,8 @@
     "isolatedModules": true,
     "jsx": "preserve",
     "incremental": true,
-    "skipLibCheck": true
+    "skipLibCheck": false
   },
-  "include": [
-    "next-env.d.ts",
-    "**/*.ts",
-    "**/*.tsx",
-    "pages/[...slug].js"
-  ],
-  "exclude": [
-    "node_modules"
-  ]
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "pages/[...slug].js"],
+  "exclude": ["node_modules"]
 }

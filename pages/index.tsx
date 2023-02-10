@@ -5,12 +5,14 @@ import { Hero, FeaturedPosts } from "../components"
 import { useSWRWithTimeout } from "../components/hooks/swr"
 import {
   GetRecentPostsResponse,
-  GetFeaturedPostsResponse
+  GetFeaturedPostsResponse,
+  GetPopularPostsResponse
 } from "../components/types/apiResponse"
 import { Post } from "../components/types/post"
 import type { InferGetStaticPropsType, NextPage, GetStaticProps } from "next"
 import request, { gql } from "graphql-request"
 import PostCards from "../components/organisms/PostCards"
+import PopularPostCards from "../components/organisms/PopularPostCards"
 const GRAPHQL_API_URL = process.env.WORDPRESS_API_URL ?? ""
 
 type HomeDataResponse = {
@@ -25,6 +27,7 @@ type HomeDataResponse = {
 type Props = InferGetStaticPropsType<typeof getStaticProps>
 
 const Home: NextPage<Props> = ({ fallback }) => {
+  console.log("fallback:", fallback)
   const homePageKey: Key = "api/page/sample-page"
 
   const { data: homeData, error: homePageError } =
@@ -56,11 +59,14 @@ const Home: NextPage<Props> = ({ fallback }) => {
 
         <h1>{title}</h1>
         <div dangerouslySetInnerHTML={{ __html: content }}></div>
+        <SWRConfig value={{ fallback }}>
+          <PopularPostCards />
+        </SWRConfig>
 
         {/* fallbackなしだと、レンダリング後にfetcherが叩かれるため、一瞬ブランクな状態が発生する。console.logしてリロードするとundefinedになることを確認できる */}
-        <SWRConfig value={{ fallback }}>
+        {/* <SWRConfig value={{ fallback }}>
           <PostCards />
-        </SWRConfig>
+        </SWRConfig> */}
       </main>
     </div>
   )
@@ -122,7 +128,6 @@ export const getStaticProps: GetStaticProps<
     ({ node }) => node
   )
 
-  // TODO プラグイン「Post Views Counter」ををインストール → チュートリアル(https://www.wpgraphql.com/docs/build-your-first-wpgraphql-extension)参考にして、WPGraphQLで{viewCount}をqueryできるようにして、トップに人気記事を表示できるようにする
   const queryGetRecentPosts = gql`
     query GetRecentPosts {
       posts(first: 5, where: { orderby: { field: DATE, order: DESC } }) {
@@ -166,11 +171,64 @@ export const getStaticProps: GetStaticProps<
     ({ node }) => node
   )
 
+  // TODO viewCountををqueryしてGetPopularPostsで人気記事を取得するように変更
+  const queryGetPopularPosts = gql`
+    query GetPopularPosts {
+      posts(
+        where: {
+          orderby: { field: META, order: DESC }
+          metaQuery: { metaArray: { key: "_post_views_count", type: NUMERIC } }
+        }
+        first: 5
+      ) {
+        edges {
+          node {
+            slug
+            title
+            excerpt
+            date
+            categories {
+              edges {
+                node {
+                  name
+                }
+              }
+            }
+            featuredImage {
+              node {
+                altText
+                sourceUrl
+              }
+            }
+            author {
+              node {
+                name
+                avatar {
+                  url
+                }
+              }
+            }
+            viewCount
+          }
+        }
+      }
+    }
+  `
+
+  const queryGetPopularPostsResponse: GetPopularPostsResponse = await request(
+    GRAPHQL_API_URL,
+    queryGetPopularPosts
+  )
+  const popularPosts: Post[] = queryGetPopularPostsResponse.posts.edges.map(
+    ({ node }) => node
+  )
+
   return {
     props: {
       fallback: {
         "api/post/featured": featuredPosts,
-        "api/post/recent": recentPosts
+        "api/post/recent": recentPosts,
+        "api/post/popular": popularPosts
       }
     }
   }

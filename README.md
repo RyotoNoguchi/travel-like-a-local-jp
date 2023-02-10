@@ -14,10 +14,50 @@
    5. ドメインと入力してこの画面の**Current Destination**のステータスが緑色の[**Ready**](https://gyazo.com/3b48a8e338b0cc91dfc3570c5f3b460d)になっておらず、赤色の**Not Ready**になっていたらCloudFlareのダッシュボードのメニュー[**「DNS」のDNS Management for ****内のAdd record**](https://gyazo.com/12cdf216f6041be8fbd78abc1d636544)を押下
    6. **Type**は**CNAME**「5.」の**Source**の値を**Name**に、**Destination**の値を**Target**に入れ、**Proxy Status**は**Only DNS**に切り替え、[**Save**](https://gyazo.com/bcd7b59af72a743806da3a0bfff4bf8a)押下
    7. Really Simple SSLに戻り、更新すると**有効化**が活性状態になる
+5. ローカルPCのファイルをホスティングサーバーにに同期するには「[FileZilla](https://filezilla-project.org/download.php?platform=osx)」を使用する
+   1. [**Infinity Free**](https://app.infinityfree.net/)の[FTP Details](https://gyazo.com/39d888b26b9d9bdf2d99e58937c05559)ページを開く
+   2. 画面に表示されている表示されている↓をそれぞれ[FileZilla](https://gyazo.com/39d888b26b9d9bdf2d99e58937c05559)の入力欄に入力し、**クイック接続**ボタン押下
 
 ## プラグイン「WPGraphQL」をインストール
 
 1. WordPressのプラグインの新規追加で「WPGraphQL」で検索して出てくる[これ](https://gyazo.com/8a09807b35f532bde95310e1b3c98507)をインストール。 ※WordPressの言語設定が日本語になっていると**GraphQL IDE**がエラーになって無限Loading状態になる
+
+## 閲覧数OrderByしてGraphQLクエリを叩く方法
+
+1. ローカルPCにホスティングサーバーにあるhtdocsディレクトリごとコピーする
+2. `wp-graphql-extension.php`作成
+
+   `mkdir htdocs/wp-content/plugins/wp-graphql-extensions`
+
+   `touch htdocs/wp-content/plugins/wp-graphql-extensions/wp-graphql-extensions.php`
+3. このリポジトリの`wp-graphql-extensions.php`のように記述し、閲覧数をメタデータとして保存し、queryできるように機能追加
+4. WordPressプラグイン「[wp-graphql-meta-query](https://github.com/wp-graphql/wp-graphql-meta-query)」をリポジトリごとダウンロードし、`htdocs/wp-content/plugins/`にコピーする
+5. `htdocs/wp-content/plugins/wp-graphql/src/Type/Enum/PostObjectsConnectionOrderbyEnum.php`に↓のコード追加（参照[GitHubコメント](https://github.com/wp-graphql/wp-graphql-acf/issues/28#issuecomment-524628611)）
+
+   ```php
+   'META'     => [
+      'value'       => 'meta_value',
+      'description' => __( 'Order by meta value', 'wp-graphql' ),
+   ]
+   ```
+
+6. ↓のようなGraphQLクエリを使って閲覧数でOrderByしてqueryできる
+
+   ```graphql
+      query GetPopularPosts {
+         posts(
+            where: {orderby: {field: META, order: DESC}, metaQuery: {metaArray: {key: "_post_views_count", type: NUMERIC}}}
+         ) {
+            edges {
+               node {
+               slug
+               title
+               viewCount
+               }
+            }
+         }
+      }
+   ```
 
 ## Next.js × TypeScriptアプリケーション環境構築
 
@@ -30,6 +70,8 @@ This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next
 ## axiosを使ったGraphQL APIコールの仕方
 
 - https://rapidapi.com/guides/graphql-axios
+
+
 
 ## Getting Started
 
