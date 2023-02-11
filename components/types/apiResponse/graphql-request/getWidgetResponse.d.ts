@@ -1,6 +1,6 @@
 import { Widget } from "components/types/widget"
 
-type GetWidgetResponse = {
+type GetRecentPostsResponse = {
   posts: {
     edges: {
       node: Widget
@@ -8,4 +8,4 @@ type GetWidgetResponse = {
   }
 }
 
-export default GetWidgetResponse
+export default GetRecentPostsResponse

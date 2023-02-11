@@ -3,15 +3,15 @@ import Head from "next/head"
 import { SWRConfig } from "swr"
 import { Hero, FeaturedPosts } from "components"
 import {
-  GetRecentPostsResponse,
-  GetFeaturedPostsResponse,
-  GetPopularPostsResponse
+  GraphqlGetRecentPostsResponse,
+  GraphqlGetFeaturedPostsResponse,
+  GraphqlGetPopularPostsResponse,
+  GraphqlGetWidgetResponse
 } from "components/types/apiResponse"
 import { Post } from "components/types/post"
 import type { InferGetStaticPropsType, NextPage, GetStaticProps } from "next"
 import request, { gql } from "graphql-request"
 import PopularPostCards from "components/organisms/PopularPostCards"
-import GetWidgetResponse from "components/types/apiResponse/getWidgetResponse"
 import { Widget } from "components/types/widget"
 const GRAPHQL_API_URL = process.env.WORDPRESS_API_URL ?? ""
 
@@ -98,10 +98,8 @@ export const getStaticProps: GetStaticProps<
       }
     }
   `
-  const getFeaturedPostsResponse: GetFeaturedPostsResponse = await request(
-    GRAPHQL_API_URL,
-    queryGetFeaturedPosts
-  )
+  const getFeaturedPostsResponse: GraphqlGetFeaturedPostsResponse =
+    await request(GRAPHQL_API_URL, queryGetFeaturedPosts)
   const featuredPosts: Post[] = getFeaturedPostsResponse.posts.edges.map(
     ({ node }) => node
   )
@@ -141,10 +139,8 @@ export const getStaticProps: GetStaticProps<
       }
     }
   `
-  const queryGetRecentPostsResponse: GetRecentPostsResponse = await request(
-    GRAPHQL_API_URL,
-    queryGetRecentPosts
-  )
+  const queryGetRecentPostsResponse: GraphqlGetRecentPostsResponse =
+    await request(GRAPHQL_API_URL, queryGetRecentPosts)
   const recentPosts: Post[] = queryGetRecentPostsResponse.posts.edges.map(
     ({ node }) => node
   )
@@ -191,10 +187,8 @@ export const getStaticProps: GetStaticProps<
     }
   `
 
-  const queryGetPopularPostsResponse: GetPopularPostsResponse = await request(
-    GRAPHQL_API_URL,
-    queryGetPopularPosts
-  )
+  const queryGetPopularPostsResponse: GraphqlGetPopularPostsResponse =
+    await request(GRAPHQL_API_URL, queryGetPopularPosts)
   const popularPosts: Post[] = queryGetPopularPostsResponse.posts.edges.map(
     ({ node }) => node
   )
@@ -219,10 +213,12 @@ export const getStaticProps: GetStaticProps<
     }
   `
 
-  const queryGetWidgetResponse: GetWidgetResponse = await request(
+  const queryGetWidgetResponse: GraphqlGetWidgetResponse = await request(
     GRAPHQL_API_URL,
     queryGetRecentPostsForWidget
   )
+
+  console.log("queryGetWidgetResponse: ", queryGetWidgetResponse)
 
   const recentPostsForWidget: Widget[] = queryGetWidgetResponse.posts.edges.map(
     ({ node }) => node
