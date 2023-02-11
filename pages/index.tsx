@@ -13,6 +13,7 @@ import type { InferGetStaticPropsType, NextPage, GetStaticProps } from "next"
 import request, { gql } from "graphql-request"
 import PopularPostCards from "components/organisms/PopularPostCards"
 import { Widget } from "components/types/widget"
+import PostWidget from "components/organisms/PostWidget"
 const GRAPHQL_API_URL = process.env.WORDPRESS_API_URL ?? ""
 
 type Props = InferGetStaticPropsType<typeof getStaticProps>
@@ -32,16 +33,20 @@ const Home: NextPage<Props> = ({ fallback }) => {
         <SWRConfig value={{ fallback }}>
           <FeaturedPosts />
         </SWRConfig>
-        <div className="grid grid-cols-1 md:grid-cols-12 gap-12">
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-12 m-8">
           <div className="md:col-span-8 col-span-1">
             {/* fallbackなしだと、レンダリング後にfetcherが叩かれるため、一瞬ブランクな状態が発生する。console.logしてリロードするとundefinedになることを確認できる */}
             <SWRConfig value={{ fallback }}>
               <PopularPostCards />
             </SWRConfig>
           </div>
-        </div>
-        <div className="md:col-span-4 col-span-1">
-          <div className="lg:sticky relative top-8"></div>
+          <div className="md:col-span-4 col-span-1">
+            <div className="md:sticky relative top-8">
+              <SWRConfig value={{ fallback }}>
+                <PostWidget />
+              </SWRConfig>
+            </div>
+          </div>
         </div>
       </main>
     </div>
