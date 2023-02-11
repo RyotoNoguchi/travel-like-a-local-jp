@@ -1,4 +1,4 @@
-import Avatar from "./avatar"
+import Avatar from "components/types/avatar"
 
 type Author = {
   node: {

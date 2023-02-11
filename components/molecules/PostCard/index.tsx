@@ -1,7 +1,7 @@
 import Image from "next/image"
 import Link from "next/link"
 import { useState } from "react"
-import { Post } from "../../types/post"
+import { Post } from "components/types/post"
 import moment from "moment"
 
 const PostCard: React.FC<{ post: Post }> = ({ post }) => {

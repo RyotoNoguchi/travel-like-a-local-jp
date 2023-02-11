@@ -1,6 +1,6 @@
 import axios, { AxiosResponse, AxiosError } from "axios"
 import type { NextApiRequest, NextApiResponse } from "next"
-import { GetCategoriesResponse } from "../../../components/types/apiResponse"
+import { GetCategoriesResponse } from "components/types/apiResponse"
 const API_URL = process.env.WORDPRESS_API_URL ?? ""
 
 const handler = async (_: NextApiRequest, res: NextApiResponse<string[]>) => {

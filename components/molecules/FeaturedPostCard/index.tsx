@@ -2,7 +2,7 @@ import React from "react"
 import moment from "moment"
 import Image from "next/image"
 import Link from "next/link"
-import { Post } from "../../types/post"
+import { Post } from "components/types/post"
 
 const FeaturedPostCard: React.FC<{ post: Post }> = ({ post }) => {
   return (

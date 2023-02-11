@@ -1,7 +1,7 @@
 /* eslint-disable prettier/prettier */
 import Head from "next/head"
 import { SWRConfig } from "swr"
-import { Hero, FeaturedPosts } from "../components"
+import { Hero, FeaturedPosts } from "components"
 // import axios, { AxiosResponse, AxiosError } from "axios"
 // import { useSWRWithTimeout } from "../components/hooks/swr"
 import {
@@ -18,7 +18,7 @@ import type {
   // GetStaticPaths/
 } from "next"
 import request, { gql } from "graphql-request"
-// import PostCards from "../components/organisms/PostCards"
+import PostCards from "../components/organisms/PostCards"
 import PopularPostCards from "../components/organisms/PopularPostCards"
 const GRAPHQL_API_URL = process.env.WORDPRESS_API_URL ?? ""
 
@@ -62,21 +62,21 @@ const Home: NextPage<Props> = ({ fallback }) => {
         {/* 
         <h1>{title}</h1>
         <div dangerouslySetInnerHTML={{ __html: content }}></div> */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
-          <div className="lg:col-span-8 col-span-1">
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-12">
+          <div className="md:col-span-8 col-span-1">
             {/* fallbackなしだと、レンダリング後にfetcherが叩かれるため、一瞬ブランクな状態が発生する。console.logしてリロードするとundefinedになることを確認できる */}
             <SWRConfig value={{ fallback }}>
               <PopularPostCards />
             </SWRConfig>
           </div>
         </div>
-        <div className="lg:col-span-4 col-span-1">
-          <div className="lg:sticky relative top-8"></div>
+        <div className="md:col-span-4 col-span-1">
+          <div className="lg:sticky relative top-8">
+            {/* <SWRConfig value={{ fallback }}>
+              <PostCards />
+            </SWRConfig> */}
+          </div>
         </div>
-
-        {/* <SWRConfig value={{ fallback }}>
-          <PostCards />
-        </SWRConfig> */}
       </main>
     </div>
   )
@@ -182,7 +182,6 @@ export const getStaticProps: GetStaticProps<
     ({ node }) => node
   )
 
-  // TODO viewCountををqueryしてGetPopularPostsで人気記事を取得するように変更
   const queryGetPopularPosts = gql`
     query GetPopularPosts {
       posts(

@@ -1,6 +1,6 @@
-import { useSWRWithTimeout } from "../../hooks/swr"
-import { Post } from "../../types/post"
-import PostCard from "../../molecules/PostCard"
+import { useSWRWithTimeout } from "components/hooks/swr"
+import { Post } from "components/types/post"
+import PostCard from "components/molecules/PostCard"
 import { Key } from "swr"
 
 const PopularPostCards: React.FC = () => {

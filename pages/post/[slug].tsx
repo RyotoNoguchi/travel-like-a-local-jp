@@ -7,8 +7,8 @@ import { ParsedUrlQuery } from "querystring"
 import request, { gql } from "graphql-request"
 const GRAPHQL_API_URL = process.env.WORDPRESS_API_URL ?? ""
 import { unstable_serialize } from "swr"
-import PostWidget from "../../components/organisms/PostWidget"
-import GetPostWidgetResponse from "../../components/types/apiResponse/getPostWidgetResponse"
+import PostWidget from "components/organisms/PostWidget"
+import GetPostWidgetResponse from "components/types/apiResponse/getPostWidgetResponse"
 
 type Params = {
   slug: string

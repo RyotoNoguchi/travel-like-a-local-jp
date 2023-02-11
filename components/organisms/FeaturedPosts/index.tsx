@@ -1,11 +1,11 @@
-import FeaturedPostCard from "../../molecules/FeaturedPostCard"
+import FeaturedPostCard from "components/molecules/FeaturedPostCard"
 import Carousel from "react-multi-carousel"
 import "react-multi-carousel/lib/styles.css"
-import ArrowLeft from "../../atoms/ArrowLeft"
-import ArrowRight from "../../atoms/ArrowRight"
+import ArrowLeft from "components/atoms/ArrowLeft"
+import ArrowRight from "components/atoms/ArrowRight"
 import { Key } from "swr"
-import { useSWRWithTimeout } from "../../hooks/swr"
-import { Post } from "../../types/post"
+import { useSWRWithTimeout } from "components/hooks/swr"
+import { Post } from "components/types/post"
 
 const responsive = {
   superLargeDesktop: {

@@ -1,4 +1,4 @@
-import Category from "../category"
+import Category from "components/types/category"
 
 type GetCategoriesResponse = {
   data: {

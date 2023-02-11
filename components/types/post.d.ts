@@ -1,6 +1,6 @@
-import Category from "./category"
-import Author from "./author"
-import FeaturedImage from "./featuredImage"
+import Category from "components/types/category"
+import Author from "components/types/author"
+import FeaturedImage from "components/types/featuredImage"
 
 type Photo = {
   url: string

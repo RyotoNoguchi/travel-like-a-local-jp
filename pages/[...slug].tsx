@@ -4,7 +4,6 @@ import axios, { AxiosResponse, AxiosError } from "axios"
 import useSWR, { Key, Fetcher } from "swr"
 import { GetStaticPaths, GetStaticProps } from "next"
 import { ParsedUrlQuery } from "querystring"
-import path from "path"
 const API_URL = process.env.WORDPRESS_API_URL ?? ""
 
 type APIResponse = {

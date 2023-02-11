@@ -1,4 +1,4 @@
-import { useSWRDynamicParams } from "../../hooks/swr"
+import { useSWRDynamicParams } from "components/hooks/swr"
 
 type GetPostWidgetResponse = {
   categories: string[]

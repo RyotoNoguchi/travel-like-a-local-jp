@@ -1,9 +1,8 @@
 import useMediaQuery from "@mui/material/useMediaQuery"
 import Link from "next/link"
 import Image from "next/image"
-import { useSWRWithTimeout } from "../../hooks/swr"
+import { useSWRWithTimeout } from "components/hooks/swr"
 import { Key } from "swr"
-import { GetCategoriesResponse } from "../../types/apiResponse"
 
 const Header: React.FC = () => {
   const matches = useMediaQuery("(min-width:768px)")
