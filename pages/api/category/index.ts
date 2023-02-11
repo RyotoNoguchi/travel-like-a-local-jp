@@ -3,10 +3,7 @@ import type { NextApiRequest, NextApiResponse } from "next"
 import { GetCategoriesResponse } from "../../../components/types/apiResponse"
 const API_URL = process.env.WORDPRESS_API_URL ?? ""
 
-const handler = async (
-  _: NextApiRequest,
-  res: NextApiResponse<GetCategoriesResponse>
-) => {
+const handler = async (_: NextApiRequest, res: NextApiResponse<string[]>) => {
   const options = {
     method: "POST",
     url: API_URL,
@@ -25,6 +22,7 @@ const handler = async (
       `
     }
   }
+
   // axiosでGraphQLのAPIコールの仕方(https://rapidapi.com/guides/graphql-axios)
   const data: GetCategoriesResponse = await axios
     .request(options)
@@ -34,7 +32,7 @@ const handler = async (
         console.log("axios API call failed")
       }
     })
-  res.json(data)
+  res.json(data?.data?.categories?.edges.map(({ node }) => node.name))
 }
 
 export default handler

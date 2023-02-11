@@ -7,9 +7,8 @@ import { GetCategoriesResponse } from "../../types/apiResponse"
 
 const Header: React.FC = () => {
   const matches = useMediaQuery("(min-width:768px)")
-  const getCategoriesKey: Key = "api/post/category"
-  const { data: categoriesData } =
-    useSWRWithTimeout<GetCategoriesResponse>(getCategoriesKey)
+  const getCategoriesKey: Key = "/api/category"
+  const { data: categoriesData } = useSWRWithTimeout<string[]>(getCategoriesKey)
 
   return (
     <div className="flex justify-center items-center md:justify-between w-full border-blue-400 sticky top-0 z-10 bg-slate-100 text-cyan-500 h-14">
@@ -33,10 +32,8 @@ const Header: React.FC = () => {
         </Link>
       )}
       {matches && (
-        // categoriesData?.data.categories.map({ edges } => edges.)
         <div className="flex items-center">
-          {categoriesData?.data?.categories.edges.map(({ node }) => {
-            const category = node.name
+          {categoriesData?.map((category) => {
             return (
               <Link key={category} href={`category/${category}`}>
                 <span className=" ml-4 font-semibold cursor-pointer">

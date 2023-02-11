@@ -53,7 +53,7 @@ export const getStaticProps: GetStaticProps<
   const slug = params?.slug ?? ""
 
   const queryGetPostWidgetProps = gql`
-    query GetPostPostWidgetProps($id: ID!) {
+    query GetPostWidgetProps($id: ID!) {
       post(id: $id, idType: SLUG) {
         categories {
           edges {
@@ -95,7 +95,6 @@ type GetStaticPathsResponse = {
       edges: {
         node: {
           slug: string
-          id: string
         }
       }[]
     }
