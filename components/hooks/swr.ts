@@ -10,7 +10,6 @@ export function useSWRWithTimeout<T>(key: Key): SWRResponse<T> {
     axios
       .get<T, AxiosResponse<T, AxiosError>, Config>(apiPath, { timeout: 10000 })
       .then((res) => res.data)
-  console.log("key:", key)
 
   return useSWR<T, Error>(key, fetcher, { shouldRetryOnError: false })
 }

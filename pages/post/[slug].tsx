@@ -78,7 +78,6 @@ export const getStaticProps: GetStaticProps<
     ({ node }) => node.name
   )
 
-  console.log("categories: ", categories)
   return {
     props: {
       slug: slug,
