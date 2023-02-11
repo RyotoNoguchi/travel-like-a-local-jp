@@ -2,50 +2,23 @@
 import Head from "next/head"
 import { SWRConfig } from "swr"
 import { Hero, FeaturedPosts } from "components"
-// import axios, { AxiosResponse, AxiosError } from "axios"
-// import { useSWRWithTimeout } from "../components/hooks/swr"
 import {
   GetRecentPostsResponse,
   GetFeaturedPostsResponse,
   GetPopularPostsResponse
-} from "../components/types/apiResponse"
-// import { ParsedUrlQuery } from "querystring"
-import { Post } from "../components/types/post"
-import type {
-  InferGetStaticPropsType,
-  NextPage,
-  GetStaticProps
-  // GetStaticPaths/
-} from "next"
+} from "components/types/apiResponse"
+import { Post } from "components/types/post"
+import type { InferGetStaticPropsType, NextPage, GetStaticProps } from "next"
 import request, { gql } from "graphql-request"
-import PostCards from "../components/organisms/PostCards"
-import PopularPostCards from "../components/organisms/PopularPostCards"
+import PopularPostCards from "components/organisms/PopularPostCards"
+import GetWidgetResponse from "components/types/apiResponse/getWidgetResponse"
+import { Widget } from "components/types/widget"
 const GRAPHQL_API_URL = process.env.WORDPRESS_API_URL ?? ""
-
-// type HomeDataResponse = {
-//   data: {
-//     page: {
-//       content: string
-//       title: string
-//     }
-//   }
-// }
 
 type Props = InferGetStaticPropsType<typeof getStaticProps>
 
 const Home: NextPage<Props> = ({ fallback }) => {
   console.log("fallback:", fallback)
-  // const homePageKey: Key = "api/page/sample-page"
-  // const { data: homeData, error: homePageError } =
-  //   useSWRWithTimeout<HomeDataResponse>(homePageKey)
-  // if (homePageError) {
-  //   return <div>error...</div>
-  // }
-  // if (!homeData) {
-  //   return <div>loading...</div>
-  // }
-  // const title = homeData.data.page.title//
-  // const content = homeData.data.page.content
 
   return (
     <div className="relative">
@@ -59,9 +32,6 @@ const Home: NextPage<Props> = ({ fallback }) => {
         <SWRConfig value={{ fallback }}>
           <FeaturedPosts />
         </SWRConfig>
-        {/* 
-        <h1>{title}</h1>
-        <div dangerouslySetInnerHTML={{ __html: content }}></div> */}
         <div className="grid grid-cols-1 md:grid-cols-12 gap-12">
           <div className="md:col-span-8 col-span-1">
             {/* fallbackなしだと、レンダリング後にfetcherが叩かれるため、一瞬ブランクな状態が発生する。console.logしてリロードするとundefinedになることを確認できる */}
@@ -71,11 +41,7 @@ const Home: NextPage<Props> = ({ fallback }) => {
           </div>
         </div>
         <div className="md:col-span-4 col-span-1">
-          <div className="lg:sticky relative top-8">
-            {/* <SWRConfig value={{ fallback }}>
-              <PostCards />
-            </SWRConfig> */}
-          </div>
+          <div className="lg:sticky relative top-8"></div>
         </div>
       </main>
     </div>
@@ -86,9 +52,10 @@ export default Home
 
 type GetStaticPropsResponse = {
   fallback: {
-    "api/post/featured": Post[]
-    "api/post/recent": Post[]
-    "api/post/popular": Post[]
+    "/api/post/featured": Post[]
+    "/api/post/recent": Post[]
+    "/api/post/popular": Post[]
+    "/api/widget/recent": Widget[]
   }
 }
 
@@ -232,77 +199,43 @@ export const getStaticProps: GetStaticProps<
     ({ node }) => node
   )
 
+  // ウィジェット用のPostの情報取得
+  const queryGetRecentPostsForWidget = gql`
+    query GetRecentPostForWidget {
+      posts(where: { orderby: { field: DATE, order: DESC } }, first: 3) {
+        edges {
+          node {
+            title
+            date
+            featuredImage {
+              node {
+                sourceUrl
+              }
+            }
+            slug
+          }
+        }
+      }
+    }
+  `
+
+  const queryGetWidgetResponse: GetWidgetResponse = await request(
+    GRAPHQL_API_URL,
+    queryGetRecentPostsForWidget
+  )
+
+  const recentPostsForWidget: Widget[] = queryGetWidgetResponse.posts.edges.map(
+    ({ node }) => node
+  )
+
   return {
     props: {
       fallback: {
-        "api/post/featured": featuredPosts,
-        "api/post/recent": recentPosts,
-        "api/post/popular": popularPosts
+        "/api/post/featured": featuredPosts,
+        "/api/post/recent": recentPosts,
+        "/api/post/popular": popularPosts,
+        "/api/widget/recent": recentPostsForWidget
       }
     }
   }
 }
-
-// type Params = {
-//   slug: string
-// } & ParsedUrlQuery
-
-// type GetStaticPathsResponse = {
-//   data: {
-//     posts: {
-//       edges: {
-//         node: {
-//           slug: string
-//         }
-//       }[]
-//     }
-//   }
-// }
-
-// export const getStaticPaths: GetStaticPaths<Params> = async () => {
-//   const options = {
-//     method: "POST",
-//     url: GRAPHQL_API_URL,
-//     headers: { "Content-Type": "application/json" },
-//     data: {
-//       query: `#graphql
-//         query allPosts {
-//           posts {
-//             edges {
-//               node {
-//                 slug
-//               }
-//             }
-//           }
-//         }
-//       `
-//     }
-//   }
-//   const allPosts: GetStaticPathsResponse = await axios
-//     .request(options)
-//     .then((res: AxiosResponse) => res.data)
-//     .catch((err: AxiosError) => {
-//       if (err.code === "ECONNABORTED") {
-//         console.log("axios API call failed")
-//       }
-//     })
-
-//   const {
-//     data: {
-//       posts: { edges }
-//     }
-//   } = allPosts
-
-//   const paths = edges.map(({ node }) => {
-//     return {
-//       params: {
-//         slug: node.slug
-//       }
-//     }
-//   })
-
-//   return {
-//     paths,
-//     fallback: true
-//   }
-// }
