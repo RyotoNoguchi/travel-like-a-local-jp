@@ -8,8 +8,7 @@ import request, { gql } from "graphql-request"
 const GRAPHQL_API_URL = process.env.WORDPRESS_API_URL ?? ""
 import { unstable_serialize } from "swr"
 import PostWidget from "components/organisms/PostWidget"
-import GetPostWidgetResponse from "components/types/apiResponse/graphql-request/getWidgetResponse"
-import { GraphqlGetCategoriesResponse } from "components/types/apiResponse"
+import { GraphqlGetCategoryResponse } from "components/types/apiResponse"
 
 type Params = {
   slug: string
@@ -67,12 +66,12 @@ export const getStaticProps: GetStaticProps<
       }
     }
   `
-  const getPostWidgetPropsResponse: GraphqlGetCategoriesResponse =
-    await request(
-      GRAPHQL_API_URL,
-      queryGetPostWidgetProps,
-      { id: slug } // 引数渡すときは`request`の第3引数にオブジェクトオブジェクト指定する
-    )
+
+  const getPostWidgetPropsResponse: GraphqlGetCategoryResponse = await request(
+    GRAPHQL_API_URL,
+    queryGetPostWidgetProps,
+    { id: slug } // 引数渡すときは`request`の第3引数にオブジェクトオブジェクト指定する
+  )
 
   const categories = getPostWidgetPropsResponse.post.categories.edges.map(
     ({ node }) => node.name

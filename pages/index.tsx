@@ -1,19 +1,19 @@
 /* eslint-disable prettier/prettier */
 import Head from "next/head"
 import { SWRConfig } from "swr"
-import { Hero, FeaturedPosts } from "components"
+import { Hero, FeaturedPosts, CategoryWidget, PostWidget } from "components"
 import {
   GraphqlGetRecentPostsResponse,
   GraphqlGetFeaturedPostsResponse,
   GraphqlGetPopularPostsResponse,
-  GraphqlGetWidgetResponse
+  GraphqlGetWidgetResponse,
+  GraphqlGetCategoriesResponse
 } from "components/types/apiResponse"
 import { Post } from "components/types/post"
 import type { InferGetStaticPropsType, NextPage, GetStaticProps } from "next"
 import request, { gql } from "graphql-request"
 import PopularPostCards from "components/organisms/PopularPostCards"
 import { Widget } from "components/types/widget"
-import PostWidget from "components/organisms/PostWidget"
 const GRAPHQL_API_URL = process.env.WORDPRESS_API_URL ?? ""
 
 type Props = InferGetStaticPropsType<typeof getStaticProps>
@@ -33,17 +33,20 @@ const Home: NextPage<Props> = ({ fallback }) => {
         <SWRConfig value={{ fallback }}>
           <FeaturedPosts />
         </SWRConfig>
-        <div className="grid grid-cols-1 md:grid-cols-12 gap-12 m-8">
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-12 lg:m-24 md:m-8">
           <div className="md:col-span-8 col-span-1">
             {/* fallbackなしだと、レンダリング後にfetcherが叩かれるため、一瞬ブランクな状態が発生する。console.logしてリロードするとundefinedになることを確認できる */}
             <SWRConfig value={{ fallback }}>
               <PopularPostCards />
             </SWRConfig>
           </div>
-          <div className="md:col-span-4 col-span-1">
-            <div className="md:sticky relative top-8">
+          <div className="md:col-span-4 col-span-1 relative">
+            <div className="sticky top-8 mb-8">
               <SWRConfig value={{ fallback }}>
                 <PostWidget />
+              </SWRConfig>
+              <SWRConfig value={{ fallback }}>
+                <CategoryWidget />
               </SWRConfig>
             </div>
           </div>
@@ -223,10 +226,27 @@ export const getStaticProps: GetStaticProps<
     queryGetRecentPostsForWidget
   )
 
-  console.log("queryGetWidgetResponse: ", queryGetWidgetResponse)
-
   const recentPostsForWidget: Widget[] = queryGetWidgetResponse.posts.edges.map(
     ({ node }) => node
+  )
+
+  const queryGetCategories = gql`
+    query GetCategories {
+      categories {
+        edges {
+          node {
+            name
+          }
+        }
+      }
+    }
+  `
+
+  const queryGetCategoriesResponse: GraphqlGetCategoriesResponse =
+    await request(GRAPHQL_API_URL, queryGetCategories)
+
+  const categories = queryGetCategoriesResponse.categories.edges.map(
+    ({ node }) => node.name
   )
 
   return {
@@ -235,7 +255,8 @@ export const getStaticProps: GetStaticProps<
         "/api/post/featured": featuredPosts,
         "/api/post/recent": recentPosts,
         "/api/post/popular": popularPosts,
-        "/api/widget/recent": recentPostsForWidget
+        "/api/widget/recent": recentPostsForWidget,
+        "/api/category": categories
       }
     }
   }

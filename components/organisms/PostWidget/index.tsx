@@ -4,11 +4,11 @@ import Image from "next/image"
 import moment from "moment"
 import Link from "next/link"
 
-type GetPostWidgetResponse = {
-  categories: string[]
-  // eslint-disable-next-line prettier/prettier
-  slug: string
-}
+// type GetPostWidgetResponse = {
+//   categories: string[]
+//   // eslint-disable-next-line prettier/prettier
+//   slug: string
+// }
 
 const PostWidget: React.FC<{ slug?: string }> = ({ slug }) => {
   // https://swr.vercel.app/ja/docs/arguments#%E8%A4%87%E6%95%B0%E3%81%AE%E5%BC%95%E6%95%B0
