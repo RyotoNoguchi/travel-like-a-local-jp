@@ -14,10 +14,10 @@ type Data = {
 
 const handler = async (req: NextApiRequest, res: NextApiResponse<Data>) => {
   const {
-    query: { slug }
+    query: { slug } // ex. query: { slug: [ 'sample-page', 'subpage' ] } というように配列で取得されるため
   } = req
   const arraySlug = slug as string[]
-  const uri = arraySlug.join("/")
+  const uri: string = arraySlug.join("/") // stringに直して
   const options = {
     method: "POST",
     url: API_URL,

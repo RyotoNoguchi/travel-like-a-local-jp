@@ -9,6 +9,10 @@ const Header: React.FC = () => {
   const getCategoriesKey: Key = "/api/category"
   const { data: categoriesData } = useSWRWithTimeout<string[]>(getCategoriesKey)
 
+  if (!categoriesData) {
+    return null
+  }
+
   return (
     <div className="flex justify-center items-center md:justify-between w-full border-blue-400 sticky top-0 z-10 bg-slate-100 text-cyan-500 h-14">
       {matches ? (

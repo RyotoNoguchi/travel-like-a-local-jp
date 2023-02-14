@@ -1,7 +1,13 @@
 /* eslint-disable prettier/prettier */
 import Head from "next/head"
 import { SWRConfig } from "swr"
-import { Hero, FeaturedPosts, CategoryWidget, PostWidget } from "components"
+import {
+  Hero,
+  FeaturedPosts,
+  CategoryWidget,
+  PostWidget,
+  ArchiveWidget
+} from "components"
 import {
   GraphqlGetRecentPostsResponse,
   GraphqlGetFeaturedPostsResponse,
@@ -10,10 +16,11 @@ import {
   GraphqlGetCategoriesResponse
 } from "components/types/apiResponse"
 import { Post } from "components/types/post"
+import { Widget } from "components/types/widget"
 import type { InferGetStaticPropsType, NextPage, GetStaticProps } from "next"
 import request, { gql } from "graphql-request"
 import PopularPostCards from "components/organisms/PopularPostCards"
-import { Widget } from "components/types/widget"
+import Archive from "components/types/archive"
 const GRAPHQL_API_URL = process.env.WORDPRESS_API_URL ?? ""
 
 type Props = InferGetStaticPropsType<typeof getStaticProps>
@@ -21,6 +28,7 @@ type Props = InferGetStaticPropsType<typeof getStaticProps>
 const Home: NextPage<Props> = ({ fallback }) => {
   console.log("fallback:", fallback)
 
+  // TODO 各コンポーネントのフォールバックに<Skeleton />を使用するように変更
   return (
     <div className="relative">
       <Head>
@@ -32,25 +40,24 @@ const Home: NextPage<Props> = ({ fallback }) => {
         <Hero />
         <SWRConfig value={{ fallback }}>
           <FeaturedPosts />
-        </SWRConfig>
-        <div className="grid grid-cols-1 md:grid-cols-12 gap-12 lg:m-24 md:m-8">
-          <div className="md:col-span-8 col-span-1">
-            {/* fallbackなしだと、レンダリング後にfetcherが叩かれるため、一瞬ブランクな状態が発生する。console.logしてリロードするとundefinedになることを確認できる */}
-            <SWRConfig value={{ fallback }}>
+          <div className="grid grid-cols-1 md:grid-cols-12 gap-12 lg:m-24 md:m-8">
+            <div className="md:col-span-8 col-span-1">
+              {/* fallbackなしだと、レンダリング後にfetcherが叩かれるため、一瞬ブランクな状態が発生する。console.logしてリロードするとundefinedになることを確認できる */}
+              {/* <SWRConfig value={{ fallback }}> */}
               <PopularPostCards />
-            </SWRConfig>
-          </div>
-          <div className="md:col-span-4 col-span-1 relative">
-            <div className="sticky top-8 mb-8">
-              <SWRConfig value={{ fallback }}>
+              {/* </SWRConfig> */}
+            </div>
+            <div className="md:col-span-4 col-span-1 relative">
+              <div className="sticky top-8 mb-8">
+                {/* <SWRConfig value={{ fallback }}> */}
                 <PostWidget />
-              </SWRConfig>
-              <SWRConfig value={{ fallback }}>
+                <ArchiveWidget />
                 <CategoryWidget />
-              </SWRConfig>
+                {/* </SWRConfig> */}
+              </div>
             </div>
           </div>
-        </div>
+        </SWRConfig>
       </main>
     </div>
   )
@@ -64,6 +71,8 @@ type GetStaticPropsResponse = {
     "/api/post/recent": Post[]
     "/api/post/popular": Post[]
     "/api/widget/recent": Widget[]
+    "/api/category": string[]
+    "/api/widget/archive": Archive[]
   }
 }
 
@@ -230,6 +239,7 @@ export const getStaticProps: GetStaticProps<
     ({ node }) => node
   )
 
+  // ウィジェット用のカテゴリー取得
   const queryGetCategories = gql`
     query GetCategories {
       categories {
@@ -249,6 +259,47 @@ export const getStaticProps: GetStaticProps<
     ({ node }) => node.name
   )
 
+  // 過去の月別の記事数取得のために全記事取得し、月ごとのオブジェクト配列化
+
+  const queryGetAllPosts = gql`
+    query GetAllPosts {
+      posts {
+        edges {
+          node {
+            date
+          }
+        }
+      }
+    }
+  `
+
+  const queryGetAllPostsResponse: {
+    posts: { edges: { node: { date: string } }[] }
+  } = await request(GRAPHQL_API_URL, queryGetAllPosts)
+
+  const dates = queryGetAllPostsResponse?.posts?.edges.map(
+    ({ node }) => node.date
+  )
+
+  const datesReduceResult = dates.reduce<{ [key: string]: number }>(
+    (yearMonthCounts, gmt) => {
+      const yyyyMM = gmt.slice(0, 7)
+
+      if (!yearMonthCounts[yyyyMM]) {
+        yearMonthCounts[yyyyMM] = 0
+      }
+
+      yearMonthCounts[yyyyMM]++
+
+      return yearMonthCounts
+    },
+    {}
+  )
+
+  const postsPerMonth: Archive[] = Object.entries(datesReduceResult).map(
+    ([month, count]) => ({ month, count })
+  )
+
   return {
     props: {
       fallback: {
@@ -256,7 +307,8 @@ export const getStaticProps: GetStaticProps<
         "/api/post/recent": recentPosts,
         "/api/post/popular": popularPosts,
         "/api/widget/recent": recentPostsForWidget,
-        "/api/category": categories
+        "/api/category": categories,
+        "/api/widget/archive": postsPerMonth
       }
     }
   }

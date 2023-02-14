@@ -4,12 +4,6 @@ import Image from "next/image"
 import moment from "moment"
 import Link from "next/link"
 
-// type GetPostWidgetResponse = {
-//   categories: string[]
-//   // eslint-disable-next-line prettier/prettier
-//   slug: string
-// }
-
 const PostWidget: React.FC<{ slug?: string }> = ({ slug }) => {
   // https://swr.vercel.app/ja/docs/arguments#%E8%A4%87%E6%95%B0%E3%81%AE%E5%BC%95%E6%95%B0
   // useSWRの引数に配列をを指定し、変数を第2引数以降に入れることでuseSWRがkeyを動的に認知してくれるようになる
@@ -17,6 +11,11 @@ const PostWidget: React.FC<{ slug?: string }> = ({ slug }) => {
 
   const { data: recentPosts } =
     useSWRWithTimeout<Widget[]>("/api/widget/recent")
+
+  if (!recentPosts) {
+    return null
+  }
+
   return (
     <div className="bg-white shadow-lg rounded-lg p-4 mb-8 ">
       <h3 className="text-xl mb-8 font-semibold border-b pb-4">Recent Posts</h3>

@@ -1,7 +1,7 @@
 /* eslint-disable prettier/prettier */
 import axios, { AxiosResponse, AxiosError } from "axios"
 import type { NextApiRequest, NextApiResponse } from "next"
-import { GetPostsResponse } from "components/types/apiResponse"
+import Archive from "components/types/archive"
 const API_URL = process.env.WORDPRESS_API_URL ?? ""
 
 const handler = async (
@@ -28,34 +28,39 @@ const handler = async (
   }
 
   // axiosでGraphQLのAPIコールの仕方(https://rapidapi.com/guides/graphql-axios)
-  const data: GetPostsResponse = await axios
-    .request(options)
-    .then((res: AxiosResponse) => res.data)
-    .catch((err: AxiosError) => {
-      if (err.code === "ECONNABORTED") {
-        console.log("axios API call failed")
-      }
-    })
-  const dates = data?.data?.posts?.edges.map(({ node }) => node.date)
-
-  const datesReduceResult = dates.reduce<{ [key: string]: number }>(
-    (yearMonthCounts, gmt) => {
-      const yyyyMM = gmt.slice(0, 7)
-
-      if (!yearMonthCounts[yyyyMM]) {
-        yearMonthCounts[yyyyMM] = 0
-      }
-
-      yearMonthCounts[yyyyMM]++
-
-      return yearMonthCounts
-    },
-    {}
+  const data: { data: { posts: { edges: { node: { date: string } }[] } } } =
+    await axios
+      .request(options)
+      .then((res: AxiosResponse) => res.data)
+      .catch((err: AxiosError) => {
+        if (err.code === "ECONNABORTED") {
+          console.log("axios API call failed")
+        }
+      })
+  const dates: string[] | [] = data?.data?.posts?.edges.map(
+    ({ node }) => node.date
   )
 
-  const postsPerMonth: { month: string; count: number }[] = Object.entries(
-    datesReduceResult
-  ).map(([month, count]) => ({ month, count }))
+  console.log("useSWRのdates: ", dates)
+
+  const datesReduceResult = dates
+    ? dates?.reduce<{ [key: string]: number }>((yearMonthCounts, gmt) => {
+        const yyyyMM = gmt.slice(0, 7)
+
+        if (!yearMonthCounts[yyyyMM]) {
+          yearMonthCounts[yyyyMM] = 0
+        }
+
+        yearMonthCounts[yyyyMM]++
+
+        return yearMonthCounts
+      }, {})
+    : []
+
+  const postsPerMonth: Archive[] = Object.entries(datesReduceResult).map(
+    ([month, count]) => ({ month, count })
+  )
+  console.log("postsPerMonth: ", postsPerMonth)
 
   res.json(postsPerMonth)
 }

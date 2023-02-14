@@ -27,15 +27,15 @@ const responsive = {
 }
 
 const FeaturedPosts: React.FC = () => {
-  const featuredPostKey: Key = "api/post/featured"
+  const featuredPostKey: Key = "/api/post/featured"
 
   const {
     data: featuredPostData,
     isValidating,
-    error: _
+    error
   } = useSWRWithTimeout<Post[]>(featuredPostKey)
 
-  if (isValidating) return null
+  if (!featuredPostData || isValidating || error) return null
 
   return (
     <div className="mb-8">

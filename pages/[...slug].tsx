@@ -44,7 +44,7 @@ type Edges = {
 }
 
 const Page: React.FC<{ uri: string }> = ({ uri }) => {
-  const apiURL: Key = `/api/page/${uri}`
+  const apiURL: Key = `/api/page/${uri}` // ex. '/api/page/sample-page/subpage'
   const fetcher: Fetcher<APIResponse, string> = (path) =>
     axios
       .get<APIResponse, AxiosResponse<APIResponse, AxiosError>, Config>(path, {
@@ -52,6 +52,7 @@ const Page: React.FC<{ uri: string }> = ({ uri }) => {
       })
       .then((res) => res.data)
   const { data, error, isValidating } = useSWR(apiURL, fetcher)
+
   if (!data || isValidating) return <div>loading...</div>
   if (error) return <div>error...</div>
 

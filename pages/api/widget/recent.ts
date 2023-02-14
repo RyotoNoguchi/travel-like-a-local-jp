@@ -41,7 +41,6 @@ const handler = async (_: NextApiRequest, res: NextApiResponse<Post[]>) => {
         console.log("axios API call failed")
       }
     })
-  console.log("GetRecentPostForWidgetResponse: ", data)
   res.json(data?.data?.posts?.edges.map(({ node }) => node))
 }
 
