@@ -9,12 +9,22 @@ const GRAPHQL_API_URL = process.env.WORDPRESS_API_URL ?? ""
 import { unstable_serialize } from "swr"
 import PostWidget from "components/organisms/PostWidget"
 import { GraphqlGetCategoryResponse } from "components/types/apiResponse"
+import { useRouter } from "next/router"
 
 type Params = {
   slug: string
 } & ParsedUrlQuery
 
 const Post: React.FC<GetStaticPropsResponse> = ({ slug, fallback }) => {
+  const router = useRouter()
+
+  // If the page is not yet generated, this will be displayed
+  // initially until getStaticProps() finishes running
+  if (router.isFallback) {
+    return <div>Loading...</div>
+  }
+  console.log(slug)
+  console.log(fallback)
   return (
     <div>
       <Head>
@@ -26,9 +36,9 @@ const Post: React.FC<GetStaticPropsResponse> = ({ slug, fallback }) => {
         />
       </Head>
 
-      <SWRConfig value={{ fallback }}>
-        <PostWidget slug={slug} />
-      </SWRConfig>
+      {/* <SWRConfig value={{ fallback }}> */}
+      {/* <PostWidget /> */}
+      {/* </SWRConfig> */}
     </div>
   )
 }
@@ -73,9 +83,11 @@ export const getStaticProps: GetStaticProps<
     { id: slug } // 引数渡すときは`request`の第3引数にオブジェクトオブジェクト指定する
   )
 
-  const categories = getPostWidgetPropsResponse.post.categories.edges.map(
-    ({ node }) => node.name
-  )
+  const categories = getPostWidgetPropsResponse
+    ? getPostWidgetPropsResponse?.post?.categories?.edges.map(
+        ({ node }) => node.name
+      )
+    : []
 
   return {
     props: {
