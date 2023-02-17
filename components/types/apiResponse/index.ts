@@ -7,3 +7,5 @@ export type { default as GraphqlGetPopularPostsResponse } from "./graphql-reques
 export type { default as GraphqlGetWidgetResponse } from "./graphql-request/getWidgetResponse"
 export type { default as GraphqlGetCategoriesResponse } from "./graphql-request/getCategoriesResponse"
 export type { default as GraphqlGetCategoryResponse } from "./graphql-request/getCategoryResponse"
+export type { default as GraphqlGetAllSlugsResponse } from "./graphql-request/getAllSlugsResponse"
+export type { default as GraphqlGetPostResponse } from "./graphql-request/getPostResponse"

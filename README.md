@@ -1,4 +1,3 @@
-
 # WordPress × NEXT.JSでブログサイトを作ろう
 
 ## 無料でWordPressをホスティングする
