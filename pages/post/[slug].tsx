@@ -7,6 +7,7 @@ const GRAPHQL_API_URL = process.env.WORDPRESS_API_URL ?? ""
 import { GraphqlGetPostResponse } from "components/types/apiResponse"
 import { GraphqlGetAllSlugsResponse } from "components/types/apiResponse"
 import { Post } from "components/types/post"
+import { PostWidget } from "components/index"
 
 type Props = {
   post: Post
@@ -14,14 +15,17 @@ type Props = {
 const Post: React.FC<Props> = ({ post }) => {
   console.log("post", post)
   return (
-    <Head>
-      <title>single post page</title>
-      <link rel="icon" href="/favicon.ico" />
-      <link
-        rel="stylesheet"
-        href={`http://headlessnext.local/wp-includes/css/dist/block-library/style.min.css?ver=5.6`}
-      />
-    </Head>
+    <>
+      <Head>
+        <title>single post page</title>
+        <link rel="icon" href="/favicon.ico" />
+        <link
+          rel="stylesheet"
+          href={`http://headlessnext.local/wp-includes/css/dist/block-library/style.min.css?ver=5.6`}
+        />
+      </Head>
+      <PostWidget />
+    </>
   )
 }
 
