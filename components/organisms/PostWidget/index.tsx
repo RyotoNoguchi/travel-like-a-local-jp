@@ -11,6 +11,7 @@ const PostWidget: React.FC = () => {
 
   const { data: recentPosts } =
     useSWRWithTimeout<Widget[]>("/api/widget/recent")
+  // TODO PostWidgetを`pages/index.tsx`ででレンダリングするときは<新着ポスト>、
 
   if (!recentPosts) {
     return null
