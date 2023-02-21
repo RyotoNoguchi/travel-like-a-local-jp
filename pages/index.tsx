@@ -21,12 +21,15 @@ import type { InferGetStaticPropsType, NextPage, GetStaticProps } from "next"
 import request, { gql } from "graphql-request"
 import PopularPostCards from "components/organisms/PopularPostCards"
 import Archive from "components/types/archive"
+import { useRouter } from "next/router"
 const GRAPHQL_API_URL = process.env.WORDPRESS_API_URL ?? ""
 
 type Props = InferGetStaticPropsType<typeof getStaticProps>
 
 const Home: NextPage<Props> = ({ fallback }) => {
   console.log("fallback:", fallback)
+  const router = useRouter()
+  const slug = router.query.slug
 
   // TODO 各コンポーネントのフォールバックに<Skeleton />を使用するように変更
   return (
@@ -66,7 +69,7 @@ type GetStaticPropsResponse = {
     "/api/post/featured": Post[]
     "/api/post/recent": Post[]
     "/api/post/popular": Post[]
-    "/api/widget/recent": Widget[]
+    // "/api/widget/recent": Widget[]
     "/api/category": string[]
     "/api/widget/archive": Archive[]
   }
@@ -207,33 +210,33 @@ export const getStaticProps: GetStaticProps<
   )
 
   // ウィジェット用のPostの情報取得
-  const queryGetRecentPostsForWidget = gql`
-    query GetRecentPostForWidget {
-      posts(where: { orderby: { field: DATE, order: DESC } }, first: 3) {
-        edges {
-          node {
-            title
-            date
-            featuredImage {
-              node {
-                sourceUrl
-              }
-            }
-            slug
-          }
-        }
-      }
-    }
-  `
+  // const queryGetRecentPostsForWidget = gql`
+  //   query GetRecentPostForWidget {
+  //     posts(where: { orderby: { field: DATE, order: DESC } }, first: 3) {
+  //       edges {
+  //         node {
+  //           title
+  //           date
+  //           featuredImage {
+  //             node {
+  //               sourceUrl
+  //             }
+  //           }
+  //           slug
+  //         }
+  //       }
+  //     }
+  //   }
+  // `
 
-  const queryGetWidgetResponse: GraphqlGetWidgetResponse = await request(
-    GRAPHQL_API_URL,
-    queryGetRecentPostsForWidget
-  )
+  // const queryGetWidgetResponse: GraphqlGetWidgetResponse = await request(
+  //   GRAPHQL_API_URL,
+  //   queryGetRecentPostsForWidget
+  // )
 
-  const recentPostsForWidget: Widget[] = queryGetWidgetResponse.posts.edges.map(
-    ({ node }) => node
-  )
+  // const recentPostsForWidget: Widget[] = queryGetWidgetResponse.posts.edges.map(
+  //   ({ node }) => node
+  // )
 
   // ウィジェット用のカテゴリー取得
   const queryGetCategories = gql`
@@ -302,7 +305,7 @@ export const getStaticProps: GetStaticProps<
         "/api/post/featured": featuredPosts,
         "/api/post/recent": recentPosts,
         "/api/post/popular": popularPosts,
-        "/api/widget/recent": recentPostsForWidget,
+        // "/api/widget/recent": recentPostsForWidget,
         "/api/category": categories,
         "/api/widget/archive": postsPerMonth
       }
