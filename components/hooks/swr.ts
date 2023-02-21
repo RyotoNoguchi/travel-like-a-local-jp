@@ -1,5 +1,5 @@
 import axios, { AxiosResponse, AxiosError } from "axios"
-import useSWR, { Key, Fetcher, SWRResponse } from "swr"
+import useSWR, { Key, Fetcher, SWRResponse, Arguments } from "swr"
 
 type Config = {
   timeout: number
@@ -17,14 +17,12 @@ export function useSWRWithTimeout<T>(key: Key): SWRResponse<T> {
 // 参考:
 // - https://swr.vercel.app/ja/docs/with-nextjs
 // - https://swr.vercel.app/ja/docs/arguments
-export function useSWRDynamicParams<T>(
-  url: string,
-  slug: string
+export function useSWRDynamic<T>(
+  url: Arguments,
+  slug: Arguments
 ): SWRResponse<T> {
-  const fetcher: Fetcher<T, string[]> = (url: string, slug: string) =>
-    axios.get(`${url}/${slug}`, { timeout: 10000 }).then((res) => res.data)
+  const fetcher = (url: string, slug: string) =>
+    axios.get(`${url}/${slug}`).then((res) => res.data)
 
-  return useSWR<T, Error>([url, slug], ([url, slug]: [string, string]) =>
-    fetcher(url, slug)
-  )
+  return useSWR<T, Error>([url, slug], fetcher)
 }

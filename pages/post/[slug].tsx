@@ -1,143 +1,137 @@
 /* eslint-disable prettier/prettier */
 import Head from "next/head"
-import axios, { AxiosResponse, AxiosError } from "axios"
-import { SWRConfig } from "swr"
-import { GetStaticPaths, GetStaticProps } from "next"
-import { ParsedUrlQuery } from "querystring"
+import { GetStaticPaths, GetStaticProps, InferGetStaticPropsType } from "next"
 import request, { gql } from "graphql-request"
 const GRAPHQL_API_URL = process.env.WORDPRESS_API_URL ?? ""
-import { unstable_serialize } from "swr"
-import PostWidget from "components/organisms/PostWidget"
-import { GraphqlGetCategoryResponse } from "components/types/apiResponse"
+import { SWRConfig, unstable_serialize } from "swr"
+import {
+  GraphqlGetPopularPostsResponse,
+  GraphqlGetPostResponse
+} from "components/types/apiResponse"
+import {
+  GraphqlGetAllSlugsResponse,
+  GraphqlGetPostsExcludeBySlugResponse
+} from "components/types/apiResponse"
+import { Post } from "components/types/post"
+import { PostWidget } from "components/index"
+import { useRouter } from "next/router"
 
-type Params = {
-  slug: string
-} & ParsedUrlQuery
+type Props = InferGetStaticPropsType<typeof getStaticProps>
 
-const Post: React.FC<GetStaticPropsResponse> = ({ slug, fallback }) => {
+const Post: React.FC<Props> = ({ fallback }) => {
+  const router = useRouter()
+  const slug = router.query.slug as string
   return (
-    <div>
+    <>
       <Head>
-        <title>Create Next App</title>
+        <title>single post page</title>
         <link rel="icon" href="/favicon.ico" />
         <link
           rel="stylesheet"
           href={`http://headlessnext.local/wp-includes/css/dist/block-library/style.min.css?ver=5.6`}
         />
       </Head>
-
       <SWRConfig value={{ fallback }}>
         <PostWidget slug={slug} />
       </SWRConfig>
-    </div>
+    </>
   )
 }
 
 export default Post
 
 type GetStaticPropsResponse = {
-  slug: string
   fallback: {
-    [key: string]: {
-      categories: string[]
-      slug: string
-    }
+    [key: string]: Post[]
   }
 }
 
-// GetStaticPropsの型付け(https://zenn.dev/eitches/articles/2021-0424-getstaticprops-type)
 export const getStaticProps: GetStaticProps<
   GetStaticPropsResponse,
-  Params
+  GetStaticPropsParams
 > = async ({ params }) => {
   const slug = params?.slug ?? ""
 
-  const queryGetPostWidgetProps = gql`
-    query GetPostWidgetProps($id: ID!) {
-      post(id: $id, idType: SLUG) {
-        categories {
-          edges {
-            node {
-              name
+  // TODO slugを条件にして、GraphQLクエリ叩いて第一categoryを取得
+  // TODO 取得したcategoryをqueryGetRelatedPostsのパラメータに追加して「表示しているポストのslug以外の同じカテゴリのRelatedPostsを取得するようにクエリを修正」
+
+  const queryGetRelatedPosts = gql`
+    query GetPostsExcludeBySlug($slug: ID) {
+      posts(where: { excludeBySlug: $slug }) {
+        edges {
+          node {
+            author {
+              node {
+                name
+                avatar {
+                  url
+                }
+              }
             }
+            categories {
+              edges {
+                node {
+                  name
+                }
+              }
+            }
+            date
+            excerpt
+            featuredImage {
+              node {
+                altText
+                sourceUrl
+              }
+            }
+            slug
+            title
           }
         }
-        slug
       }
     }
   `
 
-  const getPostWidgetPropsResponse: GraphqlGetCategoryResponse = await request(
-    GRAPHQL_API_URL,
-    queryGetPostWidgetProps,
-    { id: slug } // 引数渡すときは`request`の第3引数にオブジェクトオブジェクト指定する
-  )
+  const queryGetRelatedPostsResponse: GraphqlGetPostsExcludeBySlugResponse =
+    await request(GRAPHQL_API_URL, queryGetRelatedPosts, { slug: slug })
 
-  const categories = getPostWidgetPropsResponse.post.categories.edges.map(
-    ({ node }) => node.name
+  const posts = queryGetRelatedPostsResponse?.posts.edges.map(
+    ({ node }) => node
   )
 
   return {
     props: {
-      slug: slug,
       fallback: {
-        // {fallback}のkeyとして動的APIエンドポイントを指定したい場合は unstable_serializeを使う
-        [unstable_serialize(["/api/post", slug])]: {
-          categories,
-          slug
-        }
+        [unstable_serialize(["/api/post", slug])]: posts
       }
     }
   }
 }
 
-type GetStaticPathsResponse = {
-  data: {
-    posts: {
-      edges: {
-        node: {
-          slug: string
-        }
-      }[]
-    }
-  }
+// getStaticPathsで返却してgetStaticPropsで引数として使用する値の型
+type GetStaticPropsParams = {
+  slug: string
 }
-
-export const getStaticPaths: GetStaticPaths<Params> = async () => {
-  const options = {
-    method: "POST",
-    url: GRAPHQL_API_URL,
-    headers: { "Content-Type": "application/json" },
-    data: {
-      query: `#graphql
-        query allPosts {
-          posts {
-            edges {
-              node {
-                slug
-              }
-            }
+export const getStaticPaths: GetStaticPaths<
+  GetStaticPropsParams
+> = async () => {
+  const queryGetAllSlugs = gql`
+    query getAllSlugs {
+      posts {
+        edges {
+          node {
+            slug
           }
         }
-      `
-    }
-  }
-  const allPosts: GetStaticPathsResponse = await axios
-    .request(options)
-    .then((res: AxiosResponse) => res.data)
-    .catch((err: AxiosError) => {
-      if (err.code === "ECONNABORTED") {
-        console.log("axios API call failed")
       }
-    })
-
-  const {
-    data: {
-      posts: { edges }
     }
-  } = allPosts
+  `
 
-  const paths = edges.map(({ node }) => {
+  const queryGetAllSlugsResponse: GraphqlGetAllSlugsResponse = await request(
+    GRAPHQL_API_URL,
+    queryGetAllSlugs
+  )
+
+  const paths = queryGetAllSlugsResponse?.posts?.edges?.map(({ node }) => {
     return {
       params: {
         slug: node.slug

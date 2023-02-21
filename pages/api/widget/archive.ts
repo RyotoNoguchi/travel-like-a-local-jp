@@ -41,8 +41,6 @@ const handler = async (
     ({ node }) => node.date
   )
 
-  console.log("useSWRのdates: ", dates)
-
   const datesReduceResult = dates
     ? dates?.reduce<{ [key: string]: number }>((yearMonthCounts, gmt) => {
         const yyyyMM = gmt.slice(0, 7)
@@ -60,8 +58,6 @@ const handler = async (
   const postsPerMonth: Archive[] = Object.entries(datesReduceResult).map(
     ([month, count]) => ({ month, count })
   )
-  console.log("postsPerMonth: ", postsPerMonth)
-
   res.json(postsPerMonth)
 }
 

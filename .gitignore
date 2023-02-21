@@ -36,9 +36,4 @@ yarn-error.log*
 next-env.d.ts
 
 # wordpress
-/htdocs/*
-!/htdocs/wp-content/
-/htdocs/wp-content/*
-!/htdocs/wp-content/plugins
-/htdocs/wp-content/plugins/*
-!/htdocs/wp-content/plugins/wp-graphql-extension
+wordpress-local

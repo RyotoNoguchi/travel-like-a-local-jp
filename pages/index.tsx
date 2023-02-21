@@ -21,12 +21,15 @@ import type { InferGetStaticPropsType, NextPage, GetStaticProps } from "next"
 import request, { gql } from "graphql-request"
 import PopularPostCards from "components/organisms/PopularPostCards"
 import Archive from "components/types/archive"
+import { useRouter } from "next/router"
 const GRAPHQL_API_URL = process.env.WORDPRESS_API_URL ?? ""
 
 type Props = InferGetStaticPropsType<typeof getStaticProps>
 
 const Home: NextPage<Props> = ({ fallback }) => {
   console.log("fallback:", fallback)
+  const router = useRouter()
+  const slug = router.query.slug
 
   // TODO 各コンポーネントのフォールバックに<Skeleton />を使用するように変更
   return (
@@ -43,17 +46,13 @@ const Home: NextPage<Props> = ({ fallback }) => {
           <div className="grid grid-cols-1 md:grid-cols-12 gap-12 lg:m-24 md:m-8">
             <div className="md:col-span-8 col-span-1">
               {/* fallbackなしだと、レンダリング後にfetcherが叩かれるため、一瞬ブランクな状態が発生する。console.logしてリロードするとundefinedになることを確認できる */}
-              {/* <SWRConfig value={{ fallback }}> */}
               <PopularPostCards />
-              {/* </SWRConfig> */}
             </div>
             <div className="md:col-span-4 col-span-1 relative">
               <div className="sticky top-8 mb-8">
-                {/* <SWRConfig value={{ fallback }}> */}
                 <PostWidget />
                 <ArchiveWidget />
                 <CategoryWidget />
-                {/* </SWRConfig> */}
               </div>
             </div>
           </div>
@@ -70,7 +69,7 @@ type GetStaticPropsResponse = {
     "/api/post/featured": Post[]
     "/api/post/recent": Post[]
     "/api/post/popular": Post[]
-    "/api/widget/recent": Widget[]
+    // "/api/widget/recent": Widget[]
     "/api/category": string[]
     "/api/widget/archive": Archive[]
   }
@@ -211,33 +210,33 @@ export const getStaticProps: GetStaticProps<
   )
 
   // ウィジェット用のPostの情報取得
-  const queryGetRecentPostsForWidget = gql`
-    query GetRecentPostForWidget {
-      posts(where: { orderby: { field: DATE, order: DESC } }, first: 3) {
-        edges {
-          node {
-            title
-            date
-            featuredImage {
-              node {
-                sourceUrl
-              }
-            }
-            slug
-          }
-        }
-      }
-    }
-  `
+  // const queryGetRecentPostsForWidget = gql`
+  //   query GetRecentPostForWidget {
+  //     posts(where: { orderby: { field: DATE, order: DESC } }, first: 3) {
+  //       edges {
+  //         node {
+  //           title
+  //           date
+  //           featuredImage {
+  //             node {
+  //               sourceUrl
+  //             }
+  //           }
+  //           slug
+  //         }
+  //       }
+  //     }
+  //   }
+  // `
 
-  const queryGetWidgetResponse: GraphqlGetWidgetResponse = await request(
-    GRAPHQL_API_URL,
-    queryGetRecentPostsForWidget
-  )
+  // const queryGetWidgetResponse: GraphqlGetWidgetResponse = await request(
+  //   GRAPHQL_API_URL,
+  //   queryGetRecentPostsForWidget
+  // )
 
-  const recentPostsForWidget: Widget[] = queryGetWidgetResponse.posts.edges.map(
-    ({ node }) => node
-  )
+  // const recentPostsForWidget: Widget[] = queryGetWidgetResponse.posts.edges.map(
+  //   ({ node }) => node
+  // )
 
   // ウィジェット用のカテゴリー取得
   const queryGetCategories = gql`
@@ -306,7 +305,7 @@ export const getStaticProps: GetStaticProps<
         "/api/post/featured": featuredPosts,
         "/api/post/recent": recentPosts,
         "/api/post/popular": popularPosts,
-        "/api/widget/recent": recentPostsForWidget,
+        // "/api/widget/recent": recentPostsForWidget,
         "/api/category": categories,
         "/api/widget/archive": postsPerMonth
       }

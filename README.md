@@ -1,4 +1,3 @@
-
 # WordPress × NEXT.JSでブログサイトを作ろう
 
 ## 無料でWordPressをホスティングする
@@ -58,6 +57,10 @@
          }
       }
    ```
+
+## `Slug-NOT-IN`のquery実装方法
+
+[こちらのGitHub ISSUE](https://github.com/wp-graphql/wp-graphql/issues/1434#issuecomment-679606203)を`plugin`にコピペしてGraphQL IDEをリロードすればOK
 
 ## Next.js × TypeScriptアプリケーション環境構築
 

@@ -5,7 +5,9 @@ const nextConfig = {
     domains: [
       "travel-like-a-local-jp.com",
       "secure.gravatar.com",
-      "upload.wikimedia.org"
+      "upload.wikimedia.org",
+      "travellikealocaljp.local",
+      "1.gravatar.com"
     ]
   },
   swcMinify: true
