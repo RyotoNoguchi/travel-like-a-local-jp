@@ -4,10 +4,10 @@ import { GetStaticPaths, GetStaticProps, InferGetStaticPropsType } from "next"
 import request, { gql } from "graphql-request"
 const GRAPHQL_API_URL = process.env.WORDPRESS_API_URL ?? ""
 import { SWRConfig, unstable_serialize } from "swr"
-import {
-  GraphqlGetPopularPostsResponse,
-  GraphqlGetPostResponse
-} from "components/types/apiResponse"
+// import {
+//   GraphqlGetPopularPostsResponse,
+//   GraphqlGetPostResponse
+// } from "components/types/apiResponse"
 import {
   GraphqlGetAllSlugsResponse,
   GraphqlGetPostsExcludeBySlugResponse
@@ -20,7 +20,8 @@ type Props = InferGetStaticPropsType<typeof getStaticProps>
 
 const Post: React.FC<Props> = ({ fallback }) => {
   const router = useRouter()
-  const slug = router.query.slug as string
+  const slug = (router.query.slug as string) ?? ("default" as string)
+
   return (
     <>
       <Head>
@@ -50,7 +51,7 @@ export const getStaticProps: GetStaticProps<
   GetStaticPropsResponse,
   GetStaticPropsParams
 > = async ({ params }) => {
-  const slug = params?.slug ?? ""
+  const slug = params?.slug ?? "default"
 
   // TODO slugを条件にして、GraphQLクエリ叩いて第一categoryを取得
   // TODO 取得したcategoryをqueryGetRelatedPostsのパラメータに追加して「表示しているポストのslug以外の同じカテゴリのRelatedPostsを取得するようにクエリを修正」
@@ -94,7 +95,7 @@ export const getStaticProps: GetStaticProps<
   const queryGetRelatedPostsResponse: GraphqlGetPostsExcludeBySlugResponse =
     await request(GRAPHQL_API_URL, queryGetRelatedPosts, { slug: slug })
 
-  const posts = queryGetRelatedPostsResponse?.posts.edges.map(
+  const posts = queryGetRelatedPostsResponse?.posts?.edges.map(
     ({ node }) => node
   )
 
@@ -141,6 +142,6 @@ export const getStaticPaths: GetStaticPaths<
 
   return {
     paths,
-    fallback: true
+    fallback: "blocking"
   }
 }

@@ -3,16 +3,23 @@ import Image from "next/image"
 import moment from "moment"
 import Link from "next/link"
 import { Post } from "components/types/post"
+import { useRouter } from "next/router"
 
 type Props = {
   slug?: string
 }
 
 const PostWidget: React.FC<Props> = ({ slug }) => {
+  const router = useRouter()
+
   // https://swr.vercel.app/ja/docs/arguments#%E8%A4%87%E6%95%B0%E3%81%AE%E5%BC%95%E6%95%B0
   // useSWRの引数に配列をを指定し、変数を第2引数以降に入れることでuseSWRがkeyを動的に認知してくれるようになる
+
   const { data: relatedPosts } = useSWRDynamic<Post[]>("/api/post", slug)
   const { data: recentPosts } = useSWRWithTimeout<Post[]>("/api/post/recent")
+  if (router.isFallback) {
+    return <div>fallback is on going</div>
+  }
 
   if (!recentPosts && !relatedPosts) {
     return null
