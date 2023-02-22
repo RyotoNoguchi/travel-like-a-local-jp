@@ -2,12 +2,7 @@
 import Head from "next/head"
 import { GetStaticPaths, GetStaticProps, InferGetStaticPropsType } from "next"
 import request, { gql } from "graphql-request"
-const GRAPHQL_API_URL = process.env.WORDPRESS_API_URL ?? ""
 import { SWRConfig, unstable_serialize } from "swr"
-// import {
-//   GraphqlGetPopularPostsResponse,
-//   GraphqlGetPostResponse
-// } from "components/types/apiResponse"
 import {
   GraphqlGetAllSlugsResponse,
   GraphqlGetPostsExcludeBySlugResponse
@@ -15,10 +10,12 @@ import {
 import { Post } from "components/types/post"
 import { PostWidget } from "components/index"
 import { useRouter } from "next/router"
+const GRAPHQL_API_URL = process.env.WORDPRESS_API_URL ?? ""
 
 type Props = InferGetStaticPropsType<typeof getStaticProps>
 
 const Post: React.FC<Props> = ({ fallback }) => {
+  console.log(fallback)
   const router = useRouter()
   const slug = (router.query.slug as string) ?? ("default" as string)
 
@@ -53,12 +50,42 @@ export const getStaticProps: GetStaticProps<
 > = async ({ params }) => {
   const slug = params?.slug ?? "default"
 
-  // TODO slugを条件にして、GraphQLクエリ叩いて第一categoryを取得
-  // TODO 取得したcategoryをqueryGetRelatedPostsのパラメータに追加して「表示しているポストのslug以外の同じカテゴリのRelatedPostsを取得するようにクエリを修正」
+  const queryGetCategoryBySlug = gql`
+    query GetCategoryBySlug($slug: ID!) {
+      post(id: $slug, idType: SLUG) {
+        categories {
+          edges {
+            node {
+              name
+            }
+          }
+        }
+      }
+    }
+  `
+
+  type GraphQLGetCategoryBySlugResponse = {
+    post: {
+      categories: {
+        edges: {
+          node: {
+            name: string
+          }
+        }[]
+      }
+    }
+  }
+
+  const queryGetCategoryBySlugResponse: GraphQLGetCategoryBySlugResponse =
+    await request(GRAPHQL_API_URL, queryGetCategoryBySlug, { slug })
+
+  const category = queryGetCategoryBySlugResponse?.post?.categories?.edges.map(
+    ({ node }) => node.name
+  )[0]
 
   const queryGetRelatedPosts = gql`
-    query GetPostsExcludeBySlug($slug: ID) {
-      posts(where: { excludeBySlug: $slug }) {
+    query GetPostsExcludeBySlug($slug: ID!, $categoryName: String!) {
+      posts(where: { excludeBySlug: $slug, categoryName: $categoryName }) {
         edges {
           node {
             author {
@@ -93,7 +120,10 @@ export const getStaticProps: GetStaticProps<
   `
 
   const queryGetRelatedPostsResponse: GraphqlGetPostsExcludeBySlugResponse =
-    await request(GRAPHQL_API_URL, queryGetRelatedPosts, { slug: slug })
+    await request(GRAPHQL_API_URL, queryGetRelatedPosts, {
+      slug,
+      categoryName: category
+    })
 
   const posts = queryGetRelatedPostsResponse?.posts?.edges.map(
     ({ node }) => node
