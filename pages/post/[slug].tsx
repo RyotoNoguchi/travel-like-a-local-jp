@@ -8,7 +8,7 @@ import {
   GraphqlGetPostsExcludeBySlugResponse
 } from "components/types/apiResponse"
 import { Post } from "components/types/post"
-import { PostWidget } from "components/index"
+import { PostWidget, PostDetail } from "components"
 import { useRouter } from "next/router"
 const GRAPHQL_API_URL = process.env.WORDPRESS_API_URL ?? ""
 
@@ -29,9 +29,14 @@ const Post: React.FC<Props> = ({ fallback }) => {
           href={`http://headlessnext.local/wp-includes/css/dist/block-library/style.min.css?ver=5.6`}
         />
       </Head>
-      <SWRConfig value={{ fallback }}>
-        <PostWidget slug={slug} />
-      </SWRConfig>
+      <div className="grid grid-cols-1 m-4 md:grid-cols-3 md:gap-6 md:m-6 lg:gap-8 lg:m-8">
+        <PostDetail slug={slug} />
+        <div>
+          <SWRConfig value={{ fallback }}>
+            <PostWidget slug={slug} />
+          </SWRConfig>
+        </div>
+      </div>
     </>
   )
 }
