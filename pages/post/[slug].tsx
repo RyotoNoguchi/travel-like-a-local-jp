@@ -137,7 +137,7 @@ export const getStaticProps: GetStaticProps<
   return {
     props: {
       fallback: {
-        [unstable_serialize(["/api/post", slug])]: posts
+        [unstable_serialize(["/api/posts", slug])]: posts
       }
     }
   }

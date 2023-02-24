@@ -66,9 +66,9 @@ export default Home
 
 type GetStaticPropsResponse = {
   fallback: {
-    "/api/post/featured": Post[]
-    "/api/post/recent": Post[]
-    "/api/post/popular": Post[]
+    "/api/posts/featured": Post[]
+    "/api/posts/recent": Post[]
+    "/api/posts/popular": Post[]
     // "/api/widget/recent": Widget[]
     "/api/category": string[]
     "/api/widget/archive": Archive[]
@@ -302,9 +302,9 @@ export const getStaticProps: GetStaticProps<
   return {
     props: {
       fallback: {
-        "/api/post/featured": featuredPosts,
-        "/api/post/recent": recentPosts,
-        "/api/post/popular": popularPosts,
+        "/api/posts/featured": featuredPosts,
+        "/api/posts/recent": recentPosts,
+        "/api/posts/popular": popularPosts,
         // "/api/widget/recent": recentPostsForWidget,
         "/api/category": categories,
         "/api/widget/archive": postsPerMonth

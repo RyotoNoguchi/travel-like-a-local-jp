@@ -7,7 +7,7 @@ const PostCards: React.FC = () => {
   // 参考: https://kk-web.link/blog/20220629
   // 参考: https://swr.vercel.app/ja/docs/with-nextjs
 
-  const recentPostsKey: Key = "api/post/recent"
+  const recentPostsKey: Key = "api/posts/recent"
   const { data: recentPostsData, isValidating } =
     useSWRWithTimeout<Post[]>(recentPostsKey)
 

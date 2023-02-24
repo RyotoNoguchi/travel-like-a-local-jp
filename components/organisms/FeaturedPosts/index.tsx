@@ -27,7 +27,7 @@ const responsive = {
 }
 
 const FeaturedPosts: React.FC = () => {
-  const featuredPostKey: Key = "/api/post/featured"
+  const featuredPostKey: Key = "/api/posts/featured"
 
   const {
     data: featuredPostData,
