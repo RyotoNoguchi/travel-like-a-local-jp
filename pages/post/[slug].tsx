@@ -5,12 +5,13 @@ import request, { gql } from "graphql-request"
 import { SWRConfig, unstable_serialize } from "swr"
 import {
   GraphqlGetAllSlugsResponse,
-  GraphqlGetPostResponse,
   GraphqlGetPostsExcludeBySlugResponse
 } from "components/types/apiResponse"
 import { Post } from "components/types/post"
 import { PostWidget, PostDetail } from "components"
 import { useRouter } from "next/router"
+import axios from "axios"
+import { API_BASE_URL } from "components/constants"
 const GRAPHQL_API_URL = process.env.WORDPRESS_API_URL ?? ""
 
 type Props = InferGetStaticPropsType<typeof getStaticProps>
@@ -135,46 +136,8 @@ export const getStaticProps: GetStaticProps<
     ({ node }) => node
   )
 
-  const queryGetPostDetail = gql`
-    query GetPostDetail($slug: ID!) {
-      post(id: $slug, idType: SLUG) {
-        author {
-          node {
-            avatar {
-              url
-            }
-            name
-          }
-        }
-        categories {
-          edges {
-            node {
-              name
-            }
-          }
-        }
-        content
-        date
-        excerpt
-        featuredImage {
-          node {
-            altText
-            sourceUrl
-          }
-        }
-        slug
-        title
-      }
-    }
-  `
-
-  const queryGetPostDetailResponse: GraphqlGetPostResponse = await request(
-    GRAPHQL_API_URL,
-    queryGetPostDetail,
-    { slug }
-  )
-
-  const post = queryGetPostDetailResponse.post
+  const res = await axios.get(`${API_BASE_URL}/post/${slug}`)
+  const post = res.data
 
   return {
     props: {
