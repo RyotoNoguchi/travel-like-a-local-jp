@@ -1,9 +1,10 @@
-import { useSWRWithTimeout } from "components/hooks/swr"
+import { useSWRDynamic, useSWRWithTimeout } from "components/hooks/swr"
 import { Post } from "components/types/post"
 import Image from "next/image"
 
 const PostDetail: React.FC<{ slug: string }> = ({ slug }) => {
-  const { data } = useSWRWithTimeout("/api/posts")
+  const { data: post, error } = useSWRDynamic("/api/post", slug)
+  console.log("PostDetailで呼び出した、'/api/post'の{ data }:", post)
   return (
     <div className="col-span-2 bg-red-400 mb-4">
       {/* <Image
