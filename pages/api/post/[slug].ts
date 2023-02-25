@@ -1,5 +1,4 @@
 /* eslint-disable prettier/prettier */
-import { GetPostsResponse } from "components/types/apiResponse"
 import { Post } from "components/types/post"
 import { GraphQLError } from "graphql"
 import request, { gql, Variables } from "graphql-request"
