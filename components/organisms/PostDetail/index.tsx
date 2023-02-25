@@ -21,7 +21,6 @@ const PostDetail: React.FC<{ slug: string }> = ({ slug }) => {
     return <div>Oops, something went wrong!</div>
   }
 
-  // TODO `data: post`を使ってPostDetailコンポーネントを描画
   return (
     <div className="col-span-2 bg-white mb-4 p-4 rounded-lg grid gap-4">
       <Image
