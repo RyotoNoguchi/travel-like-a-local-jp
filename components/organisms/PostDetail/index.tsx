@@ -3,7 +3,7 @@ import { Post } from "components/types/post"
 import Image from "next/image"
 
 const PostDetail: React.FC<{ slug: string }> = ({ slug }) => {
-  const { data } = useSWRWithTimeout("")
+  const { data } = useSWRWithTimeout("/api/posts")
   return (
     <div className="col-span-2 bg-red-400 mb-4">
       {/* <Image

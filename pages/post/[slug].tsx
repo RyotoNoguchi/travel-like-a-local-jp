@@ -5,6 +5,7 @@ import request, { gql } from "graphql-request"
 import { SWRConfig, unstable_serialize } from "swr"
 import {
   GraphqlGetAllSlugsResponse,
+  GraphqlGetPostResponse,
   GraphqlGetPostsExcludeBySlugResponse
 } from "components/types/apiResponse"
 import { Post } from "components/types/post"
@@ -45,7 +46,7 @@ export default Post
 
 type GetStaticPropsResponse = {
   fallback: {
-    [key: string]: Post[]
+    [key: string]: Post[] | Post
   }
 }
 
@@ -134,10 +135,52 @@ export const getStaticProps: GetStaticProps<
     ({ node }) => node
   )
 
+  const queryGetPostDetail = gql`
+    query GetPostDetail($slug: ID!) {
+      post(id: $slug, idType: SLUG) {
+        author {
+          node {
+            avatar {
+              url
+            }
+            name
+          }
+        }
+        categories {
+          edges {
+            node {
+              name
+            }
+          }
+        }
+        content
+        date
+        excerpt
+        featuredImage {
+          node {
+            altText
+            sourceUrl
+          }
+        }
+        slug
+        title
+      }
+    }
+  `
+
+  const queryGetPostDetailResponse: GraphqlGetPostResponse = await request(
+    GRAPHQL_API_URL,
+    queryGetPostDetail,
+    { slug }
+  )
+
+  const post = queryGetPostDetailResponse.post
+
   return {
     props: {
       fallback: {
-        [unstable_serialize(["/api/posts", slug])]: posts
+        [unstable_serialize(["/api/posts", slug])]: posts,
+        [unstable_serialize(["/api/post", slug])]: post
       }
     }
   }

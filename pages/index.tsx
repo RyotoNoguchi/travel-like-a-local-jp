@@ -12,25 +12,18 @@ import {
   GraphqlGetRecentPostsResponse,
   GraphqlGetFeaturedPostsResponse,
   GraphqlGetPopularPostsResponse,
-  GraphqlGetWidgetResponse,
   GraphqlGetCategoriesResponse
 } from "components/types/apiResponse"
 import { Post } from "components/types/post"
-import { Widget } from "components/types/widget"
 import type { InferGetStaticPropsType, NextPage, GetStaticProps } from "next"
 import request, { gql } from "graphql-request"
 import PopularPostCards from "components/organisms/PopularPostCards"
 import Archive from "components/types/archive"
-import { useRouter } from "next/router"
 const GRAPHQL_API_URL = process.env.WORDPRESS_API_URL ?? ""
 
 type Props = InferGetStaticPropsType<typeof getStaticProps>
 
 const Home: NextPage<Props> = ({ fallback }) => {
-  console.log("fallback:", fallback)
-  const router = useRouter()
-  const slug = router.query.slug
-
   // TODO 各コンポーネントのフォールバックに<Skeleton />を使用するように変更
   return (
     <div className="relative">
