@@ -1,123 +1,83 @@
 /* eslint-disable prettier/prettier */
-import axios, { AxiosError, AxiosResponse } from "axios"
-import { GetPostsResponse } from "components/types/apiResponse"
+import Category from "components/types/category"
 import { Post } from "components/types/post"
+import { GraphQLError } from "graphql"
+import request, { gql } from "graphql-request"
 import type { NextApiRequest, NextApiResponse } from "next"
-const API_URL = process.env.WORDPRESS_API_URL ?? ""
+const GRAPHQL_API_URL = process.env.WORDPRESS_API_URL ?? ""
 
 const handler = async (req: NextApiRequest, res: NextApiResponse<Post[]>) => {
   const {
     query: { slug }
   } = req
 
-  const queryCategoryOptions = {
-    method: "POST",
-    url: API_URL,
-    headers: { "Content-Type": "application/json" },
-    data: {
-      query: `#graphql
-        query GetCategoryBySlug($slug: ID!) {
-          post(id: $slug, idType: SLUG) {
-            categories {
-              edges {
-                node {
-                  name
-                }
-              }
-            }
-          }
-        }
-      `,
-      variables: {
-        slug
-      }
-    }
-  }
-
-  type GetCategoryBySlugResponse = {
-    data: {
-      post: {
-        categories: {
-          edges: {
-            node: {
-              name: string
-            }
-          }[]
-        }
-      }
-    }
-  }
-
-  const categoryData: GetCategoryBySlugResponse = await axios
-    .request(queryCategoryOptions)
-    .then((res: AxiosResponse) => res.data)
-    .catch((err: AxiosError) => {
-      if (err.code === "ECONNABORTED") {
-        console.log("axios API call failed")
-      }
-    })
-
-  const category = categoryData?.data?.post?.categories?.edges.map(
-    ({ node }) => node.name
-  )[0]
-
-  const options = {
-    method: "POST",
-    url: API_URL,
-    headers: { "Content-Type": "application/json" },
-    data: {
-      query: `#graphql
-        query GetPostsExcludeBySlug($slug: ID!, $categoryName: String!) {
-          posts(where: { excludeBySlug: $slug, categoryName: $categoryName }) {
+  try {
+    // slugを条件に該当該当Postに紐づくカテゴリを１つだけ取得
+    const queryGetCategoryBySlug = gql`
+      query GetCategoryBySlug($slug: ID!) {
+        post(id: $slug, idType: SLUG) {
+          categories {
             edges {
               node {
-                author {
-                  node {
-                    name
-                    avatar {
-                      url
-                    }
-                  }
-                }
-                categories {
-                  edges {
-                    node {
-                      name
-                    }
-                  }
-                }
-                date
-                excerpt
-                featuredImage {
-                  node {
-                    altText
-                    sourceUrl
-                  }
-                }
-                slug
-                title
+                name
               }
             }
           }
         }
-        `,
-      variables: {
-        slug,
-        categoryName: category
       }
-    }
-  }
+    `
+    const { post } = await request<{
+      post: { categories: { edges: Category[] } }
+    }>(GRAPHQL_API_URL, queryGetCategoryBySlug, { slug: slug })
 
-  // axiosでGraphQLのAPIコールの仕方(https://rapidapi.com/guides/graphql-axios)
-  const data: GetPostsResponse = await axios
-    .request(options)
-    .then((res: AxiosResponse) => res.data)
-    .catch((err: AxiosError) => {
-      if (err.code === "ECONNABORTED") {
-        console.log("axios API call failed")
+    const category = post?.categories?.edges.map(({ node }) => node.name)[0]
+
+    // queryGetCategoryBySlugで取得したカテゴリを条件にして条件にして該当のslug以外で同じカテゴリのPostsを取得
+    const queryGetPostsExcludeBySlug = gql`
+      query GetPostsExcludeBySlug($slug: ID!, $categoryName: String!) {
+        posts(where: { excludeBySlug: $slug, categoryName: $categoryName }) {
+          edges {
+            node {
+              author {
+                node {
+                  name
+                  avatar {
+                    url
+                  }
+                }
+              }
+              categories {
+                edges {
+                  node {
+                    name
+                  }
+                }
+              }
+              date
+              excerpt
+              featuredImage {
+                node {
+                  altText
+                  sourceUrl
+                }
+              }
+              slug
+              title
+            }
+          }
+        }
       }
-    })
-  res.json(data?.data?.posts?.edges.map(({ node }) => node))
+    `
+    const { posts } = await request<{ posts: { edges: { node: Post }[] } }>(
+      GRAPHQL_API_URL,
+      queryGetPostsExcludeBySlug,
+      { slug: slug, categoryName: category }
+    )
+    res.json(posts?.edges?.map(({ node }) => node))
+  } catch (error: unknown) {
+    const graphQLError = error as GraphQLError
+    console.log(graphQLError.message)
+  }
 }
 
 export default handler
