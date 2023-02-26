@@ -23,17 +23,25 @@ const PostDetail: React.FC<{ slug: string }> = ({ slug }) => {
 
   return (
     <div className="col-span-2 bg-white mb-4 p-4 rounded-lg grid gap-4">
-      <Image
-        alt={post.featuredImage.node.altText}
-        src={post.featuredImage.node.sourceUrl}
-        width={800}
-        height={500}
-      />
-      <div className="flex gap-4 ml-2">
+      {/* featuredイメージ */}
+      {/* <div className="flex justify-center">
+        <Image
+          alt={post.featuredImage.node.altText}
+          src={post.featuredImage.node.sourceUrl}
+          width={800}
+          height={500}
+        />
+      </div> */}
+      <div dangerouslySetInnerHTML={{ __html: post.content }}></div>
+
+      {/* 執筆者と日付セクション */}
+      <div className="flex justify-end gap-4 ml-2">
         <div className="flex items-center gap-2">
           <Image
             alt={post.author.node.name}
-            src={post.author.node.avatar.url}
+            src={
+              "http://travellikealocaljp.local/wp-content/uploads/2023/02/portraitのコピー-1-981x1024.jpg"
+            }
             width={30}
             height={30}
             className="rounded-full"
@@ -48,7 +56,6 @@ const PostDetail: React.FC<{ slug: string }> = ({ slug }) => {
           <span>{moment(post.date).format("MMM DD, YYYY")}</span>
         </div>
       </div>
-      <div>{post.content}</div>
     </div>
   )
 }
