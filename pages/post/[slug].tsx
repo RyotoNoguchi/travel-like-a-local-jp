@@ -8,8 +8,10 @@ import {
   GraphqlGetPostsExcludeBySlugResponse
 } from "components/types/apiResponse"
 import { Post } from "components/types/post"
-import { PostWidget } from "components/index"
+import { PostWidget, PostDetail } from "components"
 import { useRouter } from "next/router"
+import axios from "axios"
+import { API_BASE_URL } from "components/constants"
 const GRAPHQL_API_URL = process.env.WORDPRESS_API_URL ?? ""
 
 type Props = InferGetStaticPropsType<typeof getStaticProps>
@@ -29,9 +31,14 @@ const Post: React.FC<Props> = ({ fallback }) => {
           href={`http://headlessnext.local/wp-includes/css/dist/block-library/style.min.css?ver=5.6`}
         />
       </Head>
-      <SWRConfig value={{ fallback }}>
-        <PostWidget slug={slug} />
-      </SWRConfig>
+      <div className="grid grid-cols-1 m-4 md:grid-cols-3 md:gap-6 md:m-6 lg:gap-8 lg:m-8">
+        <PostDetail slug={slug} />
+        <div>
+          <SWRConfig value={{ fallback }}>
+            <PostWidget slug={slug} />
+          </SWRConfig>
+        </div>
+      </div>
     </>
   )
 }
@@ -40,7 +47,7 @@ export default Post
 
 type GetStaticPropsResponse = {
   fallback: {
-    [key: string]: Post[]
+    [key: string]: Post[] | Post
   }
 }
 
@@ -129,10 +136,14 @@ export const getStaticProps: GetStaticProps<
     ({ node }) => node
   )
 
+  const res = await axios.get(`${API_BASE_URL}/post/${slug}`)
+  const post = res.data
+
   return {
     props: {
       fallback: {
-        [unstable_serialize(["/api/post", slug])]: posts
+        [unstable_serialize(["/api/posts", slug])]: posts,
+        [unstable_serialize(["/api/post", slug])]: post
       }
     }
   }
