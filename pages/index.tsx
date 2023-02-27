@@ -10,7 +10,6 @@ import {
 } from "components"
 import {
   GraphqlGetRecentPostsResponse,
-  GraphqlGetFeaturedPostsResponse,
   GraphqlGetPopularPostsResponse,
   GraphqlGetCategoriesResponse
 } from "components/types/apiResponse"
@@ -20,6 +19,8 @@ import request, { gql } from "graphql-request"
 import PopularPostCards from "components/organisms/PopularPostCards"
 import Archive from "components/types/archive"
 const GRAPHQL_API_URL = process.env.WORDPRESS_API_URL ?? ""
+import { API_BASE_URL } from "components/constants"
+import axios, { AxiosResponse } from "axios"
 
 type Props = InferGetStaticPropsType<typeof getStaticProps>
 
@@ -71,47 +72,11 @@ type GetStaticPropsResponse = {
 export const getStaticProps: GetStaticProps<
   GetStaticPropsResponse
 > = async () => {
-  const queryGetFeaturedPosts = gql`
-    query GetFeaturedPosts {
-      posts(where: { tag: "featured" }) {
-        edges {
-          node {
-            slug
-            title
-            excerpt
-            date
-            content
-            categories {
-              edges {
-                node {
-                  name
-                }
-              }
-            }
-            featuredImage {
-              node {
-                altText
-                sourceUrl
-              }
-            }
-            author {
-              node {
-                name
-                avatar {
-                  url
-                }
-              }
-            }
-          }
-        }
-      }
-    }
-  `
-  const getFeaturedPostsResponse: GraphqlGetFeaturedPostsResponse =
-    await request(GRAPHQL_API_URL, queryGetFeaturedPosts)
-  const featuredPosts: Post[] = getFeaturedPostsResponse.posts.edges.map(
-    ({ node }) => node
-  )
+  const GetFeaturedPostsResponse = await axios.get<
+    Post[],
+    AxiosResponse<Post[]>
+  >(`${API_BASE_URL}/posts/featured`)
+  const featuredPosts = GetFeaturedPostsResponse.data
 
   const queryGetRecentPosts = gql`
     query GetRecentPosts {
