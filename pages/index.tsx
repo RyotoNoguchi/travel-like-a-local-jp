@@ -9,7 +9,6 @@ import {
   ArchiveWidget
 } from "components"
 import {
-  GraphqlGetRecentPostsResponse,
   GraphqlGetPopularPostsResponse,
   GraphqlGetCategoriesResponse
 } from "components/types/apiResponse"
@@ -63,7 +62,6 @@ type GetStaticPropsResponse = {
     "/api/posts/featured": Post[]
     "/api/posts/recent": Post[]
     "/api/posts/popular": Post[]
-    // "/api/widget/recent": Widget[]
     "/api/category": string[]
     "/api/widget/archive": Archive[]
   }
@@ -78,46 +76,10 @@ export const getStaticProps: GetStaticProps<
   >(`${API_BASE_URL}/posts/featured`)
   const featuredPosts = GetFeaturedPostsResponse.data
 
-  const queryGetRecentPosts = gql`
-    query GetRecentPosts {
-      posts(first: 5, where: { orderby: { field: DATE, order: DESC } }) {
-        edges {
-          node {
-            slug
-            title
-            excerpt
-            date
-            categories {
-              edges {
-                node {
-                  name
-                }
-              }
-            }
-            featuredImage {
-              node {
-                altText
-                sourceUrl
-              }
-            }
-            author {
-              node {
-                name
-                avatar {
-                  url
-                }
-              }
-            }
-          }
-        }
-      }
-    }
-  `
-  const queryGetRecentPostsResponse: GraphqlGetRecentPostsResponse =
-    await request(GRAPHQL_API_URL, queryGetRecentPosts)
-  const recentPosts: Post[] = queryGetRecentPostsResponse.posts.edges.map(
-    ({ node }) => node
+  const GetRecentPostsResponse = await axios.get<Post[], AxiosResponse<Post[]>>(
+    `${API_BASE_URL}/posts/recent`
   )
+  const recentPosts = GetRecentPostsResponse.data
 
   const queryGetPopularPosts = gql`
     query GetPopularPosts {
@@ -166,35 +128,6 @@ export const getStaticProps: GetStaticProps<
   const popularPosts: Post[] = queryGetPopularPostsResponse.posts.edges.map(
     ({ node }) => node
   )
-
-  // ウィジェット用のPostの情報取得
-  // const queryGetRecentPostsForWidget = gql`
-  //   query GetRecentPostForWidget {
-  //     posts(where: { orderby: { field: DATE, order: DESC } }, first: 3) {
-  //       edges {
-  //         node {
-  //           title
-  //           date
-  //           featuredImage {
-  //             node {
-  //               sourceUrl
-  //             }
-  //           }
-  //           slug
-  //         }
-  //       }
-  //     }
-  //   }
-  // `
-
-  // const queryGetWidgetResponse: GraphqlGetWidgetResponse = await request(
-  //   GRAPHQL_API_URL,
-  //   queryGetRecentPostsForWidget
-  // )
-
-  // const recentPostsForWidget: Widget[] = queryGetWidgetResponse.posts.edges.map(
-  //   ({ node }) => node
-  // )
 
   // ウィジェット用のカテゴリー取得
   const queryGetCategories = gql`
@@ -263,7 +196,6 @@ export const getStaticProps: GetStaticProps<
         "/api/posts/featured": featuredPosts,
         "/api/posts/recent": recentPosts,
         "/api/posts/popular": popularPosts,
-        // "/api/widget/recent": recentPostsForWidget,
         "/api/category": categories,
         "/api/widget/archive": postsPerMonth
       }
