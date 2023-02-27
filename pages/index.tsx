@@ -8,13 +8,10 @@ import {
   PostWidget,
   ArchiveWidget
 } from "components"
-import { GraphqlGetPopularPostsResponse } from "components/types/apiResponse"
 import { Post } from "components/types/post"
 import type { InferGetStaticPropsType, NextPage, GetStaticProps } from "next"
-import request, { gql } from "graphql-request"
 import PopularPostCards from "components/organisms/PopularPostCards"
 import Archive from "components/types/archive"
-const GRAPHQL_API_URL = process.env.WORDPRESS_API_URL ?? ""
 import { API_BASE_URL } from "components/constants"
 import axios, { AxiosResponse } from "axios"
 
@@ -68,51 +65,40 @@ export const getStaticProps: GetStaticProps<
   GetStaticPropsResponse
 > = async () => {
   // featuredPosts取得
-  const GetFeaturedPostsResponse = await axios.get<
+  const getFeaturedPostsResponse = await axios.get<
     Post[],
     AxiosResponse<Post[]>
   >(`${API_BASE_URL}/posts/featured`)
-  const featuredPosts = GetFeaturedPostsResponse.data
+  const featuredPosts = getFeaturedPostsResponse.data
 
   // recentPosts取得
-  const GetRecentPostsResponse = await axios.get<Post[], AxiosResponse<Post[]>>(
+  const getRecentPostsResponse = await axios.get<Post[], AxiosResponse<Post[]>>(
     `${API_BASE_URL}/posts/recent`
   )
-  const recentPosts = GetRecentPostsResponse.data
+  const recentPosts = getRecentPostsResponse.data
 
   // ウィジェット用のカテゴリー取得
-  const GetCategoriesResponse = await axios.get<
+  const getCategoriesResponse = await axios.get<
     string[],
     AxiosResponse<string[]>
   >(`${API_BASE_URL}/category`)
-  const categories = GetCategoriesResponse.data
+  const categories = getCategoriesResponse.data
 
-  const GetPopularPostsResponse = await axios.get<
+  // popularPosts取得
+  const getPopularPostsResponse = await axios.get<
     Post[],
     AxiosResponse<Post[]>
   >(`${API_BASE_URL}/posts/popular`)
 
-  const popularPosts = GetPopularPostsResponse.data
+  const popularPosts = getPopularPostsResponse.data
 
-  const queryGetAllPosts = gql`
-    query GetAllPosts {
-      posts {
-        edges {
-          node {
-            date
-          }
-        }
-      }
-    }
-  `
+  // postDates取得し加工
+  const getPostDatesResponse = await axios.get<
+    string[],
+    AxiosResponse<string[]>
+  >(`${API_BASE_URL}/posts`)
 
-  const queryGetAllPostsResponse: {
-    posts: { edges: { node: { date: string } }[] }
-  } = await request(GRAPHQL_API_URL, queryGetAllPosts)
-
-  const dates = queryGetAllPostsResponse?.posts?.edges.map(
-    ({ node }) => node.date
-  )
+  const dates = getPostDatesResponse?.data
 
   const datesReduceResult = dates.reduce<{ [key: string]: number }>(
     (yearMonthCounts, gmt) => {
