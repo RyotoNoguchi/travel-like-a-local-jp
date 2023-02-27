@@ -8,18 +8,12 @@ import {
   PostWidget,
   ArchiveWidget
 } from "components"
-import {
-  GraphqlGetRecentPostsResponse,
-  GraphqlGetFeaturedPostsResponse,
-  GraphqlGetPopularPostsResponse,
-  GraphqlGetCategoriesResponse
-} from "components/types/apiResponse"
 import { Post } from "components/types/post"
 import type { InferGetStaticPropsType, NextPage, GetStaticProps } from "next"
-import request, { gql } from "graphql-request"
 import PopularPostCards from "components/organisms/PopularPostCards"
 import Archive from "components/types/archive"
-const GRAPHQL_API_URL = process.env.WORDPRESS_API_URL ?? ""
+import { API_BASE_URL } from "components/constants"
+import axios, { AxiosResponse } from "axios"
 
 type Props = InferGetStaticPropsType<typeof getStaticProps>
 
@@ -62,7 +56,6 @@ type GetStaticPropsResponse = {
     "/api/posts/featured": Post[]
     "/api/posts/recent": Post[]
     "/api/posts/popular": Post[]
-    // "/api/widget/recent": Widget[]
     "/api/category": string[]
     "/api/widget/archive": Archive[]
   }
@@ -71,207 +64,41 @@ type GetStaticPropsResponse = {
 export const getStaticProps: GetStaticProps<
   GetStaticPropsResponse
 > = async () => {
-  const queryGetFeaturedPosts = gql`
-    query GetFeaturedPosts {
-      posts(where: { tag: "featured" }) {
-        edges {
-          node {
-            slug
-            title
-            excerpt
-            date
-            content
-            categories {
-              edges {
-                node {
-                  name
-                }
-              }
-            }
-            featuredImage {
-              node {
-                altText
-                sourceUrl
-              }
-            }
-            author {
-              node {
-                name
-                avatar {
-                  url
-                }
-              }
-            }
-          }
-        }
-      }
-    }
-  `
-  const getFeaturedPostsResponse: GraphqlGetFeaturedPostsResponse =
-    await request(GRAPHQL_API_URL, queryGetFeaturedPosts)
-  const featuredPosts: Post[] = getFeaturedPostsResponse.posts.edges.map(
-    ({ node }) => node
+  // featuredPosts取得
+  const getFeaturedPostsResponse = await axios.get<
+    Post[],
+    AxiosResponse<Post[]>
+  >(`${API_BASE_URL}/posts/featured`)
+  const featuredPosts = getFeaturedPostsResponse.data
+
+  // recentPosts取得
+  const getRecentPostsResponse = await axios.get<Post[], AxiosResponse<Post[]>>(
+    `${API_BASE_URL}/posts/recent`
   )
-
-  const queryGetRecentPosts = gql`
-    query GetRecentPosts {
-      posts(first: 5, where: { orderby: { field: DATE, order: DESC } }) {
-        edges {
-          node {
-            slug
-            title
-            excerpt
-            date
-            categories {
-              edges {
-                node {
-                  name
-                }
-              }
-            }
-            featuredImage {
-              node {
-                altText
-                sourceUrl
-              }
-            }
-            author {
-              node {
-                name
-                avatar {
-                  url
-                }
-              }
-            }
-          }
-        }
-      }
-    }
-  `
-  const queryGetRecentPostsResponse: GraphqlGetRecentPostsResponse =
-    await request(GRAPHQL_API_URL, queryGetRecentPosts)
-  const recentPosts: Post[] = queryGetRecentPostsResponse.posts.edges.map(
-    ({ node }) => node
-  )
-
-  const queryGetPopularPosts = gql`
-    query GetPopularPosts {
-      posts(
-        where: {
-          orderby: { field: META, order: DESC }
-          metaQuery: { metaArray: { key: "_post_views_count", type: NUMERIC } }
-        }
-        first: 5
-      ) {
-        edges {
-          node {
-            slug
-            title
-            excerpt
-            date
-            categories {
-              edges {
-                node {
-                  name
-                }
-              }
-            }
-            featuredImage {
-              node {
-                altText
-                sourceUrl
-              }
-            }
-            author {
-              node {
-                name
-                avatar {
-                  url
-                }
-              }
-            }
-          }
-        }
-      }
-    }
-  `
-
-  const queryGetPopularPostsResponse: GraphqlGetPopularPostsResponse =
-    await request(GRAPHQL_API_URL, queryGetPopularPosts)
-  const popularPosts: Post[] = queryGetPopularPostsResponse.posts.edges.map(
-    ({ node }) => node
-  )
-
-  // ウィジェット用のPostの情報取得
-  // const queryGetRecentPostsForWidget = gql`
-  //   query GetRecentPostForWidget {
-  //     posts(where: { orderby: { field: DATE, order: DESC } }, first: 3) {
-  //       edges {
-  //         node {
-  //           title
-  //           date
-  //           featuredImage {
-  //             node {
-  //               sourceUrl
-  //             }
-  //           }
-  //           slug
-  //         }
-  //       }
-  //     }
-  //   }
-  // `
-
-  // const queryGetWidgetResponse: GraphqlGetWidgetResponse = await request(
-  //   GRAPHQL_API_URL,
-  //   queryGetRecentPostsForWidget
-  // )
-
-  // const recentPostsForWidget: Widget[] = queryGetWidgetResponse.posts.edges.map(
-  //   ({ node }) => node
-  // )
+  const recentPosts = getRecentPostsResponse.data
 
   // ウィジェット用のカテゴリー取得
-  const queryGetCategories = gql`
-    query GetCategories {
-      categories {
-        edges {
-          node {
-            name
-          }
-        }
-      }
-    }
-  `
+  const getCategoriesResponse = await axios.get<
+    string[],
+    AxiosResponse<string[]>
+  >(`${API_BASE_URL}/category`)
+  const categories = getCategoriesResponse.data
 
-  const queryGetCategoriesResponse: GraphqlGetCategoriesResponse =
-    await request(GRAPHQL_API_URL, queryGetCategories)
+  // popularPosts取得
+  const getPopularPostsResponse = await axios.get<
+    Post[],
+    AxiosResponse<Post[]>
+  >(`${API_BASE_URL}/posts/popular`)
 
-  const categories = queryGetCategoriesResponse.categories.edges.map(
-    ({ node }) => node.name
-  )
+  const popularPosts = getPopularPostsResponse.data
 
-  // 過去の月別の記事数取得のために全記事取得し、月ごとのオブジェクト配列化
+  // postDates取得し加工
+  const getPostDatesResponse = await axios.get<
+    string[],
+    AxiosResponse<string[]>
+  >(`${API_BASE_URL}/posts`)
 
-  const queryGetAllPosts = gql`
-    query GetAllPosts {
-      posts {
-        edges {
-          node {
-            date
-          }
-        }
-      }
-    }
-  `
-
-  const queryGetAllPostsResponse: {
-    posts: { edges: { node: { date: string } }[] }
-  } = await request(GRAPHQL_API_URL, queryGetAllPosts)
-
-  const dates = queryGetAllPostsResponse?.posts?.edges.map(
-    ({ node }) => node.date
-  )
+  const dates = getPostDatesResponse?.data
 
   const datesReduceResult = dates.reduce<{ [key: string]: number }>(
     (yearMonthCounts, gmt) => {
@@ -298,7 +125,6 @@ export const getStaticProps: GetStaticProps<
         "/api/posts/featured": featuredPosts,
         "/api/posts/recent": recentPosts,
         "/api/posts/popular": popularPosts,
-        // "/api/widget/recent": recentPostsForWidget,
         "/api/category": categories,
         "/api/widget/archive": postsPerMonth
       }

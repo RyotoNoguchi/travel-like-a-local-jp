@@ -1,6 +1,6 @@
 import { faCalendarDays } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { useSWRDynamic, useSWRWithTimeout } from "components/hooks/swr"
+import { useSWRDynamic } from "components/hooks/swr"
 import { Post } from "components/types/post"
 import moment from "moment"
 import Image from "next/image"
@@ -11,7 +11,6 @@ const PostDetail: React.FC<{ slug: string }> = ({ slug }) => {
     isValidating,
     error
   } = useSWRDynamic<Post>("/api/post", slug)
-  console.log("PostDetailで呼び出した、'/api/post'の{ data }:", post)
 
   if (!post || isValidating) {
     return <div>Loading now....</div>
