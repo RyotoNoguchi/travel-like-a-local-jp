@@ -8,10 +8,7 @@ import {
   PostWidget,
   ArchiveWidget
 } from "components"
-import {
-  GraphqlGetPopularPostsResponse,
-  GraphqlGetCategoriesResponse
-} from "components/types/apiResponse"
+import { GraphqlGetPopularPostsResponse } from "components/types/apiResponse"
 import { Post } from "components/types/post"
 import type { InferGetStaticPropsType, NextPage, GetStaticProps } from "next"
 import request, { gql } from "graphql-request"
@@ -70,16 +67,25 @@ type GetStaticPropsResponse = {
 export const getStaticProps: GetStaticProps<
   GetStaticPropsResponse
 > = async () => {
+  // featuredPosts取得
   const GetFeaturedPostsResponse = await axios.get<
     Post[],
     AxiosResponse<Post[]>
   >(`${API_BASE_URL}/posts/featured`)
   const featuredPosts = GetFeaturedPostsResponse.data
 
+  // recentPosts取得
   const GetRecentPostsResponse = await axios.get<Post[], AxiosResponse<Post[]>>(
     `${API_BASE_URL}/posts/recent`
   )
   const recentPosts = GetRecentPostsResponse.data
+
+  // ウィジェット用のカテゴリー取得
+  const GetCategoriesResponse = await axios.get<
+    string[],
+    AxiosResponse<string[]>
+  >(`${API_BASE_URL}/category`)
+  const categories = GetCategoriesResponse.data
 
   const queryGetPopularPosts = gql`
     query GetPopularPosts {
@@ -127,26 +133,6 @@ export const getStaticProps: GetStaticProps<
     await request(GRAPHQL_API_URL, queryGetPopularPosts)
   const popularPosts: Post[] = queryGetPopularPostsResponse.posts.edges.map(
     ({ node }) => node
-  )
-
-  // ウィジェット用のカテゴリー取得
-  const queryGetCategories = gql`
-    query GetCategories {
-      categories {
-        edges {
-          node {
-            name
-          }
-        }
-      }
-    }
-  `
-
-  const queryGetCategoriesResponse: GraphqlGetCategoriesResponse =
-    await request(GRAPHQL_API_URL, queryGetCategories)
-
-  const categories = queryGetCategoriesResponse.categories.edges.map(
-    ({ node }) => node.name
   )
 
   // 過去の月別の記事数取得のために全記事取得し、月ごとのオブジェクト配列化

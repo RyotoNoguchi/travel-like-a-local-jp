@@ -1,7 +1,5 @@
 /* eslint-disable prettier/prettier */
-import axios, { AxiosResponse, AxiosError } from "axios"
 import type { NextApiRequest, NextApiResponse } from "next"
-import { GetPostsResponse } from "components/types/apiResponse"
 import { Post } from "components/types/post"
 import request, { gql } from "graphql-request"
 import { GraphQLError } from "graphql"
