@@ -1,20 +1,16 @@
 /* eslint-disable prettier/prettier */
 import Head from "next/head"
 import { GetStaticPaths, GetStaticProps, InferGetStaticPropsType } from "next"
-import request, { gql } from "graphql-request"
 import { SWRConfig, unstable_serialize } from "swr"
-import { GraphqlGetAllSlugsResponse } from "components/types/apiResponse"
 import { Post } from "components/types/post"
 import { PostWidget, PostDetail } from "components"
 import { useRouter } from "next/router"
-import axios from "axios"
+import axios, { AxiosResponse } from "axios"
 import { API_BASE_URL } from "components/constants"
-const GRAPHQL_API_URL = process.env.WORDPRESS_API_URL ?? ""
 
 type Props = InferGetStaticPropsType<typeof getStaticProps>
 
 const Post: React.FC<Props> = ({ fallback }) => {
-  console.log(fallback)
   const router = useRouter()
   const slug = (router.query.slug as string) ?? ("default" as string)
 
@@ -59,7 +55,9 @@ export const getStaticProps: GetStaticProps<
   const relatedPosts = relatedPostsResponse.data
 
   // '/api/post/[slug]'をコールしてPostDetailコンポーネント用のPostを取得
-  const res = await axios.get(`${API_BASE_URL}/post/${slug}`)
+  const res = await axios.get<Post, AxiosResponse<Post>>(
+    `${API_BASE_URL}/post/${slug}`
+  )
   const post = res.data
 
   return {
@@ -79,27 +77,15 @@ type GetStaticPropsParams = {
 export const getStaticPaths: GetStaticPaths<
   GetStaticPropsParams
 > = async () => {
-  const queryGetAllSlugs = gql`
-    query getAllSlugs {
-      posts {
-        edges {
-          node {
-            slug
-          }
-        }
-      }
-    }
-  `
-
-  const queryGetAllSlugsResponse: GraphqlGetAllSlugsResponse = await request(
-    GRAPHQL_API_URL,
-    queryGetAllSlugs
+  const res = await axios.get<string[], AxiosResponse<string[]>>(
+    `${API_BASE_URL}/posts/slug`
   )
+  const slugs = res.data
 
-  const paths = queryGetAllSlugsResponse?.posts?.edges?.map(({ node }) => {
+  const paths = slugs.map((slug) => {
     return {
       params: {
-        slug: node.slug
+        slug: slug
       }
     }
   })
