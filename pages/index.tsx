@@ -87,55 +87,12 @@ export const getStaticProps: GetStaticProps<
   >(`${API_BASE_URL}/category`)
   const categories = GetCategoriesResponse.data
 
-  const queryGetPopularPosts = gql`
-    query GetPopularPosts {
-      posts(
-        where: {
-          orderby: { field: META, order: DESC }
-          metaQuery: { metaArray: { key: "_post_views_count", type: NUMERIC } }
-        }
-        first: 5
-      ) {
-        edges {
-          node {
-            slug
-            title
-            excerpt
-            date
-            categories {
-              edges {
-                node {
-                  name
-                }
-              }
-            }
-            featuredImage {
-              node {
-                altText
-                sourceUrl
-              }
-            }
-            author {
-              node {
-                name
-                avatar {
-                  url
-                }
-              }
-            }
-          }
-        }
-      }
-    }
-  `
+  const GetPopularPostsResponse = await axios.get<
+    Post[],
+    AxiosResponse<Post[]>
+  >(`${API_BASE_URL}/posts/popular`)
 
-  const queryGetPopularPostsResponse: GraphqlGetPopularPostsResponse =
-    await request(GRAPHQL_API_URL, queryGetPopularPosts)
-  const popularPosts: Post[] = queryGetPopularPostsResponse.posts.edges.map(
-    ({ node }) => node
-  )
-
-  // 過去の月別の記事数取得のために全記事取得し、月ごとのオブジェクト配列化
+  const popularPosts = GetPopularPostsResponse.data
 
   const queryGetAllPosts = gql`
     query GetAllPosts {
