@@ -92,33 +92,13 @@ export const getStaticProps: GetStaticProps<
 
   const popularPosts = getPopularPostsResponse.data
 
-  // postDates取得し加工
-  const getPostDatesResponse = await axios.get<
-    string[],
-    AxiosResponse<string[]>
-  >(`${API_BASE_URL}/posts`)
+  // archivesを取得
+  const getArchiveWidgetResponse = await axios.get<
+    Archive[],
+    AxiosResponse<Archive[]>
+  >(`${API_BASE_URL}/widget/archive`)
 
-  const dates = getPostDatesResponse?.data
-
-  const datesReduceResult = dates.reduce<{ [key: string]: number }>(
-    (yearMonthCounts, gmt) => {
-      const yyyyMM = gmt.slice(0, 7)
-
-      if (!yearMonthCounts[yyyyMM]) {
-        yearMonthCounts[yyyyMM] = 0
-      }
-
-      yearMonthCounts[yyyyMM]++
-
-      return yearMonthCounts
-    },
-    {}
-  )
-
-  const postsPerMonth: Archive[] = Object.entries(datesReduceResult).map(
-    ([month, count]) => ({ month, count })
-  )
-
+  const archives = getArchiveWidgetResponse?.data
   return {
     props: {
       fallback: {
@@ -126,7 +106,7 @@ export const getStaticProps: GetStaticProps<
         "/api/posts/recent": recentPosts,
         "/api/posts/popular": popularPosts,
         "/api/category": categories,
-        "/api/widget/archive": postsPerMonth
+        "/api/widget/archive": archives
       }
     }
   }

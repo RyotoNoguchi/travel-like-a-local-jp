@@ -1,5 +1,4 @@
 /* eslint-disable prettier/prettier */
-import { GraphqlGetAllSlugsResponse } from "components/types/apiResponse"
 import { GraphQLError } from "graphql"
 import request, { gql, Variables } from "graphql-request"
 import { NextApiRequest, NextApiResponse } from "next"
