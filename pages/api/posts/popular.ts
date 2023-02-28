@@ -54,7 +54,6 @@ const handler = async (_: NextApiRequest, res: NextApiResponse<Post[]>) => {
       GRAPHQL_API_URL,
       queryGetPopularPosts
     )
-    console.log(posts?.edges?.map(({ node }) => node))
     res.json(posts?.edges?.map(({ node }) => node))
   } catch (error: unknown) {
     const graphQLError = error as GraphQLError

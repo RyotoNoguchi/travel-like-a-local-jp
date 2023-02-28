@@ -7,7 +7,7 @@ const PopularPostCards: React.FC = () => {
   // 参考: https://kk-web.link/blog/20220629
   // 参考: https://swr.vercel.app/ja/docs/with-nextjs
 
-  const popularPostsKey: Key = "api/posts/popular"
+  const popularPostsKey: Key = "/api/posts/popular"
   const { data: popularPostsData, isValidating } =
     useSWRWithTimeout<Post[]>(popularPostsKey)
 
