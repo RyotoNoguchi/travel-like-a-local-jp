@@ -10,7 +10,7 @@ import { API_BASE_URL } from "components/constants"
 
 type Props = InferGetStaticPropsType<typeof getStaticProps>
 
-const Post: React.FC<Props> = ({ fallback }) => {
+const PostPage: React.FC<Props> = ({ fallback }) => {
   const router = useRouter()
   const slug = (router.query.slug as string) ?? ("default" as string)
 
@@ -36,7 +36,7 @@ const Post: React.FC<Props> = ({ fallback }) => {
   )
 }
 
-export default Post
+export default PostPage
 
 type GetStaticPropsResponse = {
   fallback: {
