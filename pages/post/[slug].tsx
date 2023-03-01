@@ -3,10 +3,11 @@ import Head from "next/head"
 import { GetStaticPaths, GetStaticProps, InferGetStaticPropsType } from "next"
 import { SWRConfig, unstable_serialize } from "swr"
 import { Post } from "components/types/post"
-import { PostWidget, PostDetail } from "components"
+import { PostWidget, PostDetail, ArchiveWidget } from "components"
 import { useRouter } from "next/router"
 import axios, { AxiosResponse } from "axios"
 import { API_BASE_URL } from "components/constants"
+import Archive from "components/types/archive"
 
 type Props = InferGetStaticPropsType<typeof getStaticProps>
 
@@ -17,18 +18,15 @@ const PostPage: React.FC<Props> = ({ fallback }) => {
   return (
     <>
       <Head>
-        <title>single post page</title>
+        <title>Post page</title>
         <link rel="icon" href="/favicon.ico" />
-        <link
-          rel="stylesheet"
-          href={`http://headlessnext.local/wp-includes/css/dist/block-library/style.min.css?ver=5.6`}
-        />
       </Head>
       <div className="grid grid-cols-1 m-4 md:grid-cols-3 md:gap-6 md:m-6 lg:gap-8 lg:m-8">
         <PostDetail slug={slug} />
         <div>
           <SWRConfig value={{ fallback }}>
             <PostWidget slug={slug} />
+            <ArchiveWidget />
           </SWRConfig>
         </div>
       </div>
@@ -40,7 +38,7 @@ export default PostPage
 
 type GetStaticPropsResponse = {
   fallback: {
-    [key: string]: Post[] | Post
+    [key: string]: Post[] | Post | Archive[]
   }
 }
 
@@ -51,20 +49,29 @@ export const getStaticProps: GetStaticProps<
   const slug = params?.slug ?? "default"
 
   // '/api/posts/[slug]'をコールしてRelatedPostsを取得
-  const relatedPostsResponse = await axios.get(`${API_BASE_URL}/posts/${slug}`)
+  const relatedPostsResponse = await axios.get<Post[], AxiosResponse<Post[]>>(
+    `${API_BASE_URL}/posts/${slug}`
+  )
   const relatedPosts = relatedPostsResponse.data
 
   // '/api/post/[slug]'をコールしてPostDetailコンポーネント用のPostを取得
-  const res = await axios.get<Post, AxiosResponse<Post>>(
+  const postDetailResponse = await axios.get<Post, AxiosResponse<Post>>(
     `${API_BASE_URL}/post/${slug}`
   )
-  const post = res.data
+  const post = postDetailResponse.data
+
+  // '/api/widget/archive'をコールしてArchiveWidget用のArchivePostsを取得
+  const archivesResponse = await axios.get<Archive[], AxiosResponse<Archive[]>>(
+    `${API_BASE_URL}/widget/archive`
+  )
+  const archives = archivesResponse.data
 
   return {
     props: {
       fallback: {
         [unstable_serialize(["/api/posts", slug])]: relatedPosts,
-        [unstable_serialize(["/api/post", slug])]: post
+        [unstable_serialize(["/api/post", slug])]: post,
+        "/api/widget/archive": archives
       }
     }
   }
