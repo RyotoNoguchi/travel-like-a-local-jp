@@ -18,7 +18,6 @@ import axios, { AxiosResponse } from "axios"
 type Props = InferGetStaticPropsType<typeof getStaticProps>
 
 const TopPage: NextPage<Props> = ({ fallback }) => {
-  console.log("TopPageのfallback:", fallback)
   // TODO 各コンポーネントのフォールバックに<Skeleton />を使用するように変更
   return (
     <div className="relative">
@@ -54,11 +53,7 @@ export default TopPage
 
 type GetStaticPropsResponse = {
   fallback: {
-    "/api/posts/featured": Post[]
-    "/api/posts/recent": Post[]
-    "/api/posts/popular": Post[]
-    "/api/category": string[]
-    "/api/widget/archive": Archive[]
+    [key: string]: Post[] | string[] | Archive[]
   }
 }
 
