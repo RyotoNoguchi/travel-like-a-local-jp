@@ -17,6 +17,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse<Post>) => {
               avatar {
                 url
               }
+              description
               name
             }
           }

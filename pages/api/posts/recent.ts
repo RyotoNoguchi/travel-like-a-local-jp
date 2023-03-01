@@ -31,10 +31,11 @@ const handler = async (_: NextApiRequest, res: NextApiResponse<Post[]>) => {
               }
               author {
                 node {
-                  name
                   avatar {
                     url
                   }
+                  description
+                  name
                 }
               }
             }

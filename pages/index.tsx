@@ -18,6 +18,7 @@ import axios, { AxiosResponse } from "axios"
 type Props = InferGetStaticPropsType<typeof getStaticProps>
 
 const TopPage: NextPage<Props> = ({ fallback }) => {
+  console.log("TopPageのfallback:", fallback)
   // TODO 各コンポーネントのフォールバックに<Skeleton />を使用するように変更
   return (
     <div className="relative">
