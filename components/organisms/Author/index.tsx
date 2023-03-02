@@ -34,7 +34,7 @@ const Author: React.FC = () => {
           className="rounded-full inline"
         />
         <h3 className="text-white my-0 text-xl font-bold">{author.name}</h3>
-        <p className="text-white text-base">{author.description}</p>
+        <p className="text-white text-base text-left">{author.description}</p>
       </div>
     </div>
   )
