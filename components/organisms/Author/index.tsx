@@ -28,7 +28,6 @@ const Author: React.FC = () => {
       <div className="absolute left-0 right-0 -top-10 p-2">
         <Image
           alt={author.name}
-          c
           src={author.avatar.url}
           width={80}
           height={80}
