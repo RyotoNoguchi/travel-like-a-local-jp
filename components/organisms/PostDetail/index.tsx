@@ -21,7 +21,7 @@ const PostDetail: React.FC<{ slug: string }> = ({ slug }) => {
   }
 
   return (
-    <div className="col-span-2 bg-white mb-4 p-4 rounded-lg grid gap-4">
+    <div className="bg-white mb-4 p-4 rounded-lg grid gap-4">
       {/* featuredイメージ */}
       {/* <div className="flex justify-center">
         <Image

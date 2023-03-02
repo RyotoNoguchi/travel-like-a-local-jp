@@ -53,11 +53,7 @@ export default TopPage
 
 type GetStaticPropsResponse = {
   fallback: {
-    "/api/posts/featured": Post[]
-    "/api/posts/recent": Post[]
-    "/api/posts/popular": Post[]
-    "/api/category": string[]
-    "/api/widget/archive": Archive[]
+    [key: string]: Post[] | string[] | Archive[]
   }
 }
 
