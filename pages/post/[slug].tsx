@@ -15,7 +15,6 @@ type Props = InferGetStaticPropsType<typeof getStaticProps>
 const PostPage: React.FC<Props> = ({ fallback }) => {
   const router = useRouter()
   const slug = (router.query.slug as string) ?? ("default" as string)
-  console.log("fallback:", fallback)
 
   return (
     <>
@@ -24,16 +23,18 @@ const PostPage: React.FC<Props> = ({ fallback }) => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <div className="grid grid-cols-1 m-4 md:grid-cols-3 md:gap-6 md:m-6 lg:gap-8 lg:m-8">
-        <div className="col-span-3 lg:col-span-2">
-          <PostDetail slug={slug} />
-          <Author />
-        </div>
-        <div className="col-span-3 lg:col-span-1">
-          <SWRConfig value={{ fallback }}>
-            <PostWidget slug={slug} />
-            <ArchiveWidget />
-          </SWRConfig>
-        </div>
+        <SWRConfig value={{ fallback }}>
+          <div className="col-span-3 lg:col-span-2">
+            <PostDetail slug={slug} />
+            <Author />
+          </div>
+          <div className="col-span-3 lg:col-span-1">
+            <div className="relative md:sticky top-20">
+              <PostWidget slug={slug} />
+              <ArchiveWidget />
+            </div>
+          </div>
+        </SWRConfig>
       </div>
     </>
   )
