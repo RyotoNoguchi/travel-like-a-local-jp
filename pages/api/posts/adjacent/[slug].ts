@@ -1,15 +1,13 @@
 /* eslint-disable prettier/prettier */
 import axios from "axios"
 import { Post } from "components/types/post"
+import { AdjacentPosts } from "components/types"
 import { GraphQLError } from "graphql"
 import request, { gql } from "graphql-request"
 import { NextApiRequest, NextApiResponse } from "next"
 const GRAPHQL_API_URL = process.env.WORDPRESS_API_URL ?? ""
 import { API_BASE_URL } from "components/constants"
 
-type AdjacentPosts = {
-  [key: string]: Post
-}
 const handler = async (
   req: NextApiRequest,
   res: NextApiResponse<AdjacentPosts | []>
@@ -47,7 +45,31 @@ const handler = async (
           edges {
             node {
               slug
+              title
+              excerpt
               date
+              categories {
+                edges {
+                  node {
+                    name
+                  }
+                }
+              }
+              featuredImage {
+                node {
+                  altText
+                  sourceUrl
+                }
+              }
+              author {
+                node {
+                  avatar {
+                    url
+                  }
+                  description
+                  name
+                }
+              }
             }
           }
         }

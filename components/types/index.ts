@@ -1,1 +1,7 @@
+export type { default as AdjacentPosts } from "components/types/adjacentPosts"
 export type { default as Author } from "components/types/author"
+export type { default as Archive } from "components/types/archive"
+export type { default as Avatar } from "components/types/avatar"
+export type { default as Category } from "components/types/category"
+export type { default as FeaturedImage } from "components/types/featuredImage"
+export type { default as Post } from "components/types/post"

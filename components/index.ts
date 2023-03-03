@@ -6,8 +6,10 @@ export { default as PostWidget } from "components/organisms/PostWidget"
 export { default as CategoryWidget } from "components/organisms/CategoryWidget"
 export { default as Hero } from "components/organisms/Hero"
 export { default as ArchiveWidget } from "components/organisms/ArchiveWidget"
+export { default as AdjacentPosts } from "components/organisms/AdjacentPosts"
 export { default as PostDetail } from "components/organisms/PostDetail"
 export { default as FeaturedPosts } from "components/organisms/FeaturedPosts"
+export { default as Author } from "components/organisms/Author"
 export { default as Layout } from "components/template/Layout"
 // export { default as Author } from "./Author";
 // export { default as CommentsForm } from "./CommentsForm";

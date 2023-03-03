@@ -1,14 +1,22 @@
 /* eslint-disable prettier/prettier */
 import Head from "next/head"
+import axios, { AxiosResponse } from "axios"
+import { useRouter } from "next/router"
 import { GetStaticPaths, GetStaticProps, InferGetStaticPropsType } from "next"
 import { SWRConfig, unstable_serialize } from "swr"
-import { Post } from "components/types/post"
-import { PostWidget, PostDetail, ArchiveWidget } from "components"
-import { useRouter } from "next/router"
-import axios, { AxiosResponse } from "axios"
+import {
+  Post,
+  AdjacentPosts as AdjacentPostsType,
+  Archive
+} from "components/types"
+import {
+  PostWidget,
+  PostDetail,
+  ArchiveWidget,
+  Author,
+  AdjacentPosts
+} from "components"
 import { API_BASE_URL } from "components/constants"
-import Archive from "components/types/archive"
-import Author from "components/organisms/Author"
 
 type Props = InferGetStaticPropsType<typeof getStaticProps>
 
@@ -27,6 +35,7 @@ const PostPage: React.FC<Props> = ({ fallback }) => {
           <div className="col-span-3 lg:col-span-2">
             <PostDetail slug={slug} />
             <Author />
+            <AdjacentPosts />
           </div>
           <div className="col-span-3 lg:col-span-1">
             <div className="relative md:sticky top-20">
@@ -44,7 +53,7 @@ export default PostPage
 
 type GetStaticPropsResponse = {
   fallback: {
-    [key: string]: Post[] | Post | Archive[]
+    [key: string]: Post[] | Post | Archive[] | AdjacentPostsType
   }
 }
 
@@ -72,11 +81,19 @@ export const getStaticProps: GetStaticProps<
   )
   const archives = archivesResponse.data
 
+  // '/api/posts/adjacent/[slug]'をコールしてAdjacentPostsを取得
+  const adjacentPostsResponse = await axios.get<
+    AdjacentPostsType,
+    AxiosResponse<AdjacentPostsType>
+  >(`${API_BASE_URL}/posts/adjacent/${slug}`)
+  const adjacentPosts = adjacentPostsResponse.data
+
   return {
     props: {
       fallback: {
         [unstable_serialize(["/api/posts", slug])]: relatedPosts,
         [unstable_serialize(["/api/post", slug])]: post,
+        [unstable_serialize(["/api/posts/adjacent", slug])]: adjacentPosts,
         "/api/widget/archive": archives
       }
     }
