@@ -3,6 +3,7 @@ import { useSWRDynamic } from "components/hooks/swr"
 import { AdjacentPosts as AdjacentPostsType } from "components/types"
 import { useRouter } from "next/router"
 import { PREVIOUS, NEXT } from "components/constants"
+import AdjacentPost from "components/molecules/AdjacentPost"
 
 const AdjacentPosts: React.FC = () => {
   const router = useRouter()
@@ -26,14 +27,9 @@ const AdjacentPosts: React.FC = () => {
 
   return (
     <>
-      <div
-        className="rounded-lg bg-center bg-no-repeat shadow-md inline-block w-full h-72"
-        style={{
-          backgroundImage: `url(${previousPost.featuredImage.node.sourceUrl})`
-        }}
-      />
-      <div className="">
-        <p className="">{previousPost.title}</p>
+      <div className="grid col-span-1 w-full h-72">
+        <AdjacentPost post={previousPost} position={PREVIOUS} />
+        <AdjacentPost post={nextPost} position={NEXT} />
       </div>
     </>
   )

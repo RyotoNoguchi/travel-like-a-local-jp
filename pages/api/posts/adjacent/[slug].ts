@@ -38,7 +38,7 @@ const handler = async (
               column: DATE
               before: { month: $month, day: $day, year: $year }
             }
-            orderby: { field: DATE, order: ASC }
+            orderby: { field: DATE, order: DESC }
             excludeBySlug: $slug
           }
         ) {
@@ -111,7 +111,31 @@ const handler = async (
           edges {
             node {
               slug
+              title
+              excerpt
               date
+              categories {
+                edges {
+                  node {
+                    name
+                  }
+                }
+              }
+              featuredImage {
+                node {
+                  altText
+                  sourceUrl
+                }
+              }
+              author {
+                node {
+                  avatar {
+                    url
+                  }
+                  description
+                  name
+                }
+              }
             }
           }
         }
