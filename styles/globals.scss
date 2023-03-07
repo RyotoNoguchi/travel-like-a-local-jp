@@ -186,3 +186,11 @@ figure {
     max-width: 90%;
   }
 }
+
+.arrow-btn{
+  transition: width 300ms ease;
+}
+
+.arrow-btn:hover {
+  width: 60px;
+}

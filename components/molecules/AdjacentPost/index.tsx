@@ -1,6 +1,8 @@
 import { Post } from "components/types"
 import moment from "moment"
 import Link from "next/link"
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
+import { faArrowLeft, faArrowRight } from "@fortawesome/free-solid-svg-icons"
 
 type Props = {
   post?: Post
@@ -31,6 +33,17 @@ const AdjacentPost: React.FC<Props> = ({ post, position }) => {
             <p className="text-white text-shadow font-semibold text-2xl text-center">
               {post.title}
             </p>
+            {position === "previous" ? (
+              <FontAwesomeIcon
+                icon={faArrowLeft}
+                className="w-12 h-12 absolute bottom-4 left-4 cursor-pointer bg-pink-600 py-2 rounded-full text-slate-200 arrow-btn"
+              />
+            ) : (
+              <FontAwesomeIcon
+                icon={faArrowRight}
+                className="w-12 h-12 absolute bottom-4 right-4 cursor-pointer bg-pink-600 py-2 rounded-full text-slate-200 arrow-btn"
+              />
+            )}
           </div>
         </Link>
       )}
