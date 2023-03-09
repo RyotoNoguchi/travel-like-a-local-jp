@@ -16,17 +16,17 @@ const AdjacentPost: React.FC<Props> = ({ post, position }) => {
       {post && (
         <Link
           href={`/post/${post.slug}`}
-          className="relative w-full block h-72 mb-4 shadow-md"
+          className="relative w-full block h-72 lg:h-80 mb-4 shadow-md"
         >
           <div
-            className="absolute rounded-lg bg-center bg-no-repeat shadow-md inline-block w-full h-72"
+            className="absolute rounded-lg bg-center shadow-md inline-block w-full h-72 lg:h-80 bg-cover"
             style={{
               backgroundImage: `url(${post.featuredImage.node.sourceUrl})`
             }}
           />
           {/* 影を作るためのdiv */}
-          <div className="absolute rounded-lg p-4 bg-center bg-gradient-to-b opacity-50 from-gray-700 to-black w-full h-72" />
-          <div className="absolute flex flex-col rounded-lg p-4 items-center justify-center w-full h-72">
+          <div className="absolute rounded-lg p-4 bg-center bg-gradient-to-b opacity-50 from-gray-700 to-black w-full h-72 lg:h-80" />
+          <div className="absolute flex flex-col rounded-lg p-4 items-center justify-center w-full h-72 lg:h-80">
             <p className="text-white text-shadow font-semibold text-xs">
               {moment(post.date).format("MMM DD, YYYY")}
             </p>
@@ -36,12 +36,12 @@ const AdjacentPost: React.FC<Props> = ({ post, position }) => {
             {position === "previous" ? (
               <FontAwesomeIcon
                 icon={faArrowLeft}
-                className="w-12 h-12 absolute bottom-4 left-4 cursor-pointer bg-pink-600 py-2 rounded-full text-slate-200 arrow-btn"
+                className="w-16 h-16 absolute bottom-4 left-4 cursor-pointer bg-pink-600 py-4 rounded-full text-slate-200 arrow-btn"
               />
             ) : (
               <FontAwesomeIcon
                 icon={faArrowRight}
-                className="w-12 h-12 absolute bottom-4 right-4 cursor-pointer bg-pink-600 py-2 rounded-full text-slate-200 arrow-btn"
+                className="w-16 h-16 absolute bottom-4 right-4 cursor-pointer bg-pink-600 py-4 rounded-full text-slate-200 arrow-btn"
               />
             )}
           </div>

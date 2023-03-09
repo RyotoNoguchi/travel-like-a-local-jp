@@ -27,10 +27,8 @@ const AdjacentPosts: React.FC = () => {
 
   return (
     <>
-      <div className="grid col-span-1 w-full h-72">
-        <AdjacentPost post={previousPost} position={PREVIOUS} />
-        <AdjacentPost post={nextPost} position={NEXT} />
-      </div>
+      <AdjacentPost post={previousPost} position={PREVIOUS} />
+      <AdjacentPost post={nextPost} position={NEXT} />
     </>
   )
 }

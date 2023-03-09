@@ -33,13 +33,13 @@ const PostPage: React.FC<Props> = ({ fallback }) => {
       </Head>
       <div className="grid grid-cols-1 m-4 md:grid-cols-3 md:gap-6 md:m-6 lg:gap-8 lg:m-8">
         <SWRConfig value={{ fallback }}>
-          <div className="col-span-3 lg:col-span-2">
+          <div className="col-span-3 lg:col-span-2 mb-4">
             <PostDetail slug={slug} />
             <Author />
             <AdjacentPosts />
           </div>
-          <div className="col-span-3 lg:col-span-1">
-            <div className="relative md:sticky top-20">
+          <div>
+            <div className="sticky md:top-20">
               <PostWidget slug={slug} />
               <ArchiveWidget />
             </div>
