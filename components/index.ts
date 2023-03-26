@@ -10,6 +10,7 @@ export { default as AdjacentPosts } from "components/organisms/AdjacentPosts"
 export { default as PostDetail } from "components/organisms/PostDetail"
 export { default as FeaturedPosts } from "components/organisms/FeaturedPosts"
 export { default as Author } from "components/organisms/Author"
+export { default as AboutMe } from "components/organisms/AboutMe"
 export { default as AdjacentPost } from "components/molecules/AdjacentPost"
 export { default as Layout } from "components/template/Layout"
 // export { default as Author } from "./Author";

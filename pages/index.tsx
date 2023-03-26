@@ -6,13 +6,18 @@ import {
   FeaturedPosts,
   CategoryWidget,
   PostWidget,
-  ArchiveWidget
+  ArchiveWidget,
+  AboutMe
 } from "components"
 import { Post } from "components/types/post"
 import type { InferGetStaticPropsType, NextPage, GetStaticProps } from "next"
 import PopularPostCards from "components/organisms/PopularPostCards"
 import Archive from "components/types/archive"
-import { API_BASE_URL } from "components/constants"
+import {
+  API_BASE_URL,
+  GRAVATAR_API_URL,
+  EMAIL_HASH
+} from "components/constants"
 import axios, { AxiosResponse } from "axios"
 
 type Props = InferGetStaticPropsType<typeof getStaticProps>
@@ -37,6 +42,7 @@ const TopPage: NextPage<Props> = ({ fallback }) => {
             </div>
             <div className="md:col-span-4 col-span-1 relative">
               <div className="sticky top-8 mb-8">
+                <AboutMe />
                 <PostWidget />
                 <ArchiveWidget />
                 <CategoryWidget />
@@ -53,7 +59,7 @@ export default TopPage
 
 type GetStaticPropsResponse = {
   fallback: {
-    [key: string]: Post[] | string[] | Archive[]
+    [key: string]: Post[] | string[] | Archive[] | string
   }
 }
 
@@ -85,7 +91,6 @@ export const getStaticProps: GetStaticProps<
     Post[],
     AxiosResponse<Post[]>
   >(`${API_BASE_URL}/posts/popular`)
-
   const popularPosts = getPopularPostsResponse.data
 
   // archivesを取得
@@ -93,8 +98,15 @@ export const getStaticProps: GetStaticProps<
     Archive[],
     AxiosResponse<Archive[]>
   >(`${API_BASE_URL}/widget/archive`)
-
   const archives = getArchiveWidgetResponse?.data
+
+  // profile画像を取得
+  const getProfilePictureResponse = await axios.get<
+    string,
+    AxiosResponse<string>
+  >(`${API_BASE_URL}/author/profile`)
+  const profilePictureUrl = getProfilePictureResponse.data
+
   return {
     props: {
       fallback: {
@@ -102,7 +114,8 @@ export const getStaticProps: GetStaticProps<
         "/api/posts/recent": recentPosts,
         "/api/posts/popular": popularPosts,
         "/api/category": categories,
-        "/api/widget/archive": archives
+        "/api/widget/archive": archives,
+        "/api/author/profile": profilePictureUrl
       }
     }
   }

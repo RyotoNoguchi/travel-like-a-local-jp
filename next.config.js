@@ -7,7 +7,8 @@ const nextConfig = {
       "secure.gravatar.com",
       "upload.wikimedia.org",
       "travellikealocaljp.local",
-      "1.gravatar.com"
+      "1.gravatar.com",
+      "www.gravatar.com"
     ]
   },
   swcMinify: true

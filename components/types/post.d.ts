@@ -3,7 +3,9 @@ import Author from "components/types/author"
 import FeaturedImage from "components/types/featuredImage"
 
 export type Post = {
-  author: Author
+  author: {
+    node: Author
+  }
   // eslint-disable-next-line prettier/prettier
   categories: {
     edges: Category[]

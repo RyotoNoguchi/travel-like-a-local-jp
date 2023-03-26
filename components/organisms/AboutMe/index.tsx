@@ -1,27 +1,36 @@
 import Image from "next/image"
-import md5 from "md5"
+import { Key } from "swr"
 import { useSWRWithTimeout } from "components/hooks/swr"
-const GRAVATAR_API_URL = "https://www.gravatar.com/avatar"
+import { Author } from "components/types"
 
-const AboutMe: React.FC<{ email: string }> = ({ email }) => {
-  const emailHash = md5(email.toLowerCase().trim())
-  const { data: profileImageUrl } = useSWRWithTimeout<string>(
-    `${GRAVATAR_API_URL}/${emailHash}`
-  )
-  if (!profileImageUrl) {
+const AboutMe: React.FC = () => {
+  const authorProfileKey: Key = "/api/author/profile"
+  const { data: profile, isValidating } =
+    useSWRWithTimeout<Author>(authorProfileKey)
+
+  if (!profile || isValidating) {
     return null
   }
 
   return (
     <div className="bg-white shadow-lg rounded-lg p-4 mb-8">
       <h3 className="text-xl mb-8 font-semibold border-b pb-4">About Me</h3>
-      <div className="flex items-center mb-4">
+      <div className="flex items-center mb-4 justify-center">
         <Image
-          src={profileImageUrl}
-          alt={profileImageUrl}
-          width={80}
-          height={80}
+          src={profile.avatar.url}
+          alt="author-portrait"
+          width={120}
+          height={120}
+          className="rounded-full"
         />
+      </div>
+      <div className="">
+        <div className="flex justify-center">
+          <span className="font-semibold">{profile.firstName}</span>
+        </div>
+        <div className="flex justify-center">
+          <span>{profile.description}</span>
+        </div>
       </div>
     </div>
   )
