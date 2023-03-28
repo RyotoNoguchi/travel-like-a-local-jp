@@ -28,7 +28,7 @@ const AboutMe: React.FC = () => {
         <div className="flex justify-center">
           <span className="font-semibold">{profile.firstName}</span>
         </div>
-        <div className="flex justify-center">
+        <div className="flex justify-center p-2">
           <span>{profile.description}</span>
         </div>
       </div>
