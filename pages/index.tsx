@@ -9,15 +9,10 @@ import {
   ArchiveWidget,
   AboutMe
 } from "components"
-import { Post } from "components/types/post"
+import { Post, Archive } from "components/types"
 import type { InferGetStaticPropsType, NextPage, GetStaticProps } from "next"
 import PopularPostCards from "components/organisms/PopularPostCards"
-import Archive from "components/types/archive"
-import {
-  API_BASE_URL,
-  GRAVATAR_API_URL,
-  EMAIL_HASH
-} from "components/constants"
+import { API_BASE_URL } from "components/constants"
 import axios, { AxiosResponse } from "axios"
 
 type Props = InferGetStaticPropsType<typeof getStaticProps>
