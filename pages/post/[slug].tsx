@@ -23,7 +23,6 @@ type Props = InferGetStaticPropsType<typeof getStaticProps>
 const PostPage: React.FC<Props> = ({ fallback }) => {
   const router = useRouter()
   const slug = (router.query.slug as string) ?? ("default" as string)
-  console.log(fallback)
 
   return (
     <>

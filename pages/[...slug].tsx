@@ -45,7 +45,6 @@ type Edges = {
 
 const Page: React.FC<{ uri: string }> = ({ uri }) => {
   const apiURL: Key = `/api/page/${uri}` // ex. '/api/page/sample-page/subpage'
-  console.log("apiURL:", apiURL) // /api/page/sample-page/subpage
   const fetcher: Fetcher<APIResponse, string> = (path) =>
     axios
       .get<APIResponse, AxiosResponse<APIResponse, AxiosError>, Config>(path, {
@@ -82,10 +81,9 @@ export default Page
 export const getStaticProps: GetStaticProps<Props, Params> = async ({
   params
 }) => {
-  console.log("params:", params) // params: { slug: [ 'sample-page', 'subpage' ] }
+  // params: { slug: [ 'sample-page', 'subpage' ] }
   const slug = params?.slug
   const uri = slug?.join("/") ?? ""
-  console.log("uri:", uri)
   return {
     props: {
       uri

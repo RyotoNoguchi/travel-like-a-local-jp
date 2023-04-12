@@ -11,7 +11,7 @@ import { Archive, Post } from "components/types"
 import axios, { AxiosResponse } from "axios"
 import { API_BASE_URL } from "components/constants"
 import { ParsedUrlQuery } from "querystring"
-import PopularPostCards from "components/organisms/PopularPostCards"
+import ArchivedPostCards from "components/organisms/ArchivedPostCards"
 
 type Props = InferGetStaticPropsType<typeof getStaticProps>
 
@@ -29,7 +29,7 @@ const ArchiveListPage: NextPage<Props> = ({ fallback }) => {
             <div className="md:col-span-8 col-span-1">
               {/* fallbackなしだと、レンダリング後にfetcherが叩かれるため、一瞬ブランクな状態が発生する。console.logしてリロードするとundefinedになることを確認できる */}
               {/* TODO PopularPostCards参考にして、ArchivedPostCardsを作成する  */}
-              <PopularPostCards />
+              <ArchivedPostCards />
             </div>
             <div className="md:col-span-4 col-span-1 relative">
               <div className="sticky top-8 mb-8">
@@ -100,7 +100,7 @@ export const getStaticProps: GetStaticProps<
         "/api/category": categories,
         "/api/widget/archive": archiveMoments,
         "/api/author/profile": profilePictureUrl,
-        [unstable_serialize(["/api/archive", dateURI])]: archivedPosts
+        [unstable_serialize(["/api", `/archive/${dateURI}`])]: archivedPosts
       }
     }
   }
