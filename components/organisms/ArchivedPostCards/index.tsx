@@ -1,4 +1,5 @@
 import { useSWRDynamic } from "components/hooks/swr"
+import PostCard from "components/molecules/PostCard"
 import { Post } from "components/types"
 import { useRouter } from "next/router"
 
@@ -14,9 +15,9 @@ const ArchivedPostCards: React.FC = () => {
 
   return (
     <>
-      {/* {archivedPostsData.map((post) => (
+      {archivedPosts.map((post) => (
         <PostCard key={post.slug} post={post} />
-      ))} */}
+      ))}
     </>
   )
 }

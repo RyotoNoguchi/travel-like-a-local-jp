@@ -28,7 +28,6 @@ const ArchiveListPage: NextPage<Props> = ({ fallback }) => {
           <div className="grid grid-cols-1 md:grid-cols-12 gap-12 lg:m-24 md:m-8">
             <div className="md:col-span-8 col-span-1">
               {/* fallbackなしだと、レンダリング後にfetcherが叩かれるため、一瞬ブランクな状態が発生する。console.logしてリロードするとundefinedになることを確認できる */}
-              {/* TODO PopularPostCards参考にして、ArchivedPostCardsを作成する  */}
               <ArchivedPostCards />
             </div>
             <div className="md:col-span-4 col-span-1 relative">
