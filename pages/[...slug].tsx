@@ -81,6 +81,7 @@ export default Page
 export const getStaticProps: GetStaticProps<Props, Params> = async ({
   params
 }) => {
+  // params: { slug: [ 'sample-page', 'subpage' ] }
   const slug = params?.slug
   const uri = slug?.join("/") ?? ""
   return {
@@ -134,6 +135,6 @@ export const getStaticPaths: GetStaticPaths<Params> = async () => {
   })
   return {
     paths,
-    fallback: false
+    fallback: "blocking"
   }
 }
