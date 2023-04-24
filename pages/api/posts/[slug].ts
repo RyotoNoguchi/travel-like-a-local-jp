@@ -12,7 +12,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse<Post[]>) => {
   } = req
 
   try {
-    // slugを条件に該当該当Postに紐づくカテゴリを１つだけ取得
+    // slugを条件に該当Postに紐づくカテゴリを１つだけ取得
     const queryGetCategoryBySlug = gql`
       query GetCategoryBySlug($slug: ID!) {
         post(id: $slug, idType: SLUG) {
@@ -32,7 +32,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse<Post[]>) => {
 
     const category = post?.categories?.edges.map(({ node }) => node.name)[0]
 
-    // queryGetCategoryBySlugで取得したカテゴリを条件にして条件にして該当のslug以外で同じカテゴリのPostsを取得
+    // queryGetCategoryBySlugで取得したカテゴリを条件にして該当のslug以外で同じカテゴリのPostsを取得
     const queryGetPostsExcludeBySlug = gql`
       query GetPostsExcludeBySlug($slug: ID!, $categoryName: String!) {
         posts(where: { excludeBySlug: $slug, categoryName: $categoryName }) {
