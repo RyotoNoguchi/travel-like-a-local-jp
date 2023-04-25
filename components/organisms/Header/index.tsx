@@ -14,7 +14,7 @@ const Header: React.FC = () => {
   }
 
   return (
-    <div className="flex justify-center items-center md:justify-between w-full border-blue-400 sticky top-0 z-10 bg-slate-100 text-cyan-500 h-14">
+    <div className="flex justify-center items-center md:justify-between w-full border-blue-400 sticky top-0 z-10 bg-slate-100 text-cyan-500 h-14 p-3">
       {matches ? (
         <Link href="/">
           <Image alt="logo" height={20} width={200} src="/rectangle-logo.png" />
