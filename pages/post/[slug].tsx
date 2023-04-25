@@ -4,6 +4,7 @@ import axios, { AxiosResponse } from "axios"
 import { useRouter } from "next/router"
 import { GetStaticPaths, GetStaticProps, InferGetStaticPropsType } from "next"
 import { SWRConfig, unstable_serialize } from "swr"
+import useMediaQuery from "@mui/material/useMediaQuery"
 import {
   Post,
   AdjacentPosts as AdjacentPostsType,
@@ -14,13 +15,15 @@ import {
   PostDetail,
   ArchiveWidget,
   AdjacentPosts,
-  AboutMe
+  AboutMe,
+  CategoryWidget
 } from "components"
 import { API_BASE_URL } from "components/constants"
 
 type Props = InferGetStaticPropsType<typeof getStaticProps>
 
 const PostPage: React.FC<Props> = ({ fallback }) => {
+  const isMobile = useMediaQuery("(max-width:768px)")
   const router = useRouter()
   const slug = (router.query.slug as string) ?? ("default" as string)
 
@@ -42,6 +45,7 @@ const PostPage: React.FC<Props> = ({ fallback }) => {
               <AboutMe />
               <PostWidget slug={slug} />
               <ArchiveWidget />
+              {isMobile && <CategoryWidget />}
             </div>
           </div>
         </SWRConfig>
