@@ -659,6 +659,11 @@
     "@types/react" "*"
     csstype "^3.0.2"
 
+"@types/youtube-player@^5.5.7":
+  version "5.5.7"
+  resolved "https://registry.yarnpkg.com/@types/youtube-player/-/youtube-player-5.5.7.tgz#9679aa54f6b314877b7b482705224983d6161971"
+  integrity sha512-W8F4eoTIvzXeNrT3JroQPimZLXnlJA8smYygHZUKFPVoYwgs/OhJkA1VBhL3iSs57OQkuINqHlY4SmMT5wtnJg==
+
 "@typescript-eslint/eslint-plugin@^5.42.1":
   version "5.42.1"
   resolved "https://registry.yarnpkg.com/@typescript-eslint/eslint-plugin/-/eslint-plugin-5.42.1.tgz#696b9cc21dfd4749c1c8ad1307f76a36a00aa0e3"
@@ -2538,6 +2543,11 @@ react-dom@18.2.0:
     loose-envify "^1.1.0"
     scheduler "^0.23.0"
 
+react-html-props@^2.0.2:
+  version "2.0.2"
+  resolved "https://registry.yarnpkg.com/react-html-props/-/react-html-props-2.0.2.tgz#291b30f67a1c8b22e60d49d42fafaf58ef61d8a6"
+  integrity sha512-5spuo3V4d39C8EGFPkI7k2XpOP0Nu3SwG2g5LwBZ9C0eT6VTxIpYo3skm1lOtp6Zla461MutNMA9HCoFqnM4vg==
+
 react-instagram-embed@^3.0.0:
   version "3.0.0"
   resolved "https://registry.yarnpkg.com/react-instagram-embed/-/react-instagram-embed-3.0.0.tgz#a32af7755ff6e46c3914ae1c07ccd78aaafd43ac"
@@ -3070,5 +3080,14 @@ youtube-player@5.5.2:
   integrity sha512-ZGtsemSpXnDky2AUYWgxjaopgB+shFHgXVpiJFeNB5nWEugpW1KWYDaHKuLqh2b67r24GtP6HoSW5swvf0fFIQ==
   dependencies:
     debug "^2.6.6"
+    load-script "^1.0.0"
+    sister "^3.0.0"
+
+youtube-player@^5.6.0:
+  version "5.6.0"
+  resolved "https://registry.yarnpkg.com/youtube-player/-/youtube-player-5.6.0.tgz#71699ca093d8ae65e87091898cf812b354e261ea"
+  integrity sha512-x95fBbxV7eZ1ZsFtMLMcSGX0Jb/GPPj69RsooyEDVa9bzvvNZ4d5VjnBVBYoY85008VefkLvtaV+b+l38R/LMQ==
+  dependencies:
+    debug "^4.3.4"
     load-script "^1.0.0"
     sister "^3.0.0"
