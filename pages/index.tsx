@@ -14,11 +14,20 @@ import type { InferGetStaticPropsType, NextPage, GetStaticProps } from "next"
 import PopularPostCards from "components/organisms/PopularPostCards"
 import { API_BASE_URL } from "components/constants"
 import axios, { AxiosResponse } from "axios"
+import { InstagramEmbed } from "react-social-media-embed"
+import { useEffect, useState } from "react"
+import useMediaQuery from "@mui/material/useMediaQuery"
 
 type Props = InferGetStaticPropsType<typeof getStaticProps>
 
 const TopPage: NextPage<Props> = ({ fallback }) => {
-  // TODO 各コンポーネントのフォールバックに<Skeleton />を使用するように変更
+  const [isRendered, setIsRendered] = useState(false)
+  const isMobile = useMediaQuery("(max-width:400px)")
+
+  useEffect(() => {
+    setIsRendered(true)
+  }, [])
+
   return (
     <div className="relative">
       <Head>
@@ -41,7 +50,10 @@ const TopPage: NextPage<Props> = ({ fallback }) => {
                   <AboutMe />
                   <PostWidget />
                   <ArchiveWidget />
-                  <CategoryWidget />
+                  {isMobile && <CategoryWidget />}
+                  {isRendered && (
+                    <InstagramEmbed url="https://www.instagram.com/p/Cgq5P6grK5d/" />
+                  )}
                 </div>
               </div>
             </div>
