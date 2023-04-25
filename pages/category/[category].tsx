@@ -7,6 +7,7 @@ import { API_BASE_URL } from "components/constants"
 import { CategoryWidget, PostWidget, ArchiveWidget, AboutMe } from "components"
 import { Post, Archive } from "components/types"
 import { ParsedUrlQuery } from "querystring"
+import CategoryPostCards from "components/organisms/CategoryPostCards"
 
 type Props = InferGetStaticPropsType<typeof getStaticProps>
 
@@ -22,6 +23,7 @@ const CategoryPage: React.FC<Props> = ({ fallback }) => {
           <div className="grid grid-cols-1 md:grid-cols-12 gap-12 lg:m-24 md:m-8">
             <div className="md:col-span-8 col-span-1">
               {/* // TODO <ArchivedPostCards>同様に、<PostCard>を子コンポーネントに持つ<CategoryPostCards>を作成 */}
+              <CategoryPostCards />
             </div>
             <div className="md:col-span-4 col-span-1 relative">
               <div className="sticky top-8 mb-8">

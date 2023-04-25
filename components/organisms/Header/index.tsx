@@ -28,7 +28,7 @@ const Header: React.FC = () => {
         <div className="flex items-center">
           {categoriesData?.map((category) => {
             return (
-              <Link key={category} href={`category/${category}`}>
+              <Link key={category} href={`/category/${category}`}>
                 <span className=" ml-4 font-semibold cursor-pointer">
                   {category}
                 </span>
