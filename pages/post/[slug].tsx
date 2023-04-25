@@ -4,6 +4,7 @@ import axios, { AxiosResponse } from "axios"
 import { useRouter } from "next/router"
 import { GetStaticPaths, GetStaticProps, InferGetStaticPropsType } from "next"
 import { SWRConfig, unstable_serialize } from "swr"
+import useMediaQuery from "@mui/material/useMediaQuery"
 import {
   Post,
   AdjacentPosts as AdjacentPostsType,
@@ -13,14 +14,16 @@ import {
   PostWidget,
   PostDetail,
   ArchiveWidget,
-  Author,
-  AdjacentPosts
+  AdjacentPosts,
+  AboutMe,
+  CategoryWidget
 } from "components"
 import { API_BASE_URL } from "components/constants"
 
 type Props = InferGetStaticPropsType<typeof getStaticProps>
 
 const PostPage: React.FC<Props> = ({ fallback }) => {
+  const isMobile = useMediaQuery("(max-width:768px)")
   const router = useRouter()
   const slug = (router.query.slug as string) ?? ("default" as string)
 
@@ -34,13 +37,15 @@ const PostPage: React.FC<Props> = ({ fallback }) => {
         <SWRConfig value={{ fallback }}>
           <div className="col-span-3 lg:col-span-2 mb-4">
             <PostDetail slug={slug} />
-            <Author />
+            {/* <Author /> */}
             <AdjacentPosts />
           </div>
           <div>
             <div className="sticky md:top-20">
+              <AboutMe />
               <PostWidget slug={slug} />
               <ArchiveWidget />
+              {isMobile && <CategoryWidget />}
             </div>
           </div>
         </SWRConfig>
@@ -53,7 +58,7 @@ export default PostPage
 
 type GetStaticPropsResponse = {
   fallback: {
-    [key: string]: Post[] | Post | Archive[] | AdjacentPostsType
+    [key: string]: Post[] | Post | Archive[] | AdjacentPostsType | string
   }
 }
 
@@ -88,12 +93,20 @@ export const getStaticProps: GetStaticProps<
   >(`${API_BASE_URL}/posts/adjacent/${slug}`)
   const adjacentPosts = adjacentPostsResponse.data
 
+  // profile画像を取得
+  const getProfilePictureResponse = await axios.get<
+    string,
+    AxiosResponse<string>
+  >(`${API_BASE_URL}/author/profile`)
+  const profilePictureUrl = getProfilePictureResponse.data
+
   return {
     props: {
       fallback: {
         [unstable_serialize(["/api/posts", slug])]: relatedPosts,
         [unstable_serialize(["/api/post", slug])]: post,
         [unstable_serialize(["/api/posts/adjacent", slug])]: adjacentPosts,
+        "/api/author/profile": profilePictureUrl,
         "/api/widget/archive": archives
       }
     }

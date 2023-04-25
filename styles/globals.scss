@@ -95,6 +95,9 @@ body .is-layout-flex {
   display: flex;
   align-items: center;
   gap: 1.5rem;
+  @media only screen and (max-width: 1024px) {
+    gap: 0.5rem;
+  }
   margin: 0;
 }
 
@@ -103,8 +106,21 @@ body .is-layout-flex {
 }
 
 .wp-block-group-item {
-  margin-bottom: 8px !important;
+  margin-bottom: 16px !important;
+
 }
+.wp-block-group-item > p {
+  max-width: 90%;
+  @media only screen and (max-width: 768px) {
+    max-width: 75%;
+  }
+}
+.wp-block-group-item.flex-end {
+  justify-content: flex-end;
+}
+
+
+
 
 .justify-content-right {
   justify-content: flex-end !important;
