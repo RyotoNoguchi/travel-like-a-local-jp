@@ -24,7 +24,7 @@ const PostCard: React.FC<{ post: Post }> = ({ post }) => {
               "https://upload.wikimedia.org/wikipedia/commons/a/ac/No_image_available.svg"
             )
           }}
-          className="object-top h-80 w-full object-cover shadow rounded-t-lg text-center"
+          className="object-center h-80 w-full object-cover shadow rounded-t-lg text-center"
         />
       </div>
       <h1 className="transition duration-300 text-center cursor-pointer hover:text-pink-600 text-3xl font-semibold">
