@@ -38,7 +38,7 @@ const FeaturedPosts: React.FC = () => {
   if (!featuredPostData || isValidating || error) return null
 
   return (
-    <div className="mb-8">
+    <div className="mb-6 md:mb-8">
       <Carousel
         infinite={true}
         customLeftArrow={<ArrowLeft />}

@@ -9,7 +9,7 @@ const PostCard: React.FC<{ post: Post }> = ({ post }) => {
     post.featuredImage?.node.sourceUrl
   )
   return (
-    <div className="bg-white shadow-lg rounded-lg p-0 mb-8">
+    <div className="bg-white shadow-lg rounded-lg p-0 mb-6 md:mb-8">
       <div className="relative overflow-hidden text-center">
         <Image
           src={
@@ -24,7 +24,7 @@ const PostCard: React.FC<{ post: Post }> = ({ post }) => {
               "https://upload.wikimedia.org/wikipedia/commons/a/ac/No_image_available.svg"
             )
           }}
-          className="object-center h-80 w-full object-cover shadow rounded-t-lg text-center"
+          className="object-center h-48 md:h-80 w-full object-cover shadow rounded-t-lg text-center"
         />
       </div>
       <h1 className="transition duration-300 text-center cursor-pointer hover:text-pink-600 text-3xl font-semibold">
