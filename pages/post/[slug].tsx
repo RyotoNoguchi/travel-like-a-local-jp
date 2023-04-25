@@ -13,8 +13,8 @@ import {
   PostWidget,
   PostDetail,
   ArchiveWidget,
-  Author,
-  AdjacentPosts
+  AdjacentPosts,
+  AboutMe
 } from "components"
 import { API_BASE_URL } from "components/constants"
 
@@ -34,11 +34,12 @@ const PostPage: React.FC<Props> = ({ fallback }) => {
         <SWRConfig value={{ fallback }}>
           <div className="col-span-3 lg:col-span-2 mb-4">
             <PostDetail slug={slug} />
-            <Author />
+            {/* <Author /> */}
             <AdjacentPosts />
           </div>
           <div>
             <div className="sticky md:top-20">
+              <AboutMe />
               <PostWidget slug={slug} />
               <ArchiveWidget />
             </div>
@@ -53,7 +54,7 @@ export default PostPage
 
 type GetStaticPropsResponse = {
   fallback: {
-    [key: string]: Post[] | Post | Archive[] | AdjacentPostsType
+    [key: string]: Post[] | Post | Archive[] | AdjacentPostsType | string
   }
 }
 
@@ -88,12 +89,20 @@ export const getStaticProps: GetStaticProps<
   >(`${API_BASE_URL}/posts/adjacent/${slug}`)
   const adjacentPosts = adjacentPostsResponse.data
 
+  // profile画像を取得
+  const getProfilePictureResponse = await axios.get<
+    string,
+    AxiosResponse<string>
+  >(`${API_BASE_URL}/author/profile`)
+  const profilePictureUrl = getProfilePictureResponse.data
+
   return {
     props: {
       fallback: {
         [unstable_serialize(["/api/posts", slug])]: relatedPosts,
         [unstable_serialize(["/api/post", slug])]: post,
         [unstable_serialize(["/api/posts/adjacent", slug])]: adjacentPosts,
+        "/api/author/profile": profilePictureUrl,
         "/api/widget/archive": archives
       }
     }

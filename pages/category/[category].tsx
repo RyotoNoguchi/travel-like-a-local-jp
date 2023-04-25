@@ -4,10 +4,14 @@ import axios, { AxiosResponse } from "axios"
 import { GetStaticPaths, GetStaticProps, InferGetStaticPropsType } from "next"
 import { SWRConfig, unstable_serialize } from "swr"
 import { API_BASE_URL } from "components/constants"
-import { CategoryWidget, PostWidget, ArchiveWidget, AboutMe } from "components"
+import {
+  PostWidget,
+  ArchiveWidget,
+  AboutMe,
+  CategoryPostCards
+} from "components"
 import { Post, Archive } from "components/types"
 import { ParsedUrlQuery } from "querystring"
-import CategoryPostCards from "components/organisms/CategoryPostCards"
 
 type Props = InferGetStaticPropsType<typeof getStaticProps>
 
@@ -22,7 +26,6 @@ const CategoryPage: React.FC<Props> = ({ fallback }) => {
         <SWRConfig value={{ fallback }}>
           <div className="grid grid-cols-1 md:grid-cols-12 gap-12 lg:m-24 md:m-8">
             <div className="md:col-span-8 col-span-1">
-              {/* // TODO <ArchivedPostCards>同様に、<PostCard>を子コンポーネントに持つ<CategoryPostCards>を作成 */}
               <CategoryPostCards />
             </div>
             <div className="md:col-span-4 col-span-1 relative">
@@ -30,7 +33,6 @@ const CategoryPage: React.FC<Props> = ({ fallback }) => {
                 <AboutMe />
                 <PostWidget />
                 <ArchiveWidget />
-                <CategoryWidget />
               </div>
             </div>
           </div>
@@ -71,13 +73,6 @@ export const getStaticProps: GetStaticProps<
   )
   const recentPosts = getRecentPostsResponse.data
 
-  // ウィジェット用のカテゴリー取得
-  const getCategoriesResponse = await axios.get<
-    string[],
-    AxiosResponse<string[]>
-  >(`${API_BASE_URL}/category`)
-  const categories = getCategoriesResponse.data
-
   // archivesを取得
   const getArchiveWidgetResponse = await axios.get<
     Archive[],
@@ -96,7 +91,6 @@ export const getStaticProps: GetStaticProps<
     props: {
       fallback: {
         "/api/posts/recent": recentPosts,
-        "/api/category": categories,
         "/api/widget/archive": archiveMoments,
         "/api/author/profile": profilePictureUrl,
         [unstable_serialize(["/api/category", category])]: postsByCategory
