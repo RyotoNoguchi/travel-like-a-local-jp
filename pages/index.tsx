@@ -12,7 +12,7 @@ import {
 import { Post, Archive } from "components/types"
 import type { InferGetStaticPropsType, NextPage, GetStaticProps } from "next"
 import PopularPostCards from "components/organisms/PopularPostCards"
-import { API_BASE_URL } from "components/constants"
+import { API_BASE_URL, INSTAGRAM_POST } from "components/constants"
 import axios, { AxiosResponse } from "axios"
 import { InstagramEmbed } from "react-social-media-embed"
 import { useEffect, useState } from "react"
@@ -51,9 +51,7 @@ const TopPage: NextPage<Props> = ({ fallback }) => {
                   <PostWidget />
                   <ArchiveWidget />
                   {isMobile && <CategoryWidget />}
-                  {isRendered && (
-                    <InstagramEmbed url="https://www.instagram.com/p/Cgq5P6grK5d/" />
-                  )}
+                  {isRendered && <InstagramEmbed url={INSTAGRAM_POST} />}
                 </div>
               </div>
             </div>
