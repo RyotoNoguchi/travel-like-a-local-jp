@@ -11,9 +11,10 @@ const Profile: React.FC = () => {
   if (!profile || isValidating) {
     return null
   }
+
   return (
     <>
-      <h1>About Me</h1>
+      <h1>ABOUT ME</h1>
       <Image
         src={profile.avatar.url}
         alt="author-portrait"
