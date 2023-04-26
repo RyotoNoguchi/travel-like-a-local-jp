@@ -6,16 +6,23 @@ import type {
   GetStaticPaths
 } from "next"
 import { SWRConfig, unstable_serialize } from "swr"
-import { CategoryWidget, PostWidget, ArchiveWidget, AboutMe } from "components"
+import {
+  CategoryWidget,
+  PostWidget,
+  ArchiveWidget,
+  AboutMe,
+  ArchivedPostCards
+} from "components"
 import { Archive, Post } from "components/types"
 import axios, { AxiosResponse } from "axios"
 import { API_BASE_URL } from "components/constants"
 import { ParsedUrlQuery } from "querystring"
-import ArchivedPostCards from "components/organisms/ArchivedPostCards"
+import useMediaQuery from "@mui/material/useMediaQuery"
 
 type Props = InferGetStaticPropsType<typeof getStaticProps>
 
 const ArchiveListPage: NextPage<Props> = ({ fallback }) => {
+  const isMobile = useMediaQuery("(max-width:400px)")
   return (
     <div className="relative">
       <Head>
@@ -35,7 +42,7 @@ const ArchiveListPage: NextPage<Props> = ({ fallback }) => {
                 <AboutMe />
                 <PostWidget />
                 <ArchiveWidget />
-                <CategoryWidget />
+                {isMobile && <CategoryWidget />}
               </div>
             </div>
           </div>
