@@ -81,14 +81,25 @@ body {
   }
 }
 
+h1 {
+  font-size: 2rem;
+  font-weight: bold;
+  margin-bottom: 32px;
+}
+
 h2 {
   display: block;
   font-size: 1.5em;
-  margin-block-start: 0.83em;
-  margin-block-end: 0.83em;
-  margin-inline-start: 0px;
-  margin-inline-end: 0px;
+  // margin-block-start: 0.83em;  
+  // margin-block-end: 0.83em;
+  // margin-inline-start: 0px;
+  // margin-inline-end: 0px;
+  margin-bottom: 8px;
   font-weight: bold;
+  padding: 0em 0.5em;/*上下 左右の余白*/
+  color: #494949;/*文字色*/
+  background: transparent;/*背景透明に*/
+  border-left: solid 5px #7db4e6;/*左線*/
 }
 
 body .is-layout-flex {
@@ -101,8 +112,12 @@ body .is-layout-flex {
   margin: 0;
 }
 
-.wp-block-image {
-  margin: 0 !important;
+.wp-block-group {
+  margin-bottom: 24px;
+}
+
+.wp-block-group > * {
+  margin-bottom: 8px !important;
 }
 
 .wp-block-group-item {
@@ -119,7 +134,10 @@ body .is-layout-flex {
   justify-content: flex-end;
 }
 
-
+.wp-block-gallery.has-nested-images.columns-default figure.wp-block-image:not(#individual-image) {
+  height: 120px;
+  margin-right: 0 !important;
+}
 
 
 .justify-content-right {
@@ -146,12 +164,20 @@ body .is-layout-flex {
 ul {
   display: block;
   list-style-type: disc;
-  margin-block-start: 1em;
-  margin-block-end: 1em;
-  margin-inline-start: 0px;
-  margin-inline-end: 0px;
-  padding-inline-start: 40px;
+  // margin-block-start: 1em;
+  // margin-block-end: 1em;
+  // margin-inline-start: 0px;
+  // margin-inline-end: 0px;
+  padding-inline-start: 16px;
+  margin: 0;
 }
+
+ul > li > a {
+  color: #1d3994;
+  text-decoration: none;
+  font-weight: bold;
+}
+
 
 .text-shadow{
   text-shadow: 0px 2px 0px rgb(0 0 0 / 30%);

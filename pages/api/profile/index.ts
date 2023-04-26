@@ -17,7 +17,6 @@ const handler = async (
     const queryGetProfile = gql`
       query GetProfile {
         page(id: "profile", idType: URI) {
-          content
           author {
             node {
               avatar {
@@ -28,6 +27,8 @@ const handler = async (
               lastName
             }
           }
+          title
+          content
         }
       }
     `

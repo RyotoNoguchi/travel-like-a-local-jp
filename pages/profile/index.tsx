@@ -4,7 +4,7 @@ import { GetStaticProps, InferGetStaticPropsType } from "next"
 import { SWRConfig } from "swr"
 import { API_BASE_URL } from "components/constants"
 import { PostWidget, ArchiveWidget, Profile } from "components"
-import { Post, Archive } from "components/types"
+import { Post, Archive, Profile as ProfileType } from "components/types"
 
 type Props = InferGetStaticPropsType<typeof getStaticProps>
 
@@ -38,7 +38,7 @@ export default ProfilePage
 
 type GetStaticPropsResponse = {
   fallback: {
-    [key: string]: Post[] | Archive[] | string
+    [key: string]: Post[] | Archive[] | string | ProfileType
   }
 }
 
@@ -58,19 +58,19 @@ export const getStaticProps: GetStaticProps<
   >(`${API_BASE_URL}/widget/archive`)
   const archiveMoments = getArchiveWidgetResponse?.data
 
-  // profile画像を取得
-  const getProfilePictureResponse = await axios.get<
-    string,
-    AxiosResponse<string>
-  >(`${API_BASE_URL}/author/profile`)
-  const profilePictureUrl = getProfilePictureResponse.data
+  // profileデータを取得
+  const getProfileResponse = await axios.get<
+    ProfileType,
+    AxiosResponse<ProfileType>
+  >(`${API_BASE_URL}/profile`)
+  const profile = getProfileResponse.data
 
   return {
     props: {
       fallback: {
         "/api/posts/recent": recentPosts,
         "/api/widget/archive": archiveMoments,
-        "/api/author/profile": profilePictureUrl
+        "/api/profile": profile
       }
     }
   }
