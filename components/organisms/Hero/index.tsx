@@ -1,5 +1,15 @@
+import Image from "next/image"
+
 const Hero: React.FC = () => (
-  <div className="mx-auto h-96 px-10 mb-8 bg-sp_hero sm:bg-pc_hero bg-no-repeat bg-cover bg-center"></div>
+  <div className="sm:h-60 md:h-h_full w-screen md:mb-8 mb-6">
+    <Image
+      src="/img/pc-hero.jpg"
+      alt="hero-image"
+      width={1200}
+      height={500}
+      className="object-cover sm:h-60 md:h-h_full w-screen"
+    />
+  </div>
 )
 
 export default Hero

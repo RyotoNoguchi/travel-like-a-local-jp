@@ -8,3 +8,4 @@ export const GRAVATAR_API_URL = "https://www.gravatar.com/avatar"
 export const EMAIL_HASH = md5(AUTHOR_EMAIL.toLowerCase().trim())
 export const GRAPHQL_API_URL = process.env.WORDPRESS_API_URL ?? ""
 export const USER_ID = "dXNlcjox"
+export const INSTAGRAM_POST = "https://www.instagram.com/p/Cgq5P6grK5d/"

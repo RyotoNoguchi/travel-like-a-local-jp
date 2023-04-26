@@ -12,13 +12,22 @@ import {
 import { Post, Archive } from "components/types"
 import type { InferGetStaticPropsType, NextPage, GetStaticProps } from "next"
 import PopularPostCards from "components/organisms/PopularPostCards"
-import { API_BASE_URL } from "components/constants"
+import { API_BASE_URL, INSTAGRAM_POST } from "components/constants"
 import axios, { AxiosResponse } from "axios"
+import { InstagramEmbed } from "react-social-media-embed"
+import { useEffect, useState } from "react"
+import useMediaQuery from "@mui/material/useMediaQuery"
 
 type Props = InferGetStaticPropsType<typeof getStaticProps>
 
 const TopPage: NextPage<Props> = ({ fallback }) => {
-  // TODO 各コンポーネントのフォールバックに<Skeleton />を使用するように変更
+  const [isRendered, setIsRendered] = useState(false)
+  const isMobile = useMediaQuery("(max-width:400px)")
+
+  useEffect(() => {
+    setIsRendered(true)
+  }, [])
+
   return (
     <div className="relative">
       <Head>
@@ -30,17 +39,20 @@ const TopPage: NextPage<Props> = ({ fallback }) => {
         <Hero />
         <SWRConfig value={{ fallback }}>
           <FeaturedPosts />
-          <div className="grid grid-cols-1 md:grid-cols-12 gap-12 lg:m-24 md:m-8">
-            <div className="md:col-span-8 col-span-1">
-              {/* fallbackなしだと、レンダリング後にfetcherが叩かれるため、一瞬ブランクな状態が発生する。console.logしてリロードするとundefinedになることを確認できる */}
-              <PopularPostCards />
-            </div>
-            <div className="md:col-span-4 col-span-1 relative">
-              <div className="sticky top-8 mb-8">
-                <AboutMe />
-                <PostWidget />
-                <ArchiveWidget />
-                <CategoryWidget />
+          <div className="px-4">
+            <div className="grid grid-cols-1 md:grid-cols-12 md:gap-12 lg:m-8 md:m-6">
+              <div className="md:col-span-8 col-span-1">
+                {/* fallbackなしだと、レンダリング後にfetcherが叩かれるため、一瞬ブランクな状態が発生する。console.logしてリロードするとundefinedになることを確認できる */}
+                <PopularPostCards />
+              </div>
+              <div className="md:col-span-4 col-span-1 relative">
+                <div className="sticky top-8 mb-8">
+                  <AboutMe />
+                  <PostWidget />
+                  <ArchiveWidget />
+                  {isMobile && <CategoryWidget />}
+                  {isRendered && <InstagramEmbed url={INSTAGRAM_POST} />}
+                </div>
               </div>
             </div>
           </div>

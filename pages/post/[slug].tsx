@@ -23,7 +23,7 @@ import { API_BASE_URL } from "components/constants"
 type Props = InferGetStaticPropsType<typeof getStaticProps>
 
 const PostPage: React.FC<Props> = ({ fallback }) => {
-  const isMobile = useMediaQuery("(max-width:768px)")
+  const isMobile = useMediaQuery("(max-width:400px)")
   const router = useRouter()
   const slug = (router.query.slug as string) ?? ("default" as string)
 
