@@ -130,13 +130,32 @@ body .is-layout-flex {
     max-width: 75%;
   }
 }
+
+.wp-block-image {
+  margin: 0 !important;
+  @media only screen and (min-width: 768px) {
+    height: 100%;
+  }
+}
+
+.wp-block-image img {
+  width: 100vw;
+}
+
 .wp-block-group-item.flex-end {
   justify-content: flex-end;
 }
 
+.wp-block-gallery.has-nested-images {
+  display: flex;
+  gap: 12px;
+}
+
 .wp-block-gallery.has-nested-images.columns-default figure.wp-block-image:not(#individual-image) {
-  height: 120px;
-  margin-right: 0 !important;
+  @media only screen and (min-width: 768px) {
+    height: 150px;
+    margin-right: 0 !important;
+  }
 }
 
 
@@ -146,6 +165,8 @@ body .is-layout-flex {
 
 .wp-block-group {
   padding: 0;
+  display: grid;
+  gap: 8px;
 }
 
 .justify-right {

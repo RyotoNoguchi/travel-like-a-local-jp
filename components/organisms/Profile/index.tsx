@@ -6,7 +6,6 @@ const Profile: React.FC = () => {
   const profileKey: Key = "/api/profile"
   const { data: profile, isValidating } =
     useSWRWithTimeout<ProfileType>(profileKey)
-  console.log("profile:", profile)
 
   if (!profile || isValidating) {
     return null
@@ -14,7 +13,7 @@ const Profile: React.FC = () => {
 
   return (
     <>
-      <h1 className="">{profile.title}</h1>
+      <h1 className="text-center md:text-left mb-0 md:mb-8">{profile.title}</h1>
       <div dangerouslySetInnerHTML={{ __html: profile.content }}></div>
     </>
   )

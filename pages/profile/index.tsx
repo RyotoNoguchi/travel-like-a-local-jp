@@ -15,9 +15,9 @@ const ProfilePage: React.FC<Props> = ({ fallback }) => {
         <title>Category page</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <main>
+      <main className="px-4">
         <SWRConfig value={{ fallback }}>
-          <div className="grid grid-cols-1 md:grid-cols-12 gap-12 lg:m-24 md:m-8">
+          <div className="grid grid-cols-1 md:grid-cols-12 md:gap-12 lg:m-24 md:m-8">
             <div className="md:col-span-8 col-span-1">
               <Profile />
             </div>
