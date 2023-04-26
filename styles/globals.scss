@@ -133,14 +133,14 @@ body .is-layout-flex {
 
 .wp-block-image {
   margin: 0 !important;
-  @media only screen and (min-width: 768px) {
-    height: 100%;
-  }
+  // @media only screen and (min-width: 768px) {
+  //   height: 100%;
+  // }
 }
 
-.wp-block-image img {
-  width: 100vw;
-}
+// .wp-block-image img {
+//   width: 100vw;
+// }
 
 .wp-block-group-item.flex-end {
   justify-content: flex-end;
