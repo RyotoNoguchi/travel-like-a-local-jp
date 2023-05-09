@@ -10,7 +10,9 @@ const PostDetail: React.FC<{ slug: string }> = ({ slug }) => {
     data: post,
     isValidating,
     error
-  } = useSWRDynamic<Post>("/api/post", slug)
+  } = useSWRDynamic<Post>("/api/en/post", slug)
+
+  console.log("fallback", post)
 
   if (!post || isValidating) {
     return <div>Loading now....</div>

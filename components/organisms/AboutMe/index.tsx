@@ -7,7 +7,7 @@ import { useLanguage } from "components/hooks/useLanguage"
 
 const AboutMe: React.FC = () => {
   const { isEnglish } = useLanguage()
-  const authorProfileKey: Key = "/api/author/profile"
+  const authorProfileKey: Key = "/api/en/author/profile"
   const { data: profile, isValidating } =
     useSWRWithTimeout<Author>(authorProfileKey)
 

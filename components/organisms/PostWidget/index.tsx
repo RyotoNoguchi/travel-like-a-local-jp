@@ -18,10 +18,12 @@ const PostWidget: React.FC<Props> = ({ slug }) => {
   // useSWRの引数に配列をを指定し、変数を第2引数以降に入れることでuseSWRがkeyを動的に認知してくれるようになる
   // トップページ('/')を表示したときにslugはundefinedになり、不要なAPIリクエストが飛んでしまうため、conditionalにしている
   const { data: relatedPosts } = useSWRDynamic<Post[]>(
-    slug ? "/api/posts" : "",
+    slug ? "/api/en/posts" : "",
     slug ?? ""
   )
-  const { data: recentPosts } = useSWRWithTimeout<Post[]>("/api/posts/recent")
+  const { data: recentPosts } = useSWRWithTimeout<Post[]>(
+    "/api/en/posts/recent"
+  )
   if (router.isFallback) {
     return <div>fallback is on going</div>
   }

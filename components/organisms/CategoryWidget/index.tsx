@@ -4,7 +4,7 @@ import Link from "next/link"
 
 const CategoryWidget: React.FC = () => {
   const { isEnglish } = useLanguage()
-  const { data: categories } = useSWRWithTimeout<string[]>("/api/category")
+  const { data: categories } = useSWRWithTimeout<string[]>("/api/en/category")
 
   if (!categories) {
     return null

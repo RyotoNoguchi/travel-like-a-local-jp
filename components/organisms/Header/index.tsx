@@ -8,7 +8,7 @@ import { useLanguage } from "components/hooks/useLanguage"
 const Header: React.FC = () => {
   const { isEnglish } = useLanguage()
   const matches = useMediaQuery("(min-width:768px)")
-  const getCategoriesKey: Key = "/api/category"
+  const getCategoriesKey: Key = "/api/en/category"
   const { data: categoriesData } = useSWRWithTimeout<string[]>(getCategoriesKey)
 
   if (!categoriesData) {

@@ -10,7 +10,7 @@ const ArchiveWidget: React.FC = () => {
     data: archives,
     error,
     isValidating
-  } = useSWRWithTimeout<Archive[]>("/api/widget/archive")
+  } = useSWRWithTimeout<Archive[]>("/api/en/widget/archive")
 
   if (!archives || isValidating || error) {
     return null

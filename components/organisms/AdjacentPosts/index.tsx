@@ -12,7 +12,7 @@ const AdjacentPosts: React.FC = () => {
     data: post,
     isValidating,
     error
-  } = useSWRDynamic<AdjacentPostsType>("/api/posts/adjacent", slug)
+  } = useSWRDynamic<AdjacentPostsType>("/api/en/posts/adjacent", slug)
 
   if (!post || isValidating) {
     return <div>Loading...</div>
