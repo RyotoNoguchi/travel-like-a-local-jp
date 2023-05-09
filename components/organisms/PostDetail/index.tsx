@@ -12,8 +12,6 @@ const PostDetail: React.FC<{ slug: string }> = ({ slug }) => {
     error
   } = useSWRDynamic<Post>("/api/en/post", slug)
 
-  console.log("fallback", post)
-
   if (!post || isValidating) {
     return <div>Loading now....</div>
   }
