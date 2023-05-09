@@ -14,8 +14,8 @@ import {
   ArchivedPostCards
 } from "components"
 import { Archive, Post } from "components/types"
-import axios, { AxiosResponse } from "axios"
-import { API_BASE_URL } from "components/constants"
+import { AxiosResponse } from "axios"
+import axios from "components/api"
 import { ParsedUrlQuery } from "querystring"
 import useMediaQuery from "@mui/material/useMediaQuery"
 
@@ -68,13 +68,13 @@ export const getStaticProps: GetStaticProps<
   const dateArray = params?.moment
   const dateURI = dateArray?.join("/") ?? ""
   const getArchivesResponse = await axios.get<Post[], AxiosResponse<Post[]>>(
-    `${API_BASE_URL}/archive/${dateURI}`
+    `/archive/${dateURI}`
   )
   const archivedPosts = getArchivesResponse.data
 
   // recentPosts取得
   const getRecentPostsResponse = await axios.get<Post[], AxiosResponse<Post[]>>(
-    `${API_BASE_URL}/posts/recent`
+    `/posts/recent`
   )
   const recentPosts = getRecentPostsResponse.data
 
@@ -82,31 +82,31 @@ export const getStaticProps: GetStaticProps<
   const getCategoriesResponse = await axios.get<
     string[],
     AxiosResponse<string[]>
-  >(`${API_BASE_URL}/category`)
+  >(`/category`)
   const categories = getCategoriesResponse.data
 
   // archivesを取得
   const getArchiveWidgetResponse = await axios.get<
     Archive[],
     AxiosResponse<Archive[]>
-  >(`${API_BASE_URL}/widget/archive`)
+  >(`/widget/archive`)
   const archiveMoments = getArchiveWidgetResponse?.data
 
   // profile画像を取得
   const getProfilePictureResponse = await axios.get<
     string,
     AxiosResponse<string>
-  >(`${API_BASE_URL}/author/profile`)
+  >(`/author/profile`)
   const profilePictureUrl = getProfilePictureResponse.data
 
   return {
     props: {
       fallback: {
-        "/api/posts/recent": recentPosts,
-        "/api/category": categories,
-        "/api/widget/archive": archiveMoments,
-        "/api/author/profile": profilePictureUrl,
-        [unstable_serialize(["/api", `/archive/${dateURI}`])]: archivedPosts
+        "/api/en/posts/recent": recentPosts,
+        "/api/en/category": categories,
+        "/api/en/widget/archive": archiveMoments,
+        "/api/en/author/profile": profilePictureUrl,
+        [unstable_serialize(["/api", `/en/archive/${dateURI}`])]: archivedPosts
       }
     }
   }
@@ -118,7 +118,7 @@ type Params = {
 
 export const getStaticPaths: GetStaticPaths<Params> = async () => {
   const getPostsResponse = await axios.get<string[], AxiosResponse<string[]>>(
-    `${API_BASE_URL}/posts`
+    `/posts`
   )
   const dates = getPostsResponse.data.map((dateString) => {
     const date = new Date(dateString)
