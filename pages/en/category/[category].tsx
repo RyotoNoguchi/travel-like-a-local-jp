@@ -24,7 +24,7 @@ const CategoryPage: React.FC<Props> = ({ fallback }) => {
       </Head>
       <main>
         <SWRConfig value={{ fallback }}>
-          <div className="grid grid-cols-1 m-4 md:grid-cols-12 gap-12 lg:m-24 md:m-8">
+          <div className="grid grid-cols-1 m-4 md:grid-cols-12 gap-12 lg:m-24 md:m-6">
             <div className="md:col-span-8 col-span-1">
               <CategoryPostCards />
             </div>

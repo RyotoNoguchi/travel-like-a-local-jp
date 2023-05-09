@@ -3,6 +3,7 @@ import moment from "moment"
 import Link from "next/link"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faArrowLeft, faArrowRight } from "@fortawesome/free-solid-svg-icons"
+import { useLanguage } from "components/hooks/useLanguage"
 
 type Props = {
   post?: Post
@@ -11,11 +12,12 @@ type Props = {
 }
 
 const AdjacentPost: React.FC<Props> = ({ post, position }) => {
+  const { isEnglish } = useLanguage()
   return (
     <>
       {post && (
         <Link
-          href={`/post/${post.slug}`}
+          href={isEnglish ? `/en/post/${post.slug}` : `/post/${post.slug}`}
           className="relative w-full block h-72 lg:h-80 mb-4 shadow-md"
         >
           <div
@@ -34,15 +36,13 @@ const AdjacentPost: React.FC<Props> = ({ post, position }) => {
               {post.title}
             </p>
             {position === "previous" ? (
-              <FontAwesomeIcon
-                icon={faArrowLeft}
-                className="w-16 h-16 absolute bottom-4 left-4 cursor-pointer bg-pink-600 py-4 rounded-full text-slate-200 arrow-btn"
-              />
+              <div className="flex justify-center w-16 h-16 absolute bottom-4 left-4 cursor-pointer bg-pink-600 py-4 rounded-full text-slate-200">
+                <FontAwesomeIcon icon={faArrowLeft} className="w-8 h-8" />
+              </div>
             ) : (
-              <FontAwesomeIcon
-                icon={faArrowRight}
-                className="w-16 h-16 absolute bottom-4 right-4 cursor-pointer bg-pink-600 py-4 rounded-full text-slate-200 arrow-btn"
-              />
+              <div className="flex justify-center w-16 h-16 absolute bottom-4 right-4 cursor-pointer bg-pink-600 py-4 rounded-full text-slate-200">
+                <FontAwesomeIcon icon={faArrowRight} className="w-8 h-8" />
+              </div>
             )}
           </div>
         </Link>
