@@ -10,7 +10,6 @@ const handler = async (req: NextApiRequest, res: NextApiResponse<Post[]>) => {
     const {
       query: { slug } // ex. query: { slug: [ 'archive', '2023', '02' ] } というように配列で取得される
     } = req
-    console.log("slug:", slug)
     const arraySlug = slug as string[]
     const year = parseInt(arraySlug[0])
     const month = parseInt(arraySlug[1])
