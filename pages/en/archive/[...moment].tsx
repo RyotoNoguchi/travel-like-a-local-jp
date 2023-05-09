@@ -22,7 +22,7 @@ import useMediaQuery from "@mui/material/useMediaQuery"
 type Props = InferGetStaticPropsType<typeof getStaticProps>
 
 const ArchiveListPage: NextPage<Props> = ({ fallback }) => {
-  const isMobile = useMediaQuery("(max-width:400px)")
+  const isMobile = useMediaQuery("(max-width:767px)")
   return (
     <div className="relative">
       <Head>
@@ -32,7 +32,7 @@ const ArchiveListPage: NextPage<Props> = ({ fallback }) => {
       </Head>
       <main>
         <SWRConfig value={{ fallback }}>
-          <div className="grid grid-cols-1 md:grid-cols-12 gap-12 lg:m-24 md:m-8">
+          <div className="grid grid-cols-1 md:grid-cols-12 gap-12 m-4 lg:m-24 md:m-8">
             <div className="md:col-span-8 col-span-1">
               {/* fallbackなしだと、レンダリング後にfetcherが叩かれるため、一瞬ブランクな状態が発生する。console.logしてリロードするとundefinedになることを確認できる */}
               <ArchivedPostCards />
