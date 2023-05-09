@@ -4,6 +4,7 @@ import moment from "moment"
 import Link from "next/link"
 import { Post } from "components/types/post"
 import { useRouter } from "next/router"
+import { useLanguage } from "components/hooks/useLanguage"
 
 type Props = {
   slug?: string
@@ -11,6 +12,7 @@ type Props = {
 
 const PostWidget: React.FC<Props> = ({ slug }) => {
   const router = useRouter()
+  const { isEnglish } = useLanguage()
 
   // https://swr.vercel.app/ja/docs/arguments#%E8%A4%87%E6%95%B0%E3%81%AE%E5%BC%95%E6%95%B0
   // useSWRの引数に配列をを指定し、変数を第2引数以降に入れることでuseSWRがkeyを動的に認知してくれるようになる
@@ -35,7 +37,10 @@ const PostWidget: React.FC<Props> = ({ slug }) => {
       </h3>
       {(slug ? relatedPosts : recentPosts)?.map((post) => (
         // eslint-disable-next-line react/jsx-key
-        <Link href={`/post/${post.slug}`} key={post.title}>
+        <Link
+          href={isEnglish ? `/en/post/${post.slug}` : `/post/${post.slug}`}
+          key={post.title}
+        >
           <div className="flex items-center mb-4">
             <Image
               alt={post.title}

@@ -2,8 +2,10 @@ import { useSWRWithTimeout } from "components/hooks/swr"
 import Archive from "components/types/archive"
 import Link from "next/link"
 import moment from "moment"
+import { useLanguage } from "components/hooks/useLanguage"
 
 const ArchiveWidget: React.FC = () => {
+  const { isEnglish } = useLanguage()
   const {
     data: archives,
     error,
@@ -25,7 +27,11 @@ const ArchiveWidget: React.FC = () => {
         const [year, month] = archive.month.split("-")
         return (
           <Link
-            href={`/archive/${year}/${month}`}
+            href={
+              isEnglish
+                ? `/en/archive/${year}/${month}`
+                : `/archive/${year}/${month}`
+            }
             key={archive.month}
             className="flex mb-4"
           >

@@ -3,8 +3,10 @@ import moment from "moment"
 import Image from "next/image"
 import Link from "next/link"
 import { Post } from "components/types/post"
+import { useLanguage } from "components/hooks/useLanguage"
 
 const FeaturedPostCard: React.FC<{ post: Post }> = ({ post }) => {
+  const { isEnglish } = useLanguage()
   return (
     <div className="relative h-72">
       <div
@@ -35,7 +37,9 @@ const FeaturedPostCard: React.FC<{ post: Post }> = ({ post }) => {
               </p>
             </div>
           </div>
-          <Link href={`/post/${post.slug}`}>
+          <Link
+            href={isEnglish ? `/en/post/${post.slug}` : `/post/${post.slug}`}
+          >
             <span className="cursor-pointer absolute w-full h-full" />
           </Link>
         </div>
