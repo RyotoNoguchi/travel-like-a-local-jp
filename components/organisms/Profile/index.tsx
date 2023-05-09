@@ -3,7 +3,7 @@ import { useSWRWithTimeout } from "components/hooks/swr"
 import { Profile as ProfileType } from "components/types"
 
 const Profile: React.FC = () => {
-  const profileKey: Key = "/api/profile"
+  const profileKey: Key = "/api/en/profile"
   const { data: profile, isValidating } =
     useSWRWithTimeout<ProfileType>(profileKey)
 
