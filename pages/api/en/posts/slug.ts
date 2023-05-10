@@ -8,7 +8,7 @@ const handler = async (_: NextApiRequest, res: NextApiResponse<string[]>) => {
   try {
     const queryGetAllSlugs = gql`
       query getAllSlugs {
-        posts {
+        posts(where: { tag: "EN" }) {
           edges {
             node {
               slug

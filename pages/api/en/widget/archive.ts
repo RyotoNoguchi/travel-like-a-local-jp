@@ -10,7 +10,7 @@ const handler = async (_: NextApiRequest, res: NextApiResponse<Archive[]>) => {
   try {
     const queryGetDates = gql`
       query GetDates {
-        posts {
+        posts(where: { tag: "EN" }) {
           edges {
             node {
               date

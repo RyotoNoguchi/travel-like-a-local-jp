@@ -15,6 +15,7 @@ const handler = async (_: NextApiRequest, res: NextApiResponse<Post[]>) => {
             metaQuery: {
               metaArray: { key: "_post_views_count", type: NUMERIC }
             }
+            tag: "EN"
           }
           first: 5
         ) {

@@ -16,7 +16,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse<Post[]>) => {
 
     const queryGetArchives = gql`
       query GetArchives($month: Int!, $year: Int!) {
-        posts(where: { dateQuery: { month: $month, year: $year } }) {
+        posts(where: { dateQuery: { month: $month, year: $year }, tag: "EN" }) {
           edges {
             node {
               slug
