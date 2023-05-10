@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-import axios from "components/api"
+import axios from "components/api/en"
 import { Post } from "components/types/post"
 import { AdjacentPosts } from "components/types"
 import { GraphQLError } from "graphql"

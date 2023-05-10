@@ -1,7 +1,7 @@
 /* eslint-disable prettier/prettier */
 import Head from "next/head"
 import { AxiosResponse } from "axios"
-import axios from "components/api"
+import axios from "components/api/en"
 import { useRouter } from "next/router"
 import { GetStaticPaths, GetStaticProps, InferGetStaticPropsType } from "next"
 import { SWRConfig, unstable_serialize } from "swr"
