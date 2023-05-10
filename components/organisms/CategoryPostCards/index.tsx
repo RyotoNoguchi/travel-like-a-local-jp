@@ -7,9 +7,11 @@ const CategoryPostCards: React.FC = () => {
   const router = useRouter()
   const category = router.query.category
   const { data: postsData, isValidating } = useSWRDynamic<Post[]>(
-    "/api/category",
+    "/api/en/category",
     category
   )
+
+  console.log("postsData:", postsData)
   if (isValidating) return null
   if (!postsData) return null
 

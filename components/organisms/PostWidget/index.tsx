@@ -40,7 +40,7 @@ const PostWidget: React.FC<Props> = ({ slug }) => {
       {(slug ? relatedPosts : recentPosts)?.map((post) => (
         // eslint-disable-next-line react/jsx-key
         <Link
-          href={isEnglish ? `/en/post/${post.slug}` : `/post/${post.slug}`}
+          href={isEnglish ? `/en/post/${post.slug}` : `/ja/post/${post.slug}`}
           key={post.title}
         >
           <div className="flex items-center mb-4">

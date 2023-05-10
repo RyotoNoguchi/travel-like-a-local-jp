@@ -16,7 +16,7 @@ const CategoryWidget: React.FC = () => {
       {categories?.map((category) => (
         <Link
           href={
-            isEnglish ? `/en/category/${category}` : `/category/${category}`
+            isEnglish ? `/en/category/${category}` : `/ja/category/${category}`
           }
           key={category}
         >

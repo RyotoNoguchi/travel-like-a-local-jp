@@ -10,7 +10,9 @@ const ArchiveWidget: React.FC = () => {
     data: archives,
     error,
     isValidating
-  } = useSWRWithTimeout<Archive[]>("/api/en/widget/archive")
+  } = useSWRWithTimeout<Archive[]>(
+    isEnglish ? "/api/en/widget/archive" : "/api/ja/widget/archive"
+  )
 
   if (!archives || isValidating || error) {
     return null
@@ -30,7 +32,7 @@ const ArchiveWidget: React.FC = () => {
             href={
               isEnglish
                 ? `/en/archive/${year}/${month}`
-                : `/archive/${year}/${month}`
+                : `/ja/archive/${year}/${month}`
             }
             key={archive.month}
             className="flex mb-4"

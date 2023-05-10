@@ -30,7 +30,9 @@ const PostCard: React.FC<{ post: Post }> = ({ post }) => {
         />
       </div>
       <h1 className="transition duration-300 text-center cursor-pointer hover:text-pink-600 text-3xl font-semibold">
-        <Link href={isEnglish ? `/en/post/${post.slug}` : `/post/${post.slug}`}>
+        <Link
+          href={isEnglish ? `/en/post/${post.slug}` : `/ja/post/${post.slug}`}
+        >
           {post.title}
         </Link>
       </h1>
@@ -69,7 +71,9 @@ const PostCard: React.FC<{ post: Post }> = ({ post }) => {
         {post.excerpt.replace(/(<([^>]+)>)/gi, "")}
       </p>
       <div className="text-center">
-        <Link href={isEnglish ? `/en/post/${post.slug}` : `/post/${post.slug}`}>
+        <Link
+          href={isEnglish ? `/en/post/${post.slug}` : `/ja/post/${post.slug}`}
+        >
           <span className="transition duration-500 transform hover:-translate-y-1 inline-block bg-pink-600 text-lg font-medium rounded-full text-white px-8 py-3 mb-4 cursor-pointer">
             Continue Reading
           </span>

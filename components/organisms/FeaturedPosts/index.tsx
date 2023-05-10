@@ -6,6 +6,7 @@ import ArrowRight from "components/atoms/ArrowRight"
 import { Key } from "swr"
 import { useSWRWithTimeout } from "components/hooks/swr"
 import { Post } from "components/types/post"
+import { useLanguage } from "components/hooks/useLanguage"
 
 const responsive = {
   superLargeDesktop: {
@@ -27,7 +28,10 @@ const responsive = {
 }
 
 const FeaturedPosts: React.FC = () => {
-  const featuredPostKey: Key = "/api/posts/featured"
+  const { isEnglish } = useLanguage()
+  const featuredPostKey: Key = isEnglish
+    ? "/api/en/posts/featured"
+    : "/api/ja/posts/featured"
 
   const {
     data: featuredPostData,
