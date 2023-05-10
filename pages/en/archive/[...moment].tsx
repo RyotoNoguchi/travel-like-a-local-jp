@@ -15,7 +15,7 @@ import {
 } from "components"
 import { Archive, Post } from "components/types"
 import { AxiosResponse } from "axios"
-import axios from "components/api"
+import axios from "components/api/en"
 import { ParsedUrlQuery } from "querystring"
 import useMediaQuery from "@mui/material/useMediaQuery"
 

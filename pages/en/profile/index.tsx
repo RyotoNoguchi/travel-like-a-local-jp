@@ -1,6 +1,6 @@
 import Head from "next/head"
 import { AxiosResponse } from "axios"
-import axios from "components/api"
+import axios from "components/api/en"
 import { GetStaticProps, InferGetStaticPropsType } from "next"
 import { SWRConfig } from "swr"
 import { PostWidget, ArchiveWidget, Profile } from "components"

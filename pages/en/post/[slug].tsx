@@ -1,7 +1,7 @@
 /* eslint-disable prettier/prettier */
 import Head from "next/head"
 import { AxiosResponse } from "axios"
-import axios from "components/api"
+import axios from "components/api/en"
 import { useRouter } from "next/router"
 import { GetStaticPaths, GetStaticProps, InferGetStaticPropsType } from "next"
 import { SWRConfig, unstable_serialize } from "swr"
@@ -33,14 +33,14 @@ const PostPage: React.FC<Props> = ({ fallback }) => {
         <title>Post page</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <div className="grid grid-cols-1 m-4 md:grid-cols-3 md:gap-6 md:m-6 lg:gap-8 lg:m-8">
+      <div className="grid grid-cols-1 md:grid-cols-3 md:gap-6 m-4 md:m-6 lg:gap-8 lg:m-8">
         <SWRConfig value={{ fallback }}>
-          <div className="col-span-3 lg:col-span-2 mb-4">
+          <div className="main-content col-span-3 md:col-span-2 mb-4">
             <PostDetail slug={slug} />
             {/* <Author /> */}
             <AdjacentPosts />
           </div>
-          <div>
+          <div className="sidebar col-span-3 md:col-span-1">
             <div className="sticky md:top-20">
               <AboutMe />
               <PostWidget slug={slug} />

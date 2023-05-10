@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 // /* eslint-disable prettier/prettier */
 // import Head from "next/head"
 // import { SWRConfig } from "swr"
@@ -132,7 +133,7 @@ import { useEffect } from "react"
 //   }
 // }
 
-const HomePage: NextPage = () => {
+const TopPage: NextPage = () => {
   const router = useRouter()
 
   useEffect(() => {
@@ -142,4 +143,4 @@ const HomePage: NextPage = () => {
   return <div>Redirecting...</div>
 }
 
-export default HomePage
+export default TopPage
