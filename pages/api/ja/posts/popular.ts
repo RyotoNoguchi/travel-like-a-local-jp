@@ -7,9 +7,18 @@ const GRAPHQL_API_URL = process.env.WORDPRESS_API_URL ?? ""
 
 const handler = async (_: NextApiRequest, res: NextApiResponse<Post[]>) => {
   try {
-    const queryGetFeaturedPosts = gql`
-      query GetFeaturedPosts {
-        posts(where: { tagSlugAnd: ["featured", "JP"] }) {
+    const queryGetPopularPosts = gql`
+      query GetPopularPosts {
+        posts(
+          where: {
+            orderby: { field: META, order: DESC }
+            metaQuery: {
+              metaArray: { key: "_post_views_count", type: NUMERIC }
+            }
+            tag: "JP"
+          }
+          first: 5
+        ) {
           edges {
             node {
               slug
@@ -43,10 +52,9 @@ const handler = async (_: NextApiRequest, res: NextApiResponse<Post[]>) => {
         }
       }
     `
-
     const { posts } = await request<{
       posts: { edges: { node: Post }[] }
-    }>(GRAPHQL_API_URL, queryGetFeaturedPosts)
+    }>(GRAPHQL_API_URL, queryGetPopularPosts)
     res.json(posts?.edges?.map(({ node }) => node))
   } catch (error: unknown) {
     const graphQLError = error as GraphQLError

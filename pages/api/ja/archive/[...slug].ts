@@ -16,7 +16,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse<Post[]>) => {
 
     const queryGetArchives = gql`
       query GetArchives($month: Int!, $year: Int!) {
-        japanesePosts(where: { dateQuery: { month: $month, year: $year } }) {
+        posts(where: { dateQuery: { month: $month, year: $year }, tag: "JP" }) {
           edges {
             node {
               slug
@@ -51,8 +51,8 @@ const handler = async (req: NextApiRequest, res: NextApiResponse<Post[]>) => {
       }
     `
 
-    const { japanesePosts: archives } = await request<{
-      japanesePosts: { edges: { node: Post }[] }
+    const { posts: archives } = await request<{
+      posts: { edges: { node: Post }[] }
     }>(GRAPHQL_API_URL, queryGetArchives, {
       month,
       year

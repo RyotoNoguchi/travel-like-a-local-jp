@@ -11,7 +11,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse<Post[]>) => {
 
     const queryGetPostsByCategory = gql`
       query GetPostsByCategory($slug: String!) {
-        japanesePosts(where: { categoryName: $slug }) {
+        posts(where: { categoryName: $slug, tag: "JP" }) {
           edges {
             node {
               slug
@@ -45,10 +45,10 @@ const handler = async (req: NextApiRequest, res: NextApiResponse<Post[]>) => {
         }
       }
     `
-    const { japanesePosts } = await request<{
-      japanesePosts: { edges: { node: Post }[] }
+    const { posts } = await request<{
+      posts: { edges: { node: Post }[] }
     }>(GRAPHQL_API_URL, queryGetPostsByCategory, { slug })
-    res.json(japanesePosts?.edges?.map(({ node }) => node))
+    res.json(posts?.edges?.map(({ node }) => node))
   } catch (error: unknown) {
     const graphQLError = error as GraphQLError
     console.log(graphQLError.message)

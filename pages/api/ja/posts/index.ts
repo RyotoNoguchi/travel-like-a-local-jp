@@ -9,7 +9,7 @@ const handler = async (_: NextApiRequest, res: NextApiResponse<string[]>) => {
   try {
     const queryGetDates = gql`
       query GetDates {
-        japanesePosts {
+        posts(where: { tag: "JP" }) {
           edges {
             node {
               date
@@ -18,10 +18,10 @@ const handler = async (_: NextApiRequest, res: NextApiResponse<string[]>) => {
         }
       }
     `
-    const { japanesePosts } = await request<{
-      japanesePosts: { edges: { node: { date: string } }[] }
+    const { posts } = await request<{
+      posts: { edges: { node: { date: string } }[] }
     }>(GRAPHQL_API_URL, queryGetDates)
-    res.json(japanesePosts?.edges?.map(({ node }) => node.date))
+    res.json(posts?.edges?.map(({ node }) => node.date))
   } catch (error: unknown) {
     const graphQLError = error as GraphQLError
     console.log(graphQLError.message)

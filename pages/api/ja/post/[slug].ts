@@ -9,11 +9,9 @@ const handler = async (req: NextApiRequest, res: NextApiResponse<Post>) => {
   try {
     const { slug } = req.query
 
-    console.log("slug:", slug)
-
     const queryGetJapanesePostDetail = gql`
       query GetPostDetail($slug: ID!) {
-        japanesePost(id: $slug, idType: SLUG) {
+        post(id: $slug, idType: SLUG) {
           author {
             node {
               avatar {
@@ -44,13 +42,13 @@ const handler = async (req: NextApiRequest, res: NextApiResponse<Post>) => {
         }
       }
     `
-    const { japanesePost } = await request<{ japanesePost: Post }, Variables>(
+    const { post } = await request<{ post: Post }, Variables>(
       GRAPHQL_API_URL,
       queryGetJapanesePostDetail,
       { slug }
     )
 
-    res.json(japanesePost)
+    res.json(post)
   } catch (error: unknown) {
     const graphQLError = error as GraphQLError
     console.log(graphQLError.message)

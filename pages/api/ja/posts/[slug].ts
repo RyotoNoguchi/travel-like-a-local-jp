@@ -35,8 +35,12 @@ const handler = async (req: NextApiRequest, res: NextApiResponse<Post[]>) => {
     // queryGetCategoryBySlugで取得したカテゴリを条件にして該当のslug以外で同じカテゴリのPostsを取得
     const queryGetPostsExcludeBySlug = gql`
       query GetPostsExcludeBySlug($slug: ID!, $categoryName: String!) {
-        japanesePosts(
-          where: { excludeBySlug: $slug, categoryName: $categoryName }
+        posts(
+          where: {
+            excludeBySlug: $slug
+            categoryName: $categoryName
+            tag: "JP"
+          }
         ) {
           edges {
             node {
@@ -70,13 +74,13 @@ const handler = async (req: NextApiRequest, res: NextApiResponse<Post[]>) => {
         }
       }
     `
-    const { japanesePosts } = await request<{
-      japanesePosts: { edges: { node: Post }[] }
+    const { posts } = await request<{
+      posts: { edges: { node: Post }[] }
     }>(GRAPHQL_API_URL, queryGetPostsExcludeBySlug, {
       slug: slug,
       categoryName: category
     })
-    res.json(japanesePosts?.edges?.map(({ node }) => node))
+    res.json(posts?.edges?.map(({ node }) => node))
   } catch (error: unknown) {
     const graphQLError = error as GraphQLError
     console.log(graphQLError.message)
