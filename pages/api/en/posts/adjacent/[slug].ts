@@ -1,12 +1,11 @@
 /* eslint-disable prettier/prettier */
-import axios from "axios"
+import axios from "components/api"
 import { Post } from "components/types/post"
 import { AdjacentPosts } from "components/types"
 import { GraphQLError } from "graphql"
 import request, { gql } from "graphql-request"
 import { NextApiRequest, NextApiResponse } from "next"
 const GRAPHQL_API_URL = process.env.WORDPRESS_API_URL ?? ""
-import { API_BASE_URL } from "components/constants"
 
 const handler = async (
   req: NextApiRequest,
@@ -16,7 +15,7 @@ const handler = async (
     query: { slug }
   } = req
 
-  const response = await axios.get<Post>(`${API_BASE_URL}/post/${slug}`)
+  const response = await axios.get<Post>(`/post/${slug}`)
   const currentPost = response.data
   const year = parseInt(currentPost.date.substring(0, 4))
   const month = parseInt(currentPost.date.substring(5, 7))
