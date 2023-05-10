@@ -28,7 +28,7 @@ const AdjacentPost: React.FC<Props> = ({ post, position }) => {
           />
           {/* 影を作るためのdiv */}
           <div className="absolute rounded-lg p-4 bg-center bg-gradient-to-b opacity-50 from-gray-700 to-black w-full h-72 lg:h-80" />
-          <div className="absolute flex flex-col rounded-lg p-4 items-center justify-center w-full h-72 lg:h-80">
+          <div className="absolute flex flex-col rounded-lg p-4 items-center justify-center w-full h-72 lg:h-80 adjacent-post">
             <p className="text-white text-shadow font-semibold text-xs">
               {moment(post.date).format("MMM DD, YYYY")}
             </p>
@@ -36,11 +36,11 @@ const AdjacentPost: React.FC<Props> = ({ post, position }) => {
               {post.title}
             </p>
             {position === "previous" ? (
-              <div className="flex justify-center w-16 h-16 absolute bottom-4 left-4 cursor-pointer bg-pink-600 py-4 rounded-full text-slate-200">
+              <div className="flex justify-center w-16 h-16 absolute bottom-4 left-4 cursor-pointer bg-pink-600 py-4 rounded-full text-slate-200 arrow-btn">
                 <FontAwesomeIcon icon={faArrowLeft} className="w-8 h-8" />
               </div>
             ) : (
-              <div className="flex justify-center w-16 h-16 absolute bottom-4 right-4 cursor-pointer bg-pink-600 py-4 rounded-full text-slate-200">
+              <div className="flex justify-center w-16 h-16 absolute bottom-4 right-4 cursor-pointer bg-pink-600 py-4 rounded-full text-slate-200 arrow-btn">
                 <FontAwesomeIcon icon={faArrowRight} className="w-8 h-8" />
               </div>
             )}
