@@ -1,8 +1,8 @@
 import Head from "next/head"
-import axios, { AxiosResponse } from "axios"
+import { AxiosResponse } from "axios"
+import axios from "components/api/ja"
 import { GetStaticProps, InferGetStaticPropsType } from "next"
 import { SWRConfig } from "swr"
-import { API_BASE_URL } from "components/constants"
 import { PostWidget, ArchiveWidget, Profile } from "components"
 import { Post, Archive, Profile as ProfileType } from "components/types"
 
@@ -47,7 +47,7 @@ export const getStaticProps: GetStaticProps<
 > = async () => {
   // recentPosts取得
   const getRecentPostsResponse = await axios.get<Post[], AxiosResponse<Post[]>>(
-    `${API_BASE_URL}/posts/recent`
+    `/posts/recent`
   )
   const recentPosts = getRecentPostsResponse.data
 
@@ -55,22 +55,22 @@ export const getStaticProps: GetStaticProps<
   const getArchiveWidgetResponse = await axios.get<
     Archive[],
     AxiosResponse<Archive[]>
-  >(`${API_BASE_URL}/widget/archive`)
+  >(`/widget/archive`)
   const archiveMoments = getArchiveWidgetResponse?.data
 
   // profileデータを取得
   const getProfileResponse = await axios.get<
     ProfileType,
     AxiosResponse<ProfileType>
-  >(`${API_BASE_URL}/profile`)
+  >(`/profile`)
   const profile = getProfileResponse.data
 
   return {
     props: {
       fallback: {
-        "/api/posts/recent": recentPosts,
-        "/api/widget/archive": archiveMoments,
-        "/api/profile": profile
+        "/api/ja/posts/recent": recentPosts,
+        "/api/ja/widget/archive": archiveMoments,
+        "/api/ja/profile": profile
       }
     }
   }

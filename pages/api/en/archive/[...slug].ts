@@ -10,14 +10,13 @@ const handler = async (req: NextApiRequest, res: NextApiResponse<Post[]>) => {
     const {
       query: { slug } // ex. query: { slug: [ 'archive', '2023', '02' ] } というように配列で取得される
     } = req
-    console.log("slug:", slug)
     const arraySlug = slug as string[]
     const year = parseInt(arraySlug[0])
     const month = parseInt(arraySlug[1])
 
     const queryGetArchives = gql`
       query GetArchives($month: Int!, $year: Int!) {
-        posts(where: { dateQuery: { month: $month, year: $year } }) {
+        posts(where: { dateQuery: { month: $month, year: $year }, tag: "EN" }) {
           edges {
             node {
               slug

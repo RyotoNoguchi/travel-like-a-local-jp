@@ -40,6 +40,7 @@ const handler = async (
             }
             orderby: { field: DATE, order: DESC }
             excludeBySlug: $slug
+            tag: "EN"
           }
         ) {
           edges {
@@ -106,6 +107,7 @@ const handler = async (
             }
             orderby: { field: DATE, order: ASC }
             excludeBySlug: $slug
+            tag: "EN"
           }
         ) {
           edges {

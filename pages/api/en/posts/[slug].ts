@@ -35,7 +35,13 @@ const handler = async (req: NextApiRequest, res: NextApiResponse<Post[]>) => {
     // queryGetCategoryBySlugで取得したカテゴリを条件にして該当のslug以外で同じカテゴリのPostsを取得
     const queryGetPostsExcludeBySlug = gql`
       query GetPostsExcludeBySlug($slug: ID!, $categoryName: String!) {
-        posts(where: { excludeBySlug: $slug, categoryName: $categoryName }) {
+        posts(
+          where: {
+            excludeBySlug: $slug
+            categoryName: $categoryName
+            tag: "EN"
+          }
+        ) {
           edges {
             node {
               author {

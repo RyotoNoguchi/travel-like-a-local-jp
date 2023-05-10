@@ -9,7 +9,10 @@ const handler = async (_: NextApiRequest, res: NextApiResponse<Post[]>) => {
   try {
     const queryGetRecentPosts = gql`
       query GetRecentPosts {
-        posts(first: 5, where: { orderby: { field: DATE, order: DESC } }) {
+        posts(
+          first: 5
+          where: { orderby: { field: DATE, order: DESC }, tag: "EN" }
+        ) {
           edges {
             node {
               slug

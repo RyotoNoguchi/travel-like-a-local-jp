@@ -1,9 +1,11 @@
 import { Key } from "swr"
 import { useSWRWithTimeout } from "components/hooks/swr"
 import { Profile as ProfileType } from "components/types"
+import { useLanguage } from "components/hooks/useLanguage"
 
 const Profile: React.FC = () => {
-  const profileKey: Key = "/api/profile"
+  const { isEnglish } = useLanguage()
+  const profileKey: Key = isEnglish ? "/api/en/profile" : "/api/ja/profile"
   const { data: profile, isValidating } =
     useSWRWithTimeout<ProfileType>(profileKey)
 

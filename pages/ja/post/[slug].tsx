@@ -1,6 +1,7 @@
 /* eslint-disable prettier/prettier */
 import Head from "next/head"
-import axios, { AxiosResponse } from "axios"
+import { AxiosResponse } from "axios"
+import axios from "components/api/ja"
 import { useRouter } from "next/router"
 import { GetStaticPaths, GetStaticProps, InferGetStaticPropsType } from "next"
 import { SWRConfig, unstable_serialize } from "swr"
@@ -18,12 +19,11 @@ import {
   AboutMe,
   CategoryWidget
 } from "components"
-import { API_BASE_URL } from "components/constants"
 
 type Props = InferGetStaticPropsType<typeof getStaticProps>
 
 const PostPage: React.FC<Props> = ({ fallback }) => {
-  const isMobile = useMediaQuery("(max-width:400px)")
+  const isMobile = useMediaQuery("(max-width:767px)")
   const router = useRouter()
   const slug = (router.query.slug as string) ?? ("default" as string)
 
@@ -70,19 +70,19 @@ export const getStaticProps: GetStaticProps<
 
   // '/api/posts/[slug]'をコールしてRelatedPostsを取得
   const relatedPostsResponse = await axios.get<Post[], AxiosResponse<Post[]>>(
-    `${API_BASE_URL}/posts/${slug}`
+    `/posts/${slug}`
   )
   const relatedPosts = relatedPostsResponse.data
 
   // '/api/post/[slug]'をコールしてPostDetailコンポーネント用のPostを取得
   const postDetailResponse = await axios.get<Post, AxiosResponse<Post>>(
-    `${API_BASE_URL}/post/${slug}`
+    `/post/${slug}`
   )
   const post = postDetailResponse.data
 
   // '/api/widget/archive'をコールしてArchiveWidget用のArchivePostsを取得
   const archivesResponse = await axios.get<Archive[], AxiosResponse<Archive[]>>(
-    `${API_BASE_URL}/widget/archive`
+    "/widget/archive"
   )
   const archives = archivesResponse.data
 
@@ -90,24 +90,24 @@ export const getStaticProps: GetStaticProps<
   const adjacentPostsResponse = await axios.get<
     AdjacentPostsType,
     AxiosResponse<AdjacentPostsType>
-  >(`${API_BASE_URL}/posts/adjacent/${slug}`)
+  >(`/posts/adjacent/${slug}`)
   const adjacentPosts = adjacentPostsResponse.data
 
   // profile画像を取得
   const getProfilePictureResponse = await axios.get<
     string,
     AxiosResponse<string>
-  >(`${API_BASE_URL}/author/profile`)
+  >("/author/profile")
   const profilePictureUrl = getProfilePictureResponse.data
 
   return {
     props: {
       fallback: {
-        [unstable_serialize(["/api/posts", slug])]: relatedPosts,
-        [unstable_serialize(["/api/post", slug])]: post,
-        [unstable_serialize(["/api/posts/adjacent", slug])]: adjacentPosts,
-        "/api/author/profile": profilePictureUrl,
-        "/api/widget/archive": archives
+        [unstable_serialize(["/api/ja/posts", slug])]: relatedPosts,
+        [unstable_serialize(["/api/ja/post", slug])]: post,
+        [unstable_serialize(["/api/ja/posts/adjacent", slug])]: adjacentPosts,
+        "/api/ja/author/profile": profilePictureUrl,
+        "/api/ja/widget/archive": archives
       }
     }
   }
@@ -120,9 +120,7 @@ type GetStaticPropsParams = {
 export const getStaticPaths: GetStaticPaths<
   GetStaticPropsParams
 > = async () => {
-  const res = await axios.get<string[], AxiosResponse<string[]>>(
-    `${API_BASE_URL}/posts/slug`
-  )
+  const res = await axios.get<string[], AxiosResponse<string[]>>(`/posts/slug`)
   const slugs = res.data
 
   const paths = slugs.map((slug) => {

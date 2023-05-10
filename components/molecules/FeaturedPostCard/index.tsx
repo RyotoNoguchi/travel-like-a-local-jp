@@ -38,7 +38,7 @@ const FeaturedPostCard: React.FC<{ post: Post }> = ({ post }) => {
             </div>
           </div>
           <Link
-            href={isEnglish ? `/en/post/${post.slug}` : `/post/${post.slug}`}
+            href={isEnglish ? `/en/post/${post.slug}` : `/ja/post/${post.slug}`}
           >
             <span className="cursor-pointer absolute w-full h-full" />
           </Link>

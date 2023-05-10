@@ -9,7 +9,7 @@ const handler = async (_: NextApiRequest, res: NextApiResponse<Post[]>) => {
   try {
     const queryGetFeaturedPosts = gql`
       query GetFeaturedPosts {
-        posts(where: { tag: "featured" }) {
+        posts(where: { tagSlugAnd: ["featured", "EN"] }) {
           edges {
             node {
               slug

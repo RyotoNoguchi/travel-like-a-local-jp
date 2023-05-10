@@ -1,16 +1,18 @@
 import { faCalendarDays } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { useSWRDynamic } from "components/hooks/swr"
+import { useLanguage } from "components/hooks/useLanguage"
 import { Post } from "components/types/post"
 import moment from "moment"
 import Image from "next/image"
 
 const PostDetail: React.FC<{ slug: string }> = ({ slug }) => {
+  const { isEnglish } = useLanguage()
   const {
     data: post,
     isValidating,
     error
-  } = useSWRDynamic<Post>("/api/post", slug)
+  } = useSWRDynamic<Post>(isEnglish ? "/api/en/post" : "/api/ja/post", slug)
 
   if (!post || isValidating) {
     return <div>Loading now....</div>

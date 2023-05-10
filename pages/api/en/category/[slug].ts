@@ -11,7 +11,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse<Post[]>) => {
 
     const queryGetPostsByCategory = gql`
       query GetPostsByCategory($slug: String!) {
-        posts(where: { categoryName: $slug }) {
+        posts(where: { categoryName: $slug, tag: "EN" }) {
           edges {
             node {
               slug

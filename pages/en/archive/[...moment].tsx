@@ -14,15 +14,15 @@ import {
   ArchivedPostCards
 } from "components"
 import { Archive, Post } from "components/types"
-import axios, { AxiosResponse } from "axios"
-import { API_BASE_URL } from "components/constants"
+import { AxiosResponse } from "axios"
+import axios from "components/api"
 import { ParsedUrlQuery } from "querystring"
 import useMediaQuery from "@mui/material/useMediaQuery"
 
 type Props = InferGetStaticPropsType<typeof getStaticProps>
 
 const ArchiveListPage: NextPage<Props> = ({ fallback }) => {
-  const isMobile = useMediaQuery("(max-width:400px)")
+  const isMobile = useMediaQuery("(max-width:767px)")
   return (
     <div className="relative">
       <Head>
@@ -32,7 +32,7 @@ const ArchiveListPage: NextPage<Props> = ({ fallback }) => {
       </Head>
       <main>
         <SWRConfig value={{ fallback }}>
-          <div className="grid grid-cols-1 md:grid-cols-12 gap-12 lg:m-24 md:m-8">
+          <div className="grid grid-cols-1 md:grid-cols-12 gap-12 m-4 lg:m-24 md:m-8">
             <div className="md:col-span-8 col-span-1">
               {/* fallbackなしだと、レンダリング後にfetcherが叩かれるため、一瞬ブランクな状態が発生する。console.logしてリロードするとundefinedになることを確認できる */}
               <ArchivedPostCards />
@@ -68,13 +68,13 @@ export const getStaticProps: GetStaticProps<
   const dateArray = params?.moment
   const dateURI = dateArray?.join("/") ?? ""
   const getArchivesResponse = await axios.get<Post[], AxiosResponse<Post[]>>(
-    `${API_BASE_URL}/archive/${dateURI}`
+    `/archive/${dateURI}`
   )
   const archivedPosts = getArchivesResponse.data
 
   // recentPosts取得
   const getRecentPostsResponse = await axios.get<Post[], AxiosResponse<Post[]>>(
-    `${API_BASE_URL}/posts/recent`
+    `/posts/recent`
   )
   const recentPosts = getRecentPostsResponse.data
 
@@ -82,31 +82,31 @@ export const getStaticProps: GetStaticProps<
   const getCategoriesResponse = await axios.get<
     string[],
     AxiosResponse<string[]>
-  >(`${API_BASE_URL}/category`)
+  >(`/category`)
   const categories = getCategoriesResponse.data
 
   // archivesを取得
   const getArchiveWidgetResponse = await axios.get<
     Archive[],
     AxiosResponse<Archive[]>
-  >(`${API_BASE_URL}/widget/archive`)
+  >(`/widget/archive`)
   const archiveMoments = getArchiveWidgetResponse?.data
 
   // profile画像を取得
   const getProfilePictureResponse = await axios.get<
     string,
     AxiosResponse<string>
-  >(`${API_BASE_URL}/author/profile`)
+  >(`/author/profile`)
   const profilePictureUrl = getProfilePictureResponse.data
 
   return {
     props: {
       fallback: {
-        "/api/posts/recent": recentPosts,
-        "/api/category": categories,
-        "/api/widget/archive": archiveMoments,
-        "/api/author/profile": profilePictureUrl,
-        [unstable_serialize(["/api", `/archive/${dateURI}`])]: archivedPosts
+        "/api/en/posts/recent": recentPosts,
+        "/api/en/category": categories,
+        "/api/en/widget/archive": archiveMoments,
+        "/api/en/author/profile": profilePictureUrl,
+        [unstable_serialize(["/api", `/en/archive/${dateURI}`])]: archivedPosts
       }
     }
   }
@@ -118,7 +118,7 @@ type Params = {
 
 export const getStaticPaths: GetStaticPaths<Params> = async () => {
   const getPostsResponse = await axios.get<string[], AxiosResponse<string[]>>(
-    `${API_BASE_URL}/posts`
+    `/posts`
   )
   const dates = getPostsResponse.data.map((dateString) => {
     const date = new Date(dateString)

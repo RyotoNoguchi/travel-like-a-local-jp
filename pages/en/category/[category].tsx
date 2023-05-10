@@ -1,9 +1,9 @@
 /* eslint-disable prettier/prettier */
 import Head from "next/head"
-import axios, { AxiosResponse } from "axios"
+import { AxiosResponse } from "axios"
+import axios from "components/api"
 import { GetStaticPaths, GetStaticProps, InferGetStaticPropsType } from "next"
 import { SWRConfig, unstable_serialize } from "swr"
-import { API_BASE_URL } from "components/constants"
 import {
   PostWidget,
   ArchiveWidget,
@@ -63,13 +63,13 @@ export const getStaticProps: GetStaticProps<
   const getPostsByCategoryResponse = await axios.get<
     Post[],
     AxiosResponse<Post[]>
-  >(`${API_BASE_URL}/category/${category}`)
+  >(`/category/${category}`)
 
   const postsByCategory = getPostsByCategoryResponse.data
 
   // recentPosts取得
   const getRecentPostsResponse = await axios.get<Post[], AxiosResponse<Post[]>>(
-    `${API_BASE_URL}/posts/recent`
+    `/posts/recent`
   )
   const recentPosts = getRecentPostsResponse.data
 
@@ -77,23 +77,23 @@ export const getStaticProps: GetStaticProps<
   const getArchiveWidgetResponse = await axios.get<
     Archive[],
     AxiosResponse<Archive[]>
-  >(`${API_BASE_URL}/widget/archive`)
+  >(`/widget/archive`)
   const archiveMoments = getArchiveWidgetResponse?.data
 
   // profile画像を取得
   const getProfilePictureResponse = await axios.get<
     string,
     AxiosResponse<string>
-  >(`${API_BASE_URL}/author/profile`)
+  >(`/author/profile`)
   const profilePictureUrl = getProfilePictureResponse.data
 
   return {
     props: {
       fallback: {
-        "/api/posts/recent": recentPosts,
-        "/api/widget/archive": archiveMoments,
-        "/api/author/profile": profilePictureUrl,
-        [unstable_serialize(["/api/category", category])]: postsByCategory
+        "/api/en/posts/recent": recentPosts,
+        "/api/en/widget/archive": archiveMoments,
+        "/api/en/author/profile": profilePictureUrl,
+        [unstable_serialize(["/api/en/category", category])]: postsByCategory
       }
     }
   }
@@ -106,9 +106,7 @@ type GetStaticPropsParams = {
 export const getStaticPaths: GetStaticPaths<
   GetStaticPropsParams
 > = async () => {
-  const res = await axios.get<string[], AxiosResponse<string[]>>(
-    `${API_BASE_URL}/category`
-  )
+  const res = await axios.get<string[], AxiosResponse<string[]>>(`/category`)
   const categories = res.data
 
   const paths = categories.map((category) => {

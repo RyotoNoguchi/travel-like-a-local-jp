@@ -17,7 +17,7 @@ const AdjacentPost: React.FC<Props> = ({ post, position }) => {
     <>
       {post && (
         <Link
-          href={isEnglish ? `/en/post/${post.slug}` : `/post/${post.slug}`}
+          href={isEnglish ? `/en/post/${post.slug}` : `/ja/post/${post.slug}`}
           className="relative w-full block h-72 lg:h-80 mb-4 shadow-md"
         >
           <div

@@ -7,7 +7,9 @@ import { useLanguage } from "components/hooks/useLanguage"
 
 const AboutMe: React.FC = () => {
   const { isEnglish } = useLanguage()
-  const authorProfileKey: Key = "/api/author/profile"
+  const authorProfileKey: Key = isEnglish
+    ? "/api/en/author/profile"
+    : "/api/ja/author/profile"
   const { data: profile, isValidating } =
     useSWRWithTimeout<Author>(authorProfileKey)
 
@@ -16,7 +18,7 @@ const AboutMe: React.FC = () => {
   }
 
   return (
-    <Link href={isEnglish ? "/en/profile" : "/profile"}>
+    <Link href={isEnglish ? "/en/profile" : "/ja/profile"}>
       <div className="bg-white shadow-lg rounded-lg p-4 mb-8">
         <h3 className="text-xl mb-8 font-semibold border-b pb-4">About Me</h3>
         <div className="flex items-center mb-4 justify-center">

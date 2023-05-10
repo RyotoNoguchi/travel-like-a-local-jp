@@ -21,7 +21,7 @@
 
 1. WordPressのプラグインの新規追加で「WPGraphQL」で検索して出てくる[これ](https://gyazo.com/8a09807b35f532bde95310e1b3c98507)をインストール。 ※WordPressの言語設定が日本語になっていると**GraphQL IDE**がエラーになって無限Loading状態になる
 
-## 閲覧数OrderByしてGraphQLクエリを叩く方法
+## 閲覧数をOrderByしてGraphQLクエリを叩く方法
 
 1. ローカルPCにホスティングサーバーにあるhtdocsディレクトリごとコピーする
 2. `wp-graphql-extension.php`作成
