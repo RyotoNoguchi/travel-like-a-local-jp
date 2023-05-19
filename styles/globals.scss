@@ -46,7 +46,7 @@ body {
   --wp--preset--duotone--blue-orange: url(#wp-duotone-blue-orange);
   --wp--preset--font-size--small: clamp(0.875rem, 0.875rem + ((1vw - 0.48rem) * 0.24), 1rem);
   --wp--preset--font-size--medium: clamp(1rem, 1rem + ((1vw - 0.48rem) * 0.24), 1.125rem);
-  --wp--preset--font-size--large: clamp(1.75rem, 1.75rem + ((1vw - 0.48rem) * 0.24), 1.875rem);
+  --wp--preset--font-size--large: clamp(1.25rem, 1.25rem + ((1vw - 0.48rem) * 0.24), 1.875rem);
   --wp--preset--font-size--x-large: 2.25rem;
   --wp--preset--font-size--xx-large: clamp(4rem, 4rem + ((1vw - 0.48rem) * 11.538), 10rem);
   --wp--preset--font-family--dm-sans: "DM Sans", sans-serif;
@@ -279,4 +279,11 @@ figure {
 
 .instagram-media {
   margin: 1px auto !important;
+}
+
+// PostDetail
+
+.content-wrapper > div {
+  display: grid;
+  gap: 12px;
 }
