@@ -15,11 +15,16 @@ import { ParsedUrlQuery } from "querystring"
 
 type Props = InferGetStaticPropsType<typeof getStaticProps>
 
-const CategoryPage: React.FC<Props> = ({ fallback }) => {
+const CategoryPage: React.FC<Props> = ({ fallback, category }) => {
   return (
     <>
       <Head>
-        <title>Category page</title>
+        <title>{category} Category Page - Travel Like A Local Japan</title>
+        <meta name="description" content={`${category} category page`} />
+        <meta
+          property="og:title"
+          content={`${category} Category Page - Travel Like A Local Japan`}
+        />
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main>
@@ -48,6 +53,7 @@ type GetStaticPropsResponse = {
   fallback: {
     [key: string]: Post[] | string[] | Archive[] | string
   }
+  category: string
 }
 
 type Params = {
@@ -94,7 +100,8 @@ export const getStaticProps: GetStaticProps<
         "/api/en/widget/archive": archiveMoments,
         "/api/en/author/profile": profilePictureUrl,
         [unstable_serialize(["/api/en/category", category])]: postsByCategory
-      }
+      },
+      category: category
     }
   }
 }
