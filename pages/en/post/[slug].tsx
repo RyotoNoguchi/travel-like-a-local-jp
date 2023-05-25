@@ -30,7 +30,12 @@ const PostPage: React.FC<Props> = ({ fallback }) => {
   return (
     <>
       <Head>
-        <title>Post page</title>
+        <title>{slug} page - Post Page</title>
+        <meta name="description" content={`post about ${slug} - Post Page`} />
+        <meta
+          property="og:title"
+          content={`post about ${slug} - Travel Like A Local Japan`}
+        />
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <div className="grid grid-cols-1 md:grid-cols-3 md:gap-6 m-4 md:m-6 lg:gap-8 lg:m-8">
@@ -108,7 +113,8 @@ export const getStaticProps: GetStaticProps<
         [unstable_serialize(["/api/en/posts/adjacent", slug])]: adjacentPosts,
         "/api/en/author/profile": profilePictureUrl,
         "/api/en/widget/archive": archives
-      }
+      },
+      slug: slug
     }
   }
 }
