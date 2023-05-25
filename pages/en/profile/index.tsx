@@ -12,7 +12,12 @@ const ProfilePage: React.FC<Props> = ({ fallback }) => {
   return (
     <>
       <Head>
-        <title>Category page</title>
+        <title>Profile page</title>
+        <meta name="description" content="Profile Page - Travel Like A Local" />
+        <meta
+          property="og:title"
+          content="Profile Page - Travel Like A Local Japan"
+        />
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main className="px-4">
