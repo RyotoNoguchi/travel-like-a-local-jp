@@ -8,7 +8,8 @@ const nextConfig = {
       "upload.wikimedia.org",
       "travellikealocaljp.local",
       "1.gravatar.com",
-      "www.gravatar.com"
+      "www.gravatar.com",
+      "travel-like-a-local.jp"
     ]
   },
   swcMinify: true
