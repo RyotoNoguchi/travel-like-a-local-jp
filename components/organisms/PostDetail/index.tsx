@@ -1,7 +1,8 @@
 import { faCalendarDays } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { useSWRDynamic } from "components/hooks/swr"
+import { useSWRDynamic, useSWRWithTimeout } from "components/hooks/swr"
 import { useLanguage } from "components/hooks/useLanguage"
+import { Author } from "components/types"
 import { Post } from "components/types/post"
 import moment from "moment"
 import Image from "next/image"
@@ -14,7 +15,12 @@ const PostDetail: React.FC<{ slug: string }> = ({ slug }) => {
     error
   } = useSWRDynamic<Post>(isEnglish ? "/api/en/post" : "/api/ja/post", slug)
 
-  if (!post || isValidating) {
+  const authorProfileKey = isEnglish
+    ? "/api/en/author/profile"
+    : "/api/ja/author/profile"
+  const { data: profile } = useSWRWithTimeout<Author>(authorProfileKey)
+
+  if (!post || !profile || isValidating) {
     return <div>Loading now....</div>
   }
 
@@ -40,9 +46,7 @@ const PostDetail: React.FC<{ slug: string }> = ({ slug }) => {
         <div className="flex items-center gap-2">
           <Image
             alt={post.author.node.name}
-            src={
-              "http://travellikealocaljp.local/wp-content/uploads/2023/02/portraitのコピー-1-981x1024.jpg"
-            }
+            src={profile?.avatar.url}
             width={30}
             height={30}
             className="rounded-full"
