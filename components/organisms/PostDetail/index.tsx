@@ -1,5 +1,6 @@
 import { faCalendarDays } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
+import Loading from "components/atoms/Loading"
 import { useSWRDynamic, useSWRWithTimeout } from "components/hooks/swr"
 import { useLanguage } from "components/hooks/useLanguage"
 import { Author } from "components/types"
@@ -21,7 +22,7 @@ const PostDetail: React.FC<{ slug: string }> = ({ slug }) => {
   const { data: profile } = useSWRWithTimeout<Author>(authorProfileKey)
 
   if (!post || !profile || isValidating) {
-    return <div>Loading now....</div>
+    return <Loading />
   }
 
   if (error) {

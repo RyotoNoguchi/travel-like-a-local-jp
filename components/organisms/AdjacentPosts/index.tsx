@@ -4,6 +4,7 @@ import { AdjacentPosts as AdjacentPostsType } from "components/types"
 import { useRouter } from "next/router"
 import { PREVIOUS, NEXT } from "components/constants"
 import AdjacentPost from "components/molecules/AdjacentPost"
+import Loading from "components/atoms/Loading"
 import { useLanguage } from "components/hooks/useLanguage"
 
 const AdjacentPosts: React.FC = () => {
@@ -20,7 +21,7 @@ const AdjacentPosts: React.FC = () => {
   )
 
   if (!post || isValidating) {
-    return <div>Loading...</div>
+    return <Loading />
   }
 
   if (error) {
