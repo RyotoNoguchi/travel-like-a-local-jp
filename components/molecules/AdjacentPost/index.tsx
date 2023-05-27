@@ -13,6 +13,9 @@ type Props = {
 
 const AdjacentPost: React.FC<Props> = ({ post, position }) => {
   const { isEnglish } = useLanguage()
+  if (!post) {
+    return null
+  }
   return (
     <>
       {post && (
