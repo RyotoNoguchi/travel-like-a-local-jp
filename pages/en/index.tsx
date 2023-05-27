@@ -21,7 +21,7 @@ import useMediaQuery from "@mui/material/useMediaQuery"
 
 type Props = InferGetStaticPropsType<typeof getStaticProps>
 
-const EnglishTopPage: NextPage<Props> = ({ fallback }) => {
+const TopPage: NextPage<Props> = ({ fallback }) => {
   const [isRendered, setIsRendered] = useState(false)
   const isMobile = useMediaQuery("(max-width:400px)")
 
@@ -67,7 +67,7 @@ const EnglishTopPage: NextPage<Props> = ({ fallback }) => {
   )
 }
 
-export default EnglishTopPage
+export default TopPage
 
 type GetStaticPropsResponse = {
   fallback: {
