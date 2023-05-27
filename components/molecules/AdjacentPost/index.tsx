@@ -26,7 +26,9 @@ const AdjacentPost: React.FC<Props> = ({ post, position }) => {
           <div
             className="absolute rounded-lg bg-center shadow-md inline-block w-full h-72 lg:h-80 bg-cover"
             style={{
-              backgroundImage: `url(${post.featuredImage.node.sourceUrl})`
+              backgroundImage: `url(${
+                post?.featuredImage?.node.sourceUrl ?? ""
+              })`
             }}
           />
           {/* 影を作るためのdiv */}
