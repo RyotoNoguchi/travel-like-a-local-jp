@@ -1,6 +1,6 @@
 import Head from "next/head"
 import { AxiosResponse } from "axios"
-import axios from "components/api/en"
+import axios from "components/api/ja"
 import { GetStaticProps, InferGetStaticPropsType } from "next"
 import { SWRConfig } from "swr"
 import { PostWidget, ArchiveWidget, Profile } from "components"
@@ -12,12 +12,7 @@ const ProfilePage: React.FC<Props> = ({ fallback }) => {
   return (
     <>
       <Head>
-        <title>Profile page</title>
-        <meta name="description" content="Profile Page - Travel Like A Local" />
-        <meta
-          property="og:title"
-          content="Profile Page - Travel Like A Local Japan"
-        />
+        <title>Category page</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main className="px-4">
@@ -73,9 +68,9 @@ export const getStaticProps: GetStaticProps<
   return {
     props: {
       fallback: {
-        "/api/en/posts/recent": recentPosts,
-        "/api/en/widget/archive": archiveMoments,
-        "/api/en/profile": profile
+        "/api/ja/posts/recent": recentPosts,
+        "/api/ja/widget/archive": archiveMoments,
+        "/api/ja/profile": profile
       }
     }
   }

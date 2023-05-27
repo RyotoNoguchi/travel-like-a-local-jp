@@ -1,7 +1,7 @@
 /* eslint-disable prettier/prettier */
 import Head from "next/head"
 import { AxiosResponse } from "axios"
-import axios from "components/api/en"
+import axios from "components/api/ja"
 import { useRouter } from "next/router"
 import { GetStaticPaths, GetStaticProps, InferGetStaticPropsType } from "next"
 import { SWRConfig, unstable_serialize } from "swr"
@@ -30,22 +30,17 @@ const PostPage: React.FC<Props> = ({ fallback }) => {
   return (
     <>
       <Head>
-        <title>{slug} page - Post Page</title>
-        <meta name="description" content={`post about ${slug} - Post Page`} />
-        <meta
-          property="og:title"
-          content={`post about ${slug} - Travel Like A Local Japan`}
-        />
+        <title>Post page</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <div className="grid grid-cols-1 md:grid-cols-3 md:gap-6 m-4 md:m-6 lg:gap-8 lg:m-8">
+      <div className="grid grid-cols-1 m-4 md:grid-cols-3 md:gap-6 md:m-6 lg:gap-8 lg:m-8">
         <SWRConfig value={{ fallback }}>
-          <div className="main-content col-span-3 md:col-span-2 mb-4">
+          <div className="col-span-3 lg:col-span-2 mb-4">
             <PostDetail slug={slug} />
             {/* <Author /> */}
             <AdjacentPosts />
           </div>
-          <div className="sidebar col-span-3 md:col-span-1">
+          <div>
             <div className="sticky md:top-20">
               <AboutMe />
               <PostWidget slug={slug} />
@@ -108,13 +103,12 @@ export const getStaticProps: GetStaticProps<
   return {
     props: {
       fallback: {
-        [unstable_serialize(["/api/en/posts", slug])]: relatedPosts,
-        [unstable_serialize(["/api/en/post", slug])]: post,
-        [unstable_serialize(["/api/en/posts/adjacent", slug])]: adjacentPosts,
-        "/api/en/author/profile": profilePictureUrl,
-        "/api/en/widget/archive": archives
-      },
-      slug: slug
+        [unstable_serialize(["/api/ja/posts", slug])]: relatedPosts,
+        [unstable_serialize(["/api/ja/post", slug])]: post,
+        [unstable_serialize(["/api/ja/posts/adjacent", slug])]: adjacentPosts,
+        "/api/ja/author/profile": profilePictureUrl,
+        "/api/ja/widget/archive": archives
+      }
     }
   }
 }
