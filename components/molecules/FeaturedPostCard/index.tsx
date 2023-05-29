@@ -9,40 +9,28 @@ const FeaturedPostCard: React.FC<{ post: Post }> = ({ post }) => {
   const { isEnglish } = useLanguage()
   return (
     <div className="relative h-72">
-      <div
-        className="absolute rounded-lg bg-center bg-no-repeat bg-cover shadow-md inline-block w-full h-72"
-        style={{
-          backgroundImage: `url(${post.featuredImage?.node.sourceUrl})`
-        }}
-      >
-        <div className="absolute rounded-lg bg-center bg-gradient-to-b opacity-50 from-gray-400 via-gray-700 to-black w-full h-72">
-          <div className="flex flex-col rounded-lg p-4 items-center justify-center absolute w-full h-full">
-            <p className="text-white mb-4 text-shadow font-semibold text-xs">
-              {moment(post.date).format("MMM DD, YYYY")}
-            </p>
-            <p className="text-white mb-4 text-shadow font-semibold text-2xl text-center">
-              {post.title}
-            </p>
-            <div className="flex items-center absolute bottom-5 w-full justify-center">
-              <Image
-                unoptimized
-                alt={post.author.node.name}
-                height={30}
-                width={30}
-                src={post.author.node.avatar.url}
-                className="align-middle drop-shadow-lg rounded-full"
-              />
-              <p className="inline align-middle text-white text-shadow ml-2 font-medium">
-                {post.author.node.name}
-              </p>
-            </div>
-          </div>
-          <Link
-            href={isEnglish ? `/en/post/${post.slug}` : `/ja/post/${post.slug}`}
-          >
-            <span className="cursor-pointer absolute w-full h-full" />
-          </Link>
+      <div className="absolute rounded-lg bg-center bg-gradient-to-b from-gray-400 via-gray-700 to-black w-full h-72">
+        <div className="w-full h-full absolute top-0">
+          <Image
+            src={post?.featuredImage?.node.sourceUrl}
+            alt={post?.featuredImage?.node.altText}
+            layout="fill"
+            className="w-full object-cover rounded-lg bg-center opacity-50"
+          />
         </div>
+        <div className="flex flex-col rounded-lg p-4 items-center justify-center absolute w-full h-full opacity-80">
+          <p className="text-white mb-4 text-shadow font-semibold text-xs">
+            {moment(post.date).format("MMM DD, YYYY")}
+          </p>
+          <p className="text-white mb-4 text-shadow font-semibold text-2xl text-center">
+            {post.title}
+          </p>
+        </div>
+        <Link
+          href={isEnglish ? `/en/post/${post.slug}` : `/ja/post/${post.slug}`}
+        >
+          <span className="cursor-pointer absolute w-full h-full" />
+        </Link>
       </div>
     </div>
   )
