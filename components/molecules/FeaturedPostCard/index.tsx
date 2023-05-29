@@ -14,7 +14,7 @@ const FeaturedPostCard: React.FC<{ post: Post }> = ({ post }) => {
           <Image
             src={post?.featuredImage?.node.sourceUrl}
             alt={post?.featuredImage?.node.altText}
-            layout="fill"
+            fill
             className="w-full object-cover rounded-lg bg-center opacity-50"
           />
         </div>

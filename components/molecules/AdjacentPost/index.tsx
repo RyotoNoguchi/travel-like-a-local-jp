@@ -46,7 +46,7 @@ const AdjacentPost: React.FC<Props> = ({ post, position }) => {
               <Image
                 src={post?.featuredImage?.node.sourceUrl}
                 alt={post?.featuredImage?.node.altText}
-                layout="fill"
+                fill
                 className="w-full object-cover rounded-lg bg-center bg-gradient-to-b opacity-50 from-gray-700 z-0"
               />
             </div>
