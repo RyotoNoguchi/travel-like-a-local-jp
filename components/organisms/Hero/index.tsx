@@ -7,7 +7,6 @@ const Hero: React.FC = () => (
       alt="hero-image"
       width={1200}
       height={500}
-      loading="eager"
       className="object-cover sm:h-60 md:h-h_full w-screen"
     />
   </div>
