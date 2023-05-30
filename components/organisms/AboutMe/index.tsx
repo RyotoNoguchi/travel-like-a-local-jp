@@ -20,7 +20,9 @@ const AboutMe: React.FC = () => {
   return (
     <Link href={isEnglish ? "/en/profile" : "/ja/profile"}>
       <div className="bg-white shadow-lg rounded-lg p-4 mb-8">
-        <h3 className="text-xl mb-8 font-semibold border-b pb-4">About Me</h3>
+        <h2 className="text-xl mb-8 font-semibold border-b pb-4 border-none text-center">
+          About Me
+        </h2>
         <div className="flex items-center mb-4 justify-center">
           <Image
             src={profile.avatar.url}
