@@ -50,7 +50,7 @@ const PostWidget: React.FC<Props> = ({ slug }) => {
                   alt={post.title}
                   src={post.featuredImage?.node.sourceUrl}
                   fill
-                  className="rounded-full h-16 w-16 object-cover relative"
+                  className="rounded-full h-16 w-16 object-cover"
                 />
               </div>
             </div>
