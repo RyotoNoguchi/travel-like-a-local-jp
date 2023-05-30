@@ -4,6 +4,7 @@ import Image from "next/image"
 import Link from "next/link"
 import { Post } from "components/types/post"
 import { useLanguage } from "components/hooks/useLanguage"
+import { BLUR_DATA_URL } from "components/constants"
 
 const FeaturedPostCard: React.FC<{ post: Post }> = ({ post }) => {
   const { isEnglish } = useLanguage()
@@ -15,6 +16,8 @@ const FeaturedPostCard: React.FC<{ post: Post }> = ({ post }) => {
             src={post?.featuredImage?.node.sourceUrl}
             alt={post?.featuredImage?.node.altText}
             fill
+            placeholder="blur"
+            blurDataURL={BLUR_DATA_URL}
             className="w-full object-cover rounded-lg bg-center opacity-50"
           />
         </div>

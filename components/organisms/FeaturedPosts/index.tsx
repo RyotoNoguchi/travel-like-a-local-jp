@@ -7,6 +7,7 @@ import { Key } from "swr"
 import { useSWRWithTimeout } from "components/hooks/swr"
 import { Post } from "components/types/post"
 import { useLanguage } from "components/hooks/useLanguage"
+import Skeleton from "components/atoms/Skeleton"
 
 const responsive = {
   superLargeDesktop: {
@@ -39,7 +40,9 @@ const FeaturedPosts: React.FC = () => {
     error
   } = useSWRWithTimeout<Post[]>(featuredPostKey)
 
-  if (!featuredPostData || isValidating || error) return null
+  if (!featuredPostData || isValidating || error) {
+    return <Skeleton width="100vw" height={288} />
+  }
 
   return (
     <div className="mb-6 md:mb-8">
