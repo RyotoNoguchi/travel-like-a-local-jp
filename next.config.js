@@ -10,7 +10,8 @@ const nextConfig = {
       "1.gravatar.com",
       "www.gravatar.com",
       "travel-like-a-local.jp"
-    ]
+    ],
+    minimumCacheTTL: 60 * 60 * 24
   },
   swcMinify: true
 }

@@ -39,18 +39,6 @@ const PostCard: React.FC<{ post: Post }> = ({ post }) => {
           </Link>
         </h1>
         <div className="block lg:flex text-center items-center justify-center mb-2 w-full">
-          <div className="flex items-center justify-center lg:mb-0 w-full lg:w-auto mr-8">
-            <Image
-              src={post.author?.node.avatar.url}
-              alt={post.author?.node.name}
-              width={30}
-              height={30}
-              className="align-middle rounded-full drop-shadow-sm shadow"
-            />
-            <p className="inline align-middle text-gray-700 ml-2 text-lg">
-              {post.author?.node.name}
-            </p>
-          </div>
           <div className="font-medium text-gray-700 mt-1">
             <svg
               xmlns="http://www.w3.org/2000/svg"
