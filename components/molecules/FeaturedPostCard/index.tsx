@@ -31,6 +31,7 @@ const FeaturedPostCard: React.FC<{ post: Post }> = ({ post }) => {
         </div>
         <Link
           href={isEnglish ? `/en/post/${post.slug}` : `/ja/post/${post.slug}`}
+          tabIndex={-1}
         >
           <span className="cursor-pointer absolute w-full h-full hidden">
             Read more about {post.slug}
