@@ -44,14 +44,17 @@ const PostWidget: React.FC<Props> = ({ slug }) => {
           key={post.title}
         >
           <div className="flex items-center mb-4">
-            <Image
-              alt={post.title}
-              src={post.featuredImage?.node.sourceUrl}
-              width={64}
-              height={64}
-              className="rounded-full h-16"
-            />
-            <div className="ml-4">
+            <div className="w-16 h-16">
+              <div className="w-full h-full relative">
+                <Image
+                  alt={post.title}
+                  src={post.featuredImage?.node.sourceUrl}
+                  fill
+                  className="rounded-full h-16 w-16 object-cover relative"
+                />
+              </div>
+            </div>
+            <div className="ml-4 flex-1">
               <p className="text-gray-500 md:text-xs">
                 {moment(post.date).format("MMM DD, YYYY")}
               </p>
