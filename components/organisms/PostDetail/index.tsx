@@ -31,15 +31,9 @@ const PostDetail: React.FC<{ slug: string }> = ({ slug }) => {
 
   return (
     <div className="bg-white mb-4 p-4 rounded-lg content-wrapper">
-      {/* featuredイメージ */}
-      {/* <div className="flex justify-center">
-        <Image
-          alt={post.featuredImage.node.altText}
-          src={post.featuredImage.node.sourceUrl}
-          width={800}
-          height={500}
-        />
-      </div> */}
+      <div className="text-center font-bold text-4xl px-4 mb-6">
+        {post.title}
+      </div>
       <div dangerouslySetInnerHTML={{ __html: post.content }}></div>
 
       {/* 執筆者と日付セクション */}
