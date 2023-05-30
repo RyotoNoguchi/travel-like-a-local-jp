@@ -294,3 +294,8 @@ figure {
   display: grid;
   gap: 12px;
 }
+
+.post-top-image > img {
+  max-height: 400px;
+  object-fit: cover;
+}
