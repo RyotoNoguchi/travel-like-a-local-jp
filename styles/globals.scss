@@ -212,6 +212,13 @@ ul {
   margin: 0;
 }
 
+ol {
+  display: block;
+  list-style-type: disc;
+  padding-inline-start: 16px;
+  margin: 0;
+}
+
 ul > li > a {
   color: #1d3994;
   text-decoration: none;
