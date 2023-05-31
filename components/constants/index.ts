@@ -14,6 +14,7 @@ export const INTRODUCTION_IN_JP =
   "みなさん、こんにちは！渡鳥旅人です。\r\n日本で外国人観光客向けに英語とフランス語が話せるツアーガイドとして働いていました。\r\n今はソフトウェアエンジニアとして働きながら、日本全国を飛び回って渡り鳥のごとく毎月違う地方に滞在しています。\r\nこのブログでは日本の地方に長く滞在することで、どこを訪れ、何をし、誰に会うか、といった記事を投稿しています！"
 export const FIRST_NAME_IN_JP = "旅人"
 export const LAST_NAME_IN_JP = "渡鳥"
-export const HERO_IMAGE_SRC = "/img/pc-hero.jpg"
+export const HERO_IMAGE_PC = "/img/pc-hero.webp"
+export const HERO_IMAGE_SP = "/img/sp-hero.webp"
 export const BLUR_DATA_URL =
   "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkqAcAAIUAgUW0RjgAAAAASUVORK5CYII="
