@@ -1,7 +1,7 @@
 /* eslint-disable prettier/prettier */
 import Head from "next/head"
 import { AxiosResponse } from "axios"
-import axios from "components/api/en"
+import axios from "components/api/ja"
 import { GetStaticPaths, GetStaticProps, InferGetStaticPropsType } from "next"
 import { SWRConfig, unstable_serialize } from "swr"
 import {
@@ -15,16 +15,11 @@ import { ParsedUrlQuery } from "querystring"
 
 type Props = InferGetStaticPropsType<typeof getStaticProps>
 
-const CategoryPage: React.FC<Props> = ({ fallback, category }) => {
+const CategoryPage: React.FC<Props> = ({ fallback }) => {
   return (
     <>
       <Head>
-        <title>{category} Category Page - Travel Like A Local Japan</title>
-        <meta name="description" content={`${category} category page`} />
-        <meta
-          property="og:title"
-          content={`${category} Category Page - Travel Like A Local Japan`}
-        />
+        <title>Category page</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main>
@@ -53,7 +48,6 @@ type GetStaticPropsResponse = {
   fallback: {
     [key: string]: Post[] | string[] | Archive[] | string
   }
-  category: string
 }
 
 type Params = {
@@ -96,12 +90,11 @@ export const getStaticProps: GetStaticProps<
   return {
     props: {
       fallback: {
-        "/api/en/posts/recent": recentPosts,
-        "/api/en/widget/archive": archiveMoments,
-        "/api/en/author/profile": profilePictureUrl,
-        [unstable_serialize(["/api/en/category", category])]: postsByCategory
-      },
-      category: category
+        "/api/ja/posts/recent": recentPosts,
+        "/api/ja/widget/archive": archiveMoments,
+        "/api/ja/author/profile": profilePictureUrl,
+        [unstable_serialize(["/api/ja/category", category])]: postsByCategory
+      }
     }
   }
 }
