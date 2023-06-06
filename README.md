@@ -1,117 +1,44 @@
-# WordPress × NEXT.JSでブログサイトを作ろう
+# Project Name
 
-## 無料でWordPressをホスティングする
+Travel Like A Local Japan (A blog application to explain anything about Japan for foreign tourists)
 
-1. [YouTube](https://www.youtube.com/watch?v=7uNvYHyBNa0&t=1462s)を参考にして、[InfinityFree](https://app.infinityfree.net/)でWordPressサイトを作成する
-2. ドメインは[お名前.com](https://www.onamae.com/)でとりあえず無料にて取得する
-3. YouTubeの動画で紹介されているGoDaddyでネームサーバーをInfinityFreeのものに変更するには、[お名前.com > ドメイン設定 > 他のネームサーバーを利用 > ネームサーバー情報を入力](https://gyazo.com/f7d3ee18abb6f31a2d46fe95dd9d02c4)に入力
-4. SSLを有効化するには
-   1. InfinityFreeのコントロールパネルの[**SSL/TSL**](https://gyazo.com/bb001dfac69fea1c90414a628316cece)押下
-   2. [**ConfigureSSL**](https://gyazo.com/704f35d990dc4722d902722f8c427cd6)押下
-   3. [**Generate Key / CSR**](https://gyazo.com/ffa71af46fa2f0595c43358f8fd41898)押下
-   4. [**Free SSL Certificates**](https://gyazo.com/95e0832880a094ca3ab20123def2d337)押下
-   5. ドメインと入力してこの画面の**Current Destination**のステータスが緑色の[**Ready**](https://gyazo.com/3b48a8e338b0cc91dfc3570c5f3b460d)になっておらず、赤色の**Not Ready**になっていたらCloudFlareのダッシュボードのメニュー[**「DNS」のDNS Management for ****内のAdd record**](https://gyazo.com/12cdf216f6041be8fbd78abc1d636544)を押下
-   6. **Type**は**CNAME**「5.」の**Source**の値を**Name**に、**Destination**の値を**Target**に入れ、**Proxy Status**は**Only DNS**に切り替え、[**Save**](https://gyazo.com/bcd7b59af72a743806da3a0bfff4bf8a)押下
-   7. Really Simple SSLに戻り、更新すると**有効化**が活性状態になる
-5. ローカルPCのファイルをホスティングサーバーにに同期するには「[FileZilla](https://filezilla-project.org/download.php?platform=osx)」を使用する
-   1. [**Infinity Free**](https://app.infinityfree.net/)の[FTP Details](https://gyazo.com/39d888b26b9d9bdf2d99e58937c05559)ページを開く
-   2. 画面に表示されている表示されている↓をそれぞれ[FileZilla](https://gyazo.com/39d888b26b9d9bdf2d99e58937c05559)の入力欄に入力し、**クイック接続**ボタン押下
+## Description
 
-## プラグイン「WPGraphQL」をインストール
-
-1. WordPressのプラグインの新規追加で「WPGraphQL」で検索して出てくる[これ](https://gyazo.com/8a09807b35f532bde95310e1b3c98507)をインストール。 ※WordPressの言語設定が日本語になっていると**GraphQL IDE**がエラーになって無限Loading状態になる
-
-## 閲覧数をOrderByしてGraphQLクエリを叩く方法
-
-1. ローカルPCにホスティングサーバーにあるhtdocsディレクトリごとコピーする
-2. `wp-graphql-extension.php`作成
-
-   `mkdir htdocs/wp-content/plugins/wp-graphql-extensions`
-
-   `touch htdocs/wp-content/plugins/wp-graphql-extensions/wp-graphql-extensions.php`
-3. このリポジトリの`wp-graphql-extensions.php`のように記述し、閲覧数をメタデータとして保存し、queryできるように機能追加
-4. WordPressプラグイン「[wp-graphql-meta-query](https://github.com/wp-graphql/wp-graphql-meta-query)」をリポジトリごとダウンロードし、`htdocs/wp-content/plugins/`にコピーする
-5. `htdocs/wp-content/plugins/wp-graphql/src/Type/Enum/PostObjectsConnectionOrderbyEnum.php`に↓のコード追加（参照[GitHubコメント](https://github.com/wp-graphql/wp-graphql-acf/issues/28#issuecomment-524628611)）
-
-   ```php
-   'META'     => [
-      'value'       => 'meta_value',
-      'description' => __( 'Order by meta value', 'wp-graphql' ),
-   ]
-   ```
-
-6. ↓のようなGraphQLクエリを使って閲覧数でOrderByしてqueryできる
-
-   ```graphql
-      query GetPopularPosts {
-         posts(
-            where: {orderby: {field: META, order: DESC}, metaQuery: {metaArray: {key: "_post_views_count", type: NUMERIC}}}
-         ) {
-            edges {
-               node {
-               slug
-               title
-               viewCount
-               }
-            }
-         }
-      }
-   ```
-
-## `Slug-NOT-IN`のquery実装方法
-
-[こちらのGitHub ISSUE](https://github.com/wp-graphql/wp-graphql/issues/1434#issuecomment-679606203)を`plugin`にコピペしてGraphQL IDEをリロードすればOK
-
-## Next.js × TypeScriptアプリケーション環境構築
-
-1. `npx create-next-app {rootDirectoryName} --typescript`
-2. `yarn add -D eslint @typescript-eslint/eslint-plugin @typescript-eslint/parser`（[ESLintの導入](https://mo-gu-mo-gu.com/create-next-app-typescript/)）
-3. `yarn add -D prettier eslint-config-prettier eslint-plugin-prettier`（[Prettier導入](https://mo-gu-mo-gu.com/create-next-app-typescript/#:~:text=%E3%81%AF%E3%81%93%E3%81%A1%E3%82%89%E3%81%A7%E3%81%99%E3%80%82-,Prettier%E5%B0%8E%E5%85%A5,-Prettier%E3%81%AF%E3%80%81%E3%82%B3%E3%83%BC%E3%83%89)）
-
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
-
-## axiosを使ったGraphQL APIコールの仕方
-
-- https://rapidapi.com/guides/graphql-axios
+[This blog site](https://www.travel-like-a-local.jp/en) aims for showing off-the-beaten paths in Japan
+[GIF](https://github-production-user-asset-6210df.s3.amazonaws.com/85152191/243675493-bcae01cb-b1db-4ea4-bfc0-9d2a078fd5b5.gif)
 
 
+## Table of Contents
 
-## Getting Started
+Create a table of contents to help users navigate through your README.md file.
 
-First, run the development server:
+- [Project Name](#project-name)
+  - [Description](#description)
+  - [Table of Contents](#table-of-contents)
+  - [Installation](#installation)
+  - [Technologies](#technologies)
+  - [Deployment](#deployment)
+  - [Authors](#authors)
 
-```bash
-npm run dev
 
-# or
-yarn dev
-```
+## Installation
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+1. `yarn`
+2. `yarn dev`
+3. open `http://localhost:3000`
 
-You can start editing the page by modifying `pages/index.tsx`. The page auto-updates as you edit the file.
+## Technologies
 
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.ts`.
+- Next.js
+- React.js
+- TypeScript
+- WPGraphQL
+- Tailwind CSS
 
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
+## Deployment
 
-## Learn More
+Deploy on [Vercel](https://vercel.com/)
 
-To learn more about Next.js, take a look at the following resources:
+## Authors
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
-
-## メモ
-
-- [WordPressのプレビューモード実装](https://tsh.io/blog/headless-wordpress-as-an-api-for-a-next-js-application/)
-- [The Next.js WordPress Starter](https://webdevstudios.github.io/nextjs-wordpress-starter/)
-
+- @RyotoNoguchi

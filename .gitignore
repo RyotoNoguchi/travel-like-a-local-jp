@@ -37,3 +37,6 @@ next-env.d.ts
 
 # wordpress
 wordpress-local
+
+# 環境構築
+.environment-construction.md
