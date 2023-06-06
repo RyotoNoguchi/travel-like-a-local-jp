@@ -8,10 +8,7 @@ Travel Like A Local Japan (A blog application to explain anything about Japan fo
 
 ![GIF](https://github-production-user-asset-6210df.s3.amazonaws.com/85152191/243675493-bcae01cb-b1db-4ea4-bfc0-9d2a078fd5b5.gif)
 
-
 ## Table of Contents
-
-Create a table of contents to help users navigate through your README.md file.
 
 - [Project Name](#project-name)
   - [Description](#description)
