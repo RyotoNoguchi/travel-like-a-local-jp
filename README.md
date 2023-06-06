@@ -5,7 +5,8 @@ Travel Like A Local Japan (A blog application to explain anything about Japan fo
 ## Description
 
 [This blog site](https://www.travel-like-a-local.jp/en) aims for showing off-the-beaten paths in Japan
-[GIF](https://github-production-user-asset-6210df.s3.amazonaws.com/85152191/243675493-bcae01cb-b1db-4ea4-bfc0-9d2a078fd5b5.gif)
+
+![GIF](https://github-production-user-asset-6210df.s3.amazonaws.com/85152191/243675493-bcae01cb-b1db-4ea4-bfc0-9d2a078fd5b5.gif)
 
 
 ## Table of Contents
